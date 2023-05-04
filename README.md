@@ -25,4 +25,5 @@ Development repository for event management services.
 - clone into this repository
 - go to `/events/` directory
 - run `python manage.py runserver`
-- open `http://127.0.0.1:8000/` in webbrowser
+- (open `http://127.0.0.1:8000/` / `http://localhost:8000` -> 404)
+- open `http://localhost:8000/polls/` for hello world
