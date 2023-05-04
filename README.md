@@ -15,4 +15,5 @@ Development repository for event management services.
 
 - [Django](https://docs.djangoproject.com): [4.2 LTS](https://www.djangoproject.com/download/)
 - [Python: 3.11](https://docs.djangoproject.com/en/4.2/faq/install/#faq-python-version-support)
+- [Bootstrap](https://pypi.org/project/django-bootstrap-v5/)
 - SQL: tbd
