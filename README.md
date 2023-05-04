@@ -17,3 +17,12 @@ Development repository for event management services.
 - [Python: 3.11](https://docs.djangoproject.com/en/4.2/faq/install/#faq-python-version-support)
 - [Bootstrap](https://pypi.org/project/django-bootstrap-v5/)
 - SQL: tbd
+
+
+## Set-Up
+
+- (set up virtual env with Python 3.11 and Django 4.2)
+- clone into this repository
+- go to `/events/` directory
+- run `python manage.py runserver`
+- open `http://127.0.0.1:8000/` in webbrowser
