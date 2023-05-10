@@ -23,7 +23,18 @@ Development repository for event management services.
 
 - (set up virtual env with Python 3.11 and Django 4.2)
 - clone into this repository
-- go to `/events/` directory
+- go to `event-management/events/` directory
+- run `manage.py makemigrations` &
+- run `manage.py migrate to initialize local test db
 - run `python manage.py runserver`
 - (open `http://127.0.0.1:8000/` / `http://localhost:8000` -> 404)
 - open `http://localhost:8000/polls/` for hello world
+
+## Docker WIP
+
+- **there are several issues with that atm, so its not really working but might be helpful for testing and finding an actual setup**
+
+- go to `event-management/events/` directory
+- run `docker compose up`
+- mocked db container and container for project should be build and run
+
