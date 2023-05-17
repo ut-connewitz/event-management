@@ -6,6 +6,13 @@ Development repository for event management services.
 ```
 .
 ├── README.md
+├── db-model [information/blueprints]
+│   ├── ERD_v2.png
+│   ├── plsql-scripts 
+│   │   ├── 01_ut_create_tables.sql
+│   │   ├── 02_ut_index.sql
+│   │   └── 03_ut_create_trigger.sql
+│   └── ut_db_schema - Tabellenblatt1.csv
 └── events [project directory]
     ├── Dockerfile
     ├── db.sqlite3
@@ -13,10 +20,6 @@ Development repository for event management services.
     ├── events [project setup files]
     │   ├── __init__.py
     │   ├── __pycache__
-    │   │   ├── __init__.cpython-311.pyc
-    │   │   ├── settings.cpython-311.pyc
-    │   │   ├── urls.cpython-311.pyc
-    │   │   └── wsgi.cpython-311.pyc
     │   ├── asgi.py
     │   ├── settings.py
     │   ├── urls.py
@@ -25,13 +28,6 @@ Development repository for event management services.
     ├── polls [app directory with app setup files -> own repository?]
     │   ├── __init__.py
     │   ├── __pycache__
-    │   │   ├── __init__.cpython-311.pyc
-    │   │   ├── models.cpython-311.pyc
-    │   │   ├── testPolls.cpython-311.pyc
-    │   │   ├── testPost.cpython-311.pyc
-    │   │   ├── tests.cpython-311.pyc
-    │   │   ├── urls.cpython-311.pyc
-    │   │   └── views.cpython-311.pyc
     │   ├── admin.py
     │   ├── apps.py
     │   ├── migrations
