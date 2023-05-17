@@ -2,7 +2,50 @@
 
 Development repository for event management services.
 
-## TODO:
+## Overview
+```
+.
+├── README.md
+└── events [project directory]
+    ├── Dockerfile
+    ├── db.sqlite3
+    ├── docker-compose.yml 
+    ├── events [project setup files]
+    │   ├── __init__.py
+    │   ├── __pycache__
+    │   │   ├── __init__.cpython-311.pyc
+    │   │   ├── settings.cpython-311.pyc
+    │   │   ├── urls.cpython-311.pyc
+    │   │   └── wsgi.cpython-311.pyc
+    │   ├── asgi.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   └── wsgi.py
+    ├── manage.py [central django file for managing the project]
+    ├── polls [app directory with app setup files -> own repository?]
+    │   ├── __init__.py
+    │   ├── __pycache__
+    │   │   ├── __init__.cpython-311.pyc
+    │   │   ├── models.cpython-311.pyc
+    │   │   ├── testPolls.cpython-311.pyc
+    │   │   ├── testPost.cpython-311.pyc
+    │   │   ├── tests.cpython-311.pyc
+    │   │   ├── urls.cpython-311.pyc
+    │   │   └── views.cpython-311.pyc
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── migrations
+    │   │   ├── __init__.py
+    │   │   └── __pycache__
+    │   │       └── __init__.cpython-311.pyc
+    │   ├── models.py
+    │   ├── tests.py
+    │   ├── urls.py
+    │   └── views.py
+    └── requirements.txt [dependencies]
+```
+
+## TODO
 
 - Central database for all event related data (partially done).
 - Web service for database administration.
