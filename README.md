@@ -58,10 +58,14 @@ Development repository for event management services.
 - SQL: tbd
 
 
-## Set-Up
+## Development Set-Up
 
-- (set up virtual env with Python 3.11 and Django 4.2)
-- clone into this repository
+*Prerequisites: Python 3.11*
+
+1. Clone repo
+2. Create/Activate virtual env (`python3 -m venv venv` & `source venv/bin/activate`)
+3. Install dependencies (`pip install -r requirements.txt`)
+
 - go to `event-management/events/` directory
 - run `manage.py makemigrations` &
 - run `manage.py migrate to initialize local test db
@@ -69,11 +73,8 @@ Development repository for event management services.
 - (open `http://127.0.0.1:8000/` / `http://localhost:8000` -> 404)
 - open `http://localhost:8000/polls/` for hello world
 
-## Docker WIP
+## Deploy Docker
 
-- **there are several issues with that atm, so its not really working but might be helpful for testing and finding an actual setup**
-
-- go to `event-management/events/` directory
-- run `docker compose up`
-- mocked db container and container for project should be build and run
-
+1. Go to the root of the repo `event-management/`
+2. Run `docker compose up`
+3. Access Frontend on http://localhost:8000
