@@ -4,41 +4,28 @@ Development repository for event management services.
 
 ## Overview
 ```
-.
-├── README.md
-├── db-model [information/blueprints]
+event-management/
+├── Dockerfile
+├── OTHER
 │   ├── ERD_v2.png
-│   ├── plsql-scripts 
+│   ├── plsql-scripts
 │   │   ├── 01_ut_create_tables.sql
 │   │   ├── 02_ut_index.sql
 │   │   └── 03_ut_create_trigger.sql
 │   └── ut_db_schema - Tabellenblatt1.csv
-└── events [project directory]
-    ├── Dockerfile
-    ├── db.sqlite3
-    ├── docker-compose.yml 
-    ├── events [project setup files]
-    │   ├── __init__.py
-    │   ├── __pycache__
-    │   ├── asgi.py
-    │   ├── settings.py
-    │   ├── urls.py
-    │   └── wsgi.py
-    ├── manage.py [central django file for managing the project]
-    ├── polls [app directory with app setup files -> own repository?]
-    │   ├── __init__.py
-    │   ├── __pycache__
-    │   ├── admin.py
-    │   ├── apps.py
-    │   ├── migrations
-    │   │   ├── __init__.py
-    │   │   └── __pycache__
-    │   │       └── __init__.cpython-311.pyc
-    │   ├── models.py
-    │   ├── tests.py
-    │   ├── urls.py
-    │   └── views.py
-    └── requirements.txt [dependencies]
+├── README.md
+├── app
+│   ├── events
+│   │   ├── __init__.py
+│   │   ├── asgi.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── wsgi.py
+│   └── manage.py
+├── data
+│   └── db
+├── docker-compose.yml
+└── requirements.txt
 ```
 
 ## TODO
@@ -55,7 +42,7 @@ Development repository for event management services.
 - [Django](https://docs.djangoproject.com): [4.2 LTS](https://www.djangoproject.com/download/)
 - [Python: 3.11](https://docs.djangoproject.com/en/4.2/faq/install/#faq-python-version-support)
 - [Bootstrap](https://pypi.org/project/django-bootstrap-v5/)
-- SQL: tbd
+- SQL: Postgres
 
 
 ## Set-Up
