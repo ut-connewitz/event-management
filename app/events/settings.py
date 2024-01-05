@@ -32,11 +32,13 @@ ALLOWED_HOSTS = ["0.0.0.0"]
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    # What is it: https://youtu.be/rHux0gMZ3Eg?si=V1zuGiQlmNghjwgn&t=1368
+    'django.contrib.admin',         # Admin interface
+    'django.contrib.auth',          # Authenticating users
+   # 'django.contrib.sessions',     # Legacy
+    'django.contrib.contenttypes',  #
+    'django.contrib.messages',      # One-time notifications for the user
+    'django.contrib.staticfiles',   # Serving static files like images and css
     'polls',
 ]
 
