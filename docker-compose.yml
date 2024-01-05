@@ -1,5 +1,6 @@
 services:
   db:
+    container_name: events_db
     image: postgres
     volumes:
       - ./data/db:/var/lib/postgresql/data
@@ -8,6 +9,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   events:
+    container_name: events
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
