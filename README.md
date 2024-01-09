@@ -8,6 +8,7 @@ event-management/
 ├── Dockerfile
 ├── OTHER
 │   ├── ERD_v2.png
+│   ├── IDEF1X.png
 │   ├── plsql-scripts
 │   │   ├── 01_ut_create_tables.sql
 │   │   ├── 02_ut_index.sql
@@ -17,11 +18,23 @@ event-management/
 ├── app
 │   ├── events
 │   │   ├── __init__.py
+│   │   ├── __pycache__
 │   │   ├── asgi.py
 │   │   ├── settings.py
 │   │   ├── urls.py
 │   │   └── wsgi.py
-│   └── manage.py
+│   ├── manage.py
+│   └── testbootstrap
+│       ├── __init__.py
+│       ├── __pycache__
+│       ├── admin.py
+│       ├── apps.py
+│       ├── migrations
+│       ├── models.py
+│       ├── templates
+│       ├── tests.py
+│       ├── urls.py
+│       └── views.py
 ├── data
 │   └── db
 ├── docker-compose.yml
