@@ -56,6 +56,7 @@ class Team(models.Model):
         return self.team_name
 
 class TeamMember(models.Model):
+    team_member_id = models.BigAutoField(primary_key=true)
     username = models.ForeignKey(User, on_delete=models.CASCADE)
     team_name = models.ForeignKey(Team, on_delete=models.CASCADE)
 

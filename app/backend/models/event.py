@@ -9,7 +9,7 @@ class EventType(models.TextChoices):
 
 
 class Event(models.Model):
-    event_name = models.CharField(max_length=50, primary_key=true)
+    event_name = models.CharField(max_length=50, primary_key=true))
     event_type = models.CharField(
         max_length=2,
         choices=EventType.choices
@@ -29,6 +29,7 @@ class Event(models.Model):
         return self.event_name
 
 class EventDay(models.Model):
+    event_day_id = models.BigAutoField(primary_key=true)
     event_name = models.ForeignKey(Event, on_delete=models.CASCADE)
     date = models.DateField()
     start_time = models.DateTimeField()
@@ -60,6 +61,7 @@ class Act(models.Model):
         return self.act_name
 
 class EventAct(models.Model):
+    event_act_id = models.BigAutoField(primary_key=true)
     event_day = models.ForeignKey(EventDay, on_delete=models.cascade)
     act_name = models.ForeignKey(Act, on_delete=models.cascade)
 
