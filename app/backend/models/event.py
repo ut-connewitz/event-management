@@ -9,7 +9,7 @@ class EventType(models.TextChoices):
 
 
 class Event(models.Model):
-    event_name = models.CharField(max_length=50, primary_key=true))
+    event_name = models.CharField(max_length=50, primary_key=true)
     event_type = models.CharField(
         max_length=2,
         choices=EventType.choices
