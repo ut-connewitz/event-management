@@ -41,7 +41,7 @@ class EventDay(models.Model):
         verbose_name_plural = "Veranstaltungstage"
 
     def __str__(self):
-        return self.event_name + date
+        return self.event_name + self.date
 
 class Act(models.Model):
     act_name = models.CharField(max_length=40, primary_key=true)
@@ -70,4 +70,4 @@ class EventAct(models.Model):
         verbose_name_plural = "Auftritte"
 
     def __str__(self):
-        return self.event_name + act_name
+        return self.event_name + self.act_name
