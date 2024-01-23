@@ -1,7 +1,7 @@
 from django.db import models
 
 class NotificationType(models.TextChoices):
-    TASK_NOTIFICATION = "TN", ("Aufgabenbenachrichtigung")
+    TASK_NOTIFICATION = "TN", _("Aufgabenbenachrichtigung")
     VOLUNTEERING_NOTIFICATION = "VN", _("Dienstbenachrichtigung")
     MISC_NOTIFICATION = "MN", _("Benachrichtigung")
 
@@ -11,7 +11,7 @@ class Notification(models.Model):
     notification_type = models.CharField(
         max_length=2,
         choices=NotificationType.choices
-        default=EventType.MISC_NOTIFICATION)
+        default=NotificationType.MISC_NOTIFICATION)
     comment = models.TextField()
     timer = models.PositiveIntegerField() #alternative: TimeField
 
