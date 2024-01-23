@@ -2,7 +2,7 @@ from django.db import models
 
 
 class User(models.Model):
-    username = models.CharField(max_length=20, primary_key=true)
+    username = models.CharField(max_length=20, primary_key=True)
     password = models.CharField(max_length=40)
     surname = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
@@ -47,7 +47,7 @@ class Adress(models.Model):
         return self.username
 
 class Team(models.Model):
-    team_name = models.CharField(max_length=40, primary_key=true)
+    team_name = models.CharField(max_length=40, primary_key=True)
 
     class Meta:
         verbose_name = "Team"
@@ -56,7 +56,7 @@ class Team(models.Model):
         return self.team_name
 
 class TeamMember(models.Model):
-    team_member_id = models.BigAutoField(primary_key=true)
+    team_member_id = models.BigAutoField(primary_key=True)
     username = models.ForeignKey(User, on_delete=models.CASCADE)
     team_name = models.ForeignKey(Team, on_delete=models.CASCADE)
 

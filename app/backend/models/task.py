@@ -1,52 +1,55 @@
 from django.db import models
+from .event import EventDay
+from .user import User
 
 class TaskType(models.TextChoices):
-    ADMISSION = "AD", _("Einlass")
-    SOUND = "SO", _("Tontechnik")
-    LIGHT = "LI", _("Lichttechnik")
-    KITCHEN = "KI", _("Küche")
-    OTHER = "O", _("Sonstiges")
+    ADMISSION = "Einlass"
+    SOUND = "Tontechnik"
+    LIGHT = "Lichttechnik"
+    KITCHEN = "Küche"
+    OTHER = "Sonstiges"
 
 class TeamRestriction(models.TextChoices):
-    SOUND = "SO", _("Tontechnik")
-    LIGHT = "LI", _("Lichttechnik")
-    OFFICE = "OF", _("Verwaltung")
-    NONE = "NO", _("Ohne")
+    SOUND = "Tontechnik"
+    LIGHT = "Lichttechnik"
+    OFFICE = "Verwaltung"
+    NONE = "Ohne"
 
 class Urgency(models.TextChoices):
-    URGENT = "HI", _("Dringend")
-    IMPORTANT = "IM", _("Wichtig")
-    MEDIUM = "ME", _("Mittel")
-    LOW = "LO", _("Niedrig")
+    URGENT = "Dringend"
+    IMPORTANT = "Wichtig"
+    MEDIUM = "Mittel"
+    LOW = "Niedrig"
 
 class State(models.TextChoices):
-    FREE = "FR", _("Offen")
-    TAKEN = "TA", _("Übernommen")
-    MAYBE = "MB", _("Vielleicht")
-    DONE = "DN", _("Erledigt")
+    FREE = "Offen"
+    TAKEN = "Übernommen"
+    MAYBE = "Vielleicht"
+    DONE = "Erledigt"
 
 class ConfirmationType(models.TextChoices):
-    NOT = "NO", _("Nicht")
-    CERTAIN = "CE", _("Sicher")
-    MAYBE = "MB", _("Vielleicht")
+    NOT = "Nicht"
+    CERTAIN = "Sicher"
+    MAYBE = "Vielleicht"
 
 class Task(models.Model):
-    task_id = models.BigAutoField(primary_key=true)
+    task_id = models.BigAutoField(primary_key=True)
+    event_day_id = models.ForeignKey(EventDay, on_delete=models.CASCADE)
     task_type = models.CharField(
-        max_length=2,
-        choices=TaskType.choices
+        max_length=15,
+        choices=TaskType.choices,
         default=TaskType.OTHER)
     team_restriction = models.CharField(
-        max_length=2,
-        choices=TeamRestriction.choices
+        max_length=15,
+        choices=TeamRestriction.choices,
         default=TeamRestriction.NONE)
     urgency = models.CharField(
-        max_length=2,
-        choices=Urgency.choices
+        max_length=15,
+        choices=Urgency.choices,
         default=Urgency.MEDIUM)
     state = models.CharField(
-        max_length=2,
-        choices=State.choices
+        max_length=15,
+        choices=State.choices,
         default=State.FREE)
     start_time = models.DateTimeField()
     finish_time = models.DateTimeField()
@@ -60,12 +63,12 @@ class Task(models.Model):
         return self.task_id
 
 class Volunteering(models.Model):
-    volunteering_id = models.BigAutoField(primary_key=true)
-    task_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+    volunteering_id = models.BigAutoField(primary_key=True)
+    task_id = models.ForeignKey(Task, on_delete=models.CASCADE)
     username = models.ForeignKey(User, on_delete=models.CASCADE)
     confirmation_type = models.CharField(
-        max_length=2,
-        choices=ConfirmationType.choices
+        max_length=15,
+        choices=ConfirmationType.choices,
         default=ConfirmationType.NOT)
 
     class Meta:

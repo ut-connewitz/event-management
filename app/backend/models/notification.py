@@ -1,16 +1,17 @@
 from django.db import models
+from .task import Task, Volunteering
 
 class NotificationType(models.TextChoices):
-    TASK_NOTIFICATION = "TN", _("Aufgabenbenachrichtigung")
-    VOLUNTEERING_NOTIFICATION = "VN", _("Dienstbenachrichtigung")
-    MISC_NOTIFICATION = "MN", _("Benachrichtigung")
+    TASK_NOTIFICATION = "Aufgabenbenachrichtigung"
+    VOLUNTEERING_NOTIFICATION = "Dienstbenachrichtigung"
+    MISC_NOTIFICATION = "Benachrichtigung"
 
 
 class Notification(models.Model):
-    notification_id = models.BigAutoField(primary_key=true)
+    notification_id = models.BigAutoField(primary_key=True)
     notification_type = models.CharField(
-        max_length=2,
-        choices=NotificationType.choices
+        max_length=30,
+        choices=NotificationType.choices,
         default=NotificationType.MISC_NOTIFICATION)
     comment = models.TextField()
     timer = models.PositiveIntegerField() #alternative: TimeField

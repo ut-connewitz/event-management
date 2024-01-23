@@ -1,18 +1,18 @@
 from django.db import models
 
 class EventType(models.TextChoices):
-    CINEMA = "CI", ("Kino")
-    CONCERT = "CO", _("Konzert")
-    PLAY = "P", _("Theater")
-    FESTIVAL = "F", _("Festival")
-    OTHER = "O", _("Sonstiges")
+    CINEMA = "Kino"
+    CONCERT = "Konzert"
+    PLAY = "Theater"
+    FESTIVAL = "Festival"
+    OTHER = "Sonstiges"
 
 
 class Event(models.Model):
-    event_name = models.CharField(max_length=50, primary_key=true)
+    event_name = models.CharField(max_length=50, primary_key=True)
     event_type = models.CharField(
-        max_length=2,
-        choices=EventType.choices
+        max_length=10,
+        choices=EventType.choices,
         default=EventType.OTHER)
     event_description = models.TextField()
     #maybe use blob here instead
@@ -29,7 +29,7 @@ class Event(models.Model):
         return self.event_name
 
 class EventDay(models.Model):
-    event_day_id = models.BigAutoField(primary_key=true)
+    event_day_id = models.BigAutoField(primary_key=True)
     event_name = models.ForeignKey(Event, on_delete=models.CASCADE)
     date = models.DateField()
     start_time = models.DateTimeField()
@@ -44,14 +44,14 @@ class EventDay(models.Model):
         return self.event_name + self.date
 
 class Act(models.Model):
-    act_name = models.CharField(max_length=40, primary_key=true)
+    act_name = models.CharField(max_length=40, primary_key=True)
     person_count = models.PositiveIntegerField()
     #TODO: "requires pillow library"
     act_image = models.ImageField()
     #TODO: test options
     music_sample = models.FileField()
     diet = models.CharField(max_length=100)
-    act_email = models.EmailField, max_length=100)
+    act_email = models.EmailField(max_length=100)
     act_phone = models.CharField(max_length=15)
 
     class Meta:
@@ -61,9 +61,9 @@ class Act(models.Model):
         return self.act_name
 
 class EventAct(models.Model):
-    event_act_id = models.BigAutoField(primary_key=true)
-    event_day = models.ForeignKey(EventDay, on_delete=models.cascade)
-    act_name = models.ForeignKey(Act, on_delete=models.cascade)
+    event_act_id = models.BigAutoField(primary_key=True)
+    event_day = models.ForeignKey(EventDay, on_delete=models.CASCADE)
+    act_name = models.ForeignKey(Act, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Auftritt"
