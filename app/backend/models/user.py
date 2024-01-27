@@ -30,6 +30,9 @@ class UTMember(User):
 class Volunteer(User):
     volunteering_count = models.PositiveIntegerField()
 
+    class Meta:
+        verbose_name = "Helfer:in"
+
     def __str__(self):
         return self.username
 

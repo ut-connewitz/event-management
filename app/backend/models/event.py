@@ -1,19 +1,21 @@
 from django.db import models
-
-class EventType(models.TextChoices):
-    CINEMA = "Kino"
-    CONCERT = "Konzert"
-    PLAY = "Theater"
-    FESTIVAL = "Festival"
-    OTHER = "Sonstiges"
+from django.utils.translation import gettext_lazy as _
 
 
 class Event(models.Model):
+    class EventType(models.TextChoices):
+        CINEMA = "CI", _("Kino")
+        CONCERT = "CO", _("Konzert")
+        PLAY = "PY", _("Theater")
+        FESTIVAL = "FV", _("Festival")
+        OTHER = "OT", _("Sonstiges")
+
     event_name = models.CharField(max_length=50, primary_key=True)
     event_type = models.CharField(
-        max_length=10,
+        max_length=2,
         choices=EventType.choices,
-        default=EventType.OTHER)
+        default=EventType.OTHER,
+    )
     event_description = models.TextField()
     #maybe use blob here instead
     event_press = models.TextField()

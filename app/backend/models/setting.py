@@ -1,27 +1,31 @@
 from django.db import models
-
-class SettingType(models.TextChoices):
-    NOTIFICATION_GLOBAL = "Alle Benachrichtiggungen"
-    NOTIFICATION_SPECIFIC = "Eine Benachrichtigung" #not yet implemented, low prio
-    APPEARANCE = "Erscheinungsbild"
-    MISC_SETTING = "Einstellung"
-
-class ValueType(models.TextChoices):
-    BOOL_VALUE = "Bool"
-    INT_VALUE = "Integer"
-    ENUM_VALUE = "Eumeration"
+from django.utils.translation import gettext_lazy as _
+from .user import User
 
 
 class Setting(models.Model):
+    class SettingType(models.TextChoices):
+        NOTIFICATION_GLOBAL = "NG", _("Benachrichtigungen allgmein")
+        NOTIFICATION_SPECIFIC = "NS", _("Bestimmte Benachrichtigung") #not yet implemented, low prio
+        APPEARANCE = "AP", _("Erscheinungsbild")
+        MISC_SETTING = "ST", _("Einstellung")
+
+    class ValueType(models.TextChoices):
+        BOOL_VALUE = "BO", _("Bool")
+        INT_VALUE = "IN", _("Integer")
+        ENUM_VALUE = "EN", _("Eumeration")
+
     setting_name = models.CharField(primary_key=True)
     setting_type = models.CharField(
-        max_length=30,
+        max_length=2,
         choices=SettingType.choices,
-        default=SettingType.MISC_SETTING)
+        default=SettingType.MISC_SETTING,
+    )
     value_type = models.CharField(
-        max_length=15,
+        max_length=2,
         choices=ValueType.choices,
-        default=ValueType.BOOL_VALUE)
+        default=ValueType.BOOL_VALUE,
+    )
 
     class Meta:
         verbose_name = "Einstellung"
@@ -45,8 +49,17 @@ class UserSettingValue(models.Model):
 class BoolValue(UserSettingValue):
     bool_value = models.BooleanField()
 
+    class Meta:
+        verbose_name = "Boolwert"
+
 class IntValue(UserSettingValue):
     int_value = models.BigIntegerField()
 
+    class Meta:
+        verbose_name = "Integerwert"
+
 class EnumValue(UserSettingValue):
     #TODO
+
+    class Meta:
+        verbose_name = "Enumwert"
