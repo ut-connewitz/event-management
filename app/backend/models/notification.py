@@ -11,12 +11,13 @@ class Notification(models.Model):
 
     notification_id = models.BigAutoField(primary_key=True)
     notification_type = models.CharField(
+        "Benachrichtigungsart",
         max_length=2,
         choices=NotificationType.choices,
         default=NotificationType.MISC_NOTIFICATION,
     )
-    comment = models.TextField()
-    timer = models.PositiveIntegerField() #alternative: TimeField
+    comment = models.TextField("Kommentar", blank=True)
+    timer = models.PositiveIntegerField("Timer") #alternative: TimeField
 
     class Meta:
         verbose_name = "Benachrichtigung"
@@ -30,9 +31,11 @@ class TaskNotification(Notification):
 
     class Meta:
         verbose_name = "Aufgabenbenachrichtigung"
+        verbose_name_plural = "Aufgabenbenachrichtigungen"
 
 class VolunteeringNotification(Notification):
     volunteering_id = models.ForeignKey(Volunteering, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Dienstbenachrichtigung"
+        verbose_name_plural ="Dienstbenachrichtigungen"

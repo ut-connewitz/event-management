@@ -15,13 +15,15 @@ class Setting(models.Model):
         INT_VALUE = "IN", _("Integer")
         ENUM_VALUE = "EN", _("Eumeration")
 
-    setting_name = models.CharField(primary_key=True)
+    setting_name = models.CharField("Einstellungsname", primary_key=True)
     setting_type = models.CharField(
+        "Einstellungsart",
         max_length=2,
         choices=SettingType.choices,
         default=SettingType.MISC_SETTING,
     )
     value_type = models.CharField(
+        "Datentyp",
         max_length=2,
         choices=ValueType.choices,
         default=ValueType.BOOL_VALUE,
@@ -51,15 +53,18 @@ class BoolValue(UserSettingValue):
 
     class Meta:
         verbose_name = "Boolwert"
+        verbose_name_plural = "Boolwerte"
 
 class IntValue(UserSettingValue):
     int_value = models.BigIntegerField()
 
     class Meta:
         verbose_name = "Integerwert"
+        verbose_name_plural = "Integerwerte"
 
 class EnumValue(UserSettingValue):
     #TODO
 
     class Meta:
         verbose_name = "Enumwert"
+        verbose_name_plural ="Enumwerte"

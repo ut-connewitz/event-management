@@ -10,18 +10,27 @@ class Event(models.Model):
         FESTIVAL = "FV", _("Festival")
         OTHER = "OT", _("Sonstiges")
 
-    event_name = models.CharField(max_length=50, primary_key=True)
+    event_name = models.CharField(
+        "Veranstaltungsname",
+        max_length=50,
+        primary_key=True,
+    )
     event_type = models.CharField(
+        "Veranstaltungsart",
         max_length=2,
         choices=EventType.choices,
         default=EventType.OTHER,
     )
-    event_description = models.TextField()
-    #maybe use blob here instead
-    event_press = models.TextField()
-    event_fee = models.DecimalField(max_digits=4, decimal_places=2)
-    #TODO: "requires pillow library"
-    event_image = models.ImageField()
+    event_description = models.TextField("Beschreibung", blank=True)
+    event_press = models.TextField("Pressetext", blank=True)
+    event_fee = models.DecimalField(
+        "Einlassgebühr",
+        null=True,
+        blank=True,
+        max_digits=4,
+        decimal_places=2,
+    )
+    event_image = models.ImageField("Bild", null=True, blank=True)
 
     class Meta:
         verbose_name = "Veranstaltung"
@@ -33,10 +42,10 @@ class Event(models.Model):
 class EventDay(models.Model):
     event_day_id = models.BigAutoField(primary_key=True)
     event_name = models.ForeignKey(Event, on_delete=models.CASCADE)
-    date = models.DateField()
-    start_time = models.DateTimeField()
-    duration = models.DurationField() #TODO: test how this works
-    admission_time = models.DateTimeField()
+    date = models.DateField("Datum", null=True, blank=True)
+    start_time = models.DateTimeField("Veranstaltungsbeginn", null=True, blank=True)
+    duration = models.DurationField("Veranstaltungsdauer", null=True, blank=True) #TODO: test how this works
+    admission_time = models.DateTimeField("Einlassbeginn", null=True, blank=True)
 
     class Meta:
         verbose_name = "Veranstaltungstag"
@@ -46,18 +55,22 @@ class EventDay(models.Model):
         return self.event_name + self.date
 
 class Act(models.Model):
-    act_name = models.CharField(max_length=40, primary_key=True)
-    person_count = models.PositiveIntegerField()
-    #TODO: "requires pillow library"
-    act_image = models.ImageField()
-    #TODO: test options
-    music_sample = models.FileField()
-    diet = models.CharField(max_length=100)
-    act_email = models.EmailField(max_length=100)
-    act_phone = models.CharField(max_length=15)
+    act_name = models.CharField(
+        "Aktname",
+        max_length=40,
+        primary_key=True
+    )
+    person_count = models.PositiveIntegerField("Personenzahl", null=True, blank=True)
+    act_image = models.ImageField("Bild", null=True, blank=True)
+    #TODO: test options for music files
+    music_sample = models.FileField("Musikbeispiel", null=True, blank=True)
+    diet = models.CharField("Ernährung", blank=True, max_length=100)
+    act_email = models.EmailField("Email", null=True, blank=True, max_length=100)
+    act_phone = models.CharField("Telefon", blank=True, max_length=15)
 
     class Meta:
-        verbose_name = "Band"
+        verbose_name = "Akt"
+        verbose_name_plural = "Akte"
 
     def __str__(self):
         return self.act_name

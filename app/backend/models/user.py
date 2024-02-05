@@ -2,12 +2,11 @@ from django.db import models
 
 
 class User(models.Model):
-    username = models.CharField(max_length=20, primary_key=True)
-    password = models.CharField(max_length=40)
-    surname = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
-    email = models.EmailField(max_length=100)
-    phone = models.CharField(max_length=20)
+    username = models.CharField("Anmeldename", max_length=20, primary_key=True)
+    surname = models.CharField("Vorname", blank=True, max_length=40)
+    last_name = models.CharField("Nachname", blank=True, max_length=40)
+    email = models.EmailField("Email", null=True, blank=True, max_length=100)
+    phone = models.CharField("Telefon", blank=True, max_length=20)
 
     class Meta:
         verbose_name = "Person"
@@ -18,42 +17,46 @@ class User(models.Model):
 
 
 class UTMember(User):
-    member_number = models.PositiveIntegerField()
+    member_number = models.PositiveIntegerField("Mitgliedsnummer")
 
     class Meta:
         verbose_name = "Mitglied"
+        verbose_name_plural = "Mitglieder"
 
     def __str__(self):
         return self.username
 
 
 class Volunteer(User):
-    volunteering_count = models.PositiveIntegerField()
+    volunteering_count = models.PositiveIntegerField("Zähler", null=True, blank=True) #not necessary, just a placeholder/example for what this class could be used
 
     class Meta:
         verbose_name = "Helfer:in"
+        verbose_name_plural = "Helfer:innen"
 
     def __str__(self):
         return self.username
 
 class Adress(models.Model):
     username = models.ForeignKey(User, on_delete=models.CASCADE)
-    street = models.CharField(max_length=40)
-    house_number = models.CharField(max_length=40)
-    postal_code = models.CharField(max_length=40)
-    country = models.CharField(max_length=40)
+    street = models.CharField("Straße", blank=True, max_length=40)
+    house_number = models.CharField("Hausnummer", blank=True, max_length=40)
+    postal_code = models.CharField("PLZ", blank=True, max_length=40)
+    country = models.CharField("Land", blank=True, max_length=40) #maybe as an option field
 
     class Meta:
         verbose_name = "Adresse"
+        verbose_name_plural = "Adressen"
 
     def __str__(self):
         return self.username
 
 class Team(models.Model):
-    team_name = models.CharField(max_length=40, primary_key=True)
+    team_name = models.CharField("Teamname", max_length=40, primary_key=True)
 
     class Meta:
         verbose_name = "Team"
+        verbose_name_plural = "Teams"
 
     def __str__(self):
         return self.team_name
@@ -64,7 +67,8 @@ class TeamMember(models.Model):
     team_name = models.ForeignKey(Team, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = "Team Member"
+        verbose_name = "Teammitglied"
+        verbose_name_plural = "Teammitglieder"
 
     def __str__(self):
         return self.username + self.team_name
