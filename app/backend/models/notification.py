@@ -24,7 +24,7 @@ class Notification(models.Model):
         verbose_name_plural = "Benachrichtigungen"
 
     def __str__(self):
-        return self.notification_id
+        return str(self.notification_id)
 
 class TaskNotification(Notification):
     task_id = models.ForeignKey(Task, on_delete=models.CASCADE)

@@ -37,7 +37,7 @@ class Event(models.Model):
         verbose_name_plural = "Veranstaltungen"
 
     def __str__(self):
-        return self.event_name
+        return str(self.event_name)
 
 class EventDay(models.Model):
     event_day_id = models.BigAutoField(primary_key=True)
@@ -52,7 +52,7 @@ class EventDay(models.Model):
         verbose_name_plural = "Veranstaltungstage"
 
     def __str__(self):
-        return self.event_name + self.date
+        return str(self.event_name) + str(self.date)
 
 class Act(models.Model):
     act_name = models.CharField(
@@ -73,7 +73,7 @@ class Act(models.Model):
         verbose_name_plural = "Akte"
 
     def __str__(self):
-        return self.act_name
+        return str(self.act_name)
 
 class EventAct(models.Model):
     event_act_id = models.BigAutoField(primary_key=True)
@@ -85,4 +85,4 @@ class EventAct(models.Model):
         verbose_name_plural = "Auftritte"
 
     def __str__(self):
-        return self.event_name + self.act_name
+        return str(self.event_name) + str(self.act_name)

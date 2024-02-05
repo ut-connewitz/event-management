@@ -64,7 +64,7 @@ class Task(models.Model):
         verbose_name_plural = "Aufgaben"
 
     def __str__(self):
-        return self.task_id
+        return str(self.task_id)
 
 class Volunteering(models.Model):
     class ConfirmationType(models.TextChoices):
@@ -87,4 +87,4 @@ class Volunteering(models.Model):
         verbose_name_plural = "Dienste"
 
     def __str__(self):
-        return self.volunteering_id
+        return str(self.volunteering_id)

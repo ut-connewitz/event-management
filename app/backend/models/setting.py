@@ -34,7 +34,7 @@ class Setting(models.Model):
         verbose_name_plural = "Einstellungen"
 
     def __str__(self):
-        return self.setting_name
+        return str(self.setting_name)
 
 class UserSettingValue(models.Model):
     user_setting_value_id = models.BigAutoField(primary_key=True)
@@ -46,7 +46,7 @@ class UserSettingValue(models.Model):
         verbose_name_plural = "Einstellungswerte"
 
     def __str__(self):
-        return self.user_setting_value_id
+        return str(self.user_setting_value_id)
 
 class BoolValue(UserSettingValue):
     bool_value = models.BooleanField()

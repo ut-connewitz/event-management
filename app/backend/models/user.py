@@ -13,7 +13,7 @@ class User(models.Model):
         verbose_name_plural = "Personen"
 
     def __str__(self):
-        return self.username
+        return str(self.username)
 
 
 class UTMember(User):
@@ -24,7 +24,7 @@ class UTMember(User):
         verbose_name_plural = "Mitglieder"
 
     def __str__(self):
-        return self.username
+        return str(self.username)
 
 
 class Volunteer(User):
@@ -35,7 +35,7 @@ class Volunteer(User):
         verbose_name_plural = "Helfer:innen"
 
     def __str__(self):
-        return self.username
+        return str(self.username)
 
 class Adress(models.Model):
     username = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -49,7 +49,7 @@ class Adress(models.Model):
         verbose_name_plural = "Adressen"
 
     def __str__(self):
-        return self.username
+        return str(self.username)
 
 class Team(models.Model):
     team_name = models.CharField("Teamname", max_length=40, primary_key=True)
@@ -59,7 +59,7 @@ class Team(models.Model):
         verbose_name_plural = "Teams"
 
     def __str__(self):
-        return self.team_name
+        return str(self.team_name)
 
 class TeamMember(models.Model):
     team_member_id = models.BigAutoField(primary_key=True)
@@ -71,4 +71,4 @@ class TeamMember(models.Model):
         verbose_name_plural = "Teammitglieder"
 
     def __str__(self):
-        return self.username + self.team_name
+        return str(self.username) + str(self.team_name)
