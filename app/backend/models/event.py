@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
+from django.db.utils import IntegrityError
 
 class EventType(models.TextChoices):
     CINEMA = "CI", _("Kino")
@@ -59,6 +60,18 @@ class EventDay(models.Model):
     def __str__(self):
         return str(self.event_name) + str(self.date)
 
+    # overwrite save methods with caution!
+    # this is meant to prevent db crash wenn multiple event days with equal starting times are entered from addtestdata.py
+    # this may occur, when addtestdata.py is run multiple times for development/testing reasons
+    # for now, only unique fields are problematic since primary key duplicates just wont be inserted (as expected) without crashing the db
+    # exception handling in the admin panel is not affected
+    def save(self, *args, **kwargs):
+        try:
+            super(EventDay, self).save(*args, **kwargs)
+        except IntegrityError:
+            print("Zu dieser Zeit findet bereits eine Veranstaltung statt")
+            pass
+
 class Act(models.Model):
     act_name = models.CharField(
         "Aktname",
@@ -90,4 +103,4 @@ class EventAct(models.Model):
         verbose_name_plural = "Auftritte"
 
     def __str__(self):
-        return str(self.event_name) + str(self.act_name)
+        return str(self.event_day) + str(self.act_name)

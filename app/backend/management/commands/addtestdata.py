@@ -36,7 +36,7 @@ class Command(BaseCommand):
             username=utmember1,
             street="Forstweg",
             house_number="13a",
-            postal_code="43221"
+            postal_code="43221",
         )
         adress_jd.save()
         team_tontechnik = Team(team_name="Tontechnik") #base data
@@ -53,13 +53,13 @@ class Command(BaseCommand):
             event_name="BAIKALTRAIN DISCO",
             event_type=EventType.EXTRA,
             event_description="Disko mit DJ Malhalla und DJ Petrike",
-            event_press="Knackige Tanzmusik vom Balkan bis zum Baikal. \"Von der Eisenbahn in den Club. Die Leute sind nicht zu bremsen.\""
+            event_press="Knackige Tanzmusik vom Balkan bis zum Baikal. \"Von der Eisenbahn in den Club. Die Leute sind nicht zu bremsen.\"",
         ) #possibly base data
         event1.save()
         event2 = Event(
             event_name="JOHNNY & ME",
             event_type=EventType.CINEMA,
-            event_description="Eine Zeitreise mit Johnny Heartfield"
+            event_description="Eine Zeitreise mit Johnny Heartfield",
         )
         event2.save()
         event1day1 = EventDay(
@@ -86,3 +86,15 @@ class Command(BaseCommand):
             admission_time=parse_datetime("2024-02-12 19:50:00").replace(tzinfo=get_current_timezone()),
         )
         event2day1.save()
+        act1 = Act(act_name="DJ Malhalla und DJ Petrike", person_count=2) #possibly base data
+        act1.save()
+        eventact1 = EventAct(
+            event_day=EventDay.objects.get(start_time=parse_datetime("2024-02-24 20:00:00").replace(tzinfo=get_current_timezone())),
+            act_name=act1,
+        )
+        eventact1.save()
+        eventact2 = EventAct(
+            event_day=EventDay.objects.get(start_time=parse_datetime("2024-03-08 20:00:00").replace(tzinfo=get_current_timezone())),
+            act_name=act1,
+        )
+        eventact2.save()
