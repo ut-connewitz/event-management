@@ -45,7 +45,7 @@ class UserSettingValue(models.Model):
         verbose_name_plural = "Einstellungswerte"
 
     def __str__(self):
-        return str(self.user_setting_value_id)
+        return str(self.username) + " " + str(self.setting_name)
 
 class BoolValue(UserSettingValue):
     bool_value = models.BooleanField()

@@ -87,4 +87,4 @@ class Volunteering(models.Model):
         verbose_name_plural = "Dienste"
 
     def __str__(self):
-        return str(self.volunteering_id)
+        return str(self.username) + " " + str(self.task_id)

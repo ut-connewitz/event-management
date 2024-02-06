@@ -58,7 +58,7 @@ class EventDay(models.Model):
         verbose_name_plural = "Veranstaltungstage"
 
     def __str__(self):
-        return str(self.event_name) + str(self.date)
+        return str(self.event_name) + " " + str(self.date)
 
     # overwrite save methods with caution!
     # this is meant to prevent db crash wenn multiple event days with equal starting times are entered from addtestdata.py
@@ -103,4 +103,4 @@ class EventAct(models.Model):
         verbose_name_plural = "Auftritte"
 
     def __str__(self):
-        return str(self.event_day) + str(self.act_name)
+        return str(self.event_day) + " " + str(self.act_name)

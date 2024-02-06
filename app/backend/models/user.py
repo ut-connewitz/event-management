@@ -49,7 +49,7 @@ class Adress(models.Model):
         verbose_name_plural = "Adressen"
 
     def __str__(self):
-        return str(self.username)
+        return str(self.username) + "\'s Adresse"
 
 class Team(models.Model):
     team_name = models.CharField("Teamname", max_length=40, primary_key=True)
@@ -71,4 +71,4 @@ class TeamMember(models.Model):
         verbose_name_plural = "Teammitglieder"
 
     def __str__(self):
-        return str(self.username) + str(self.team_name)
+        return str(self.team_name) + " " + str(self.username)
