@@ -2,19 +2,18 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from .user import User
 
+class SettingType(models.TextChoices):
+    NOTIFICATION_GLOBAL = "NG", _("Benachrichtigungen allgmein")
+    NOTIFICATION_SPECIFIC = "NS", _("Bestimmte Benachrichtigung") #not yet implemented, low prio
+    APPEARANCE = "AP", _("Erscheinungsbild")
+    MISC_SETTING = "ST", _("Einstellung")
+
+class ValueType(models.TextChoices):
+    BOOL_VALUE = "BO", _("Bool")
+    INT_VALUE = "IN", _("Integer")
+    ENUM_VALUE = "EN", _("Eumeration")
 
 class Setting(models.Model):
-    class SettingType(models.TextChoices):
-        NOTIFICATION_GLOBAL = "NG", _("Benachrichtigungen allgmein")
-        NOTIFICATION_SPECIFIC = "NS", _("Bestimmte Benachrichtigung") #not yet implemented, low prio
-        APPEARANCE = "AP", _("Erscheinungsbild")
-        MISC_SETTING = "ST", _("Einstellung")
-
-    class ValueType(models.TextChoices):
-        BOOL_VALUE = "BO", _("Bool")
-        INT_VALUE = "IN", _("Integer")
-        ENUM_VALUE = "EN", _("Eumeration")
-
     setting_name = models.CharField("Einstellungsname", primary_key=True)
     setting_type = models.CharField(
         "Einstellungsart",

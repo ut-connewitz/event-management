@@ -2,13 +2,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from .task import Task, Volunteering
 
+class NotificationType(models.TextChoices):
+    TASK_NOTIFICATION = "AB", _("Aufgabenbenachrichtigung")
+    VOLUNTEERING_NOTIFICATION = "DB", _("Dienstbenachrichtigung")
+    MISC_NOTIFICATION = "BN", _("Benachrichtigung")
 
 class Notification(models.Model):
-    class NotificationType(models.TextChoices):
-        TASK_NOTIFICATION = "AB", _("Aufgabenbenachrichtigung")
-        VOLUNTEERING_NOTIFICATION = "DB", _("Dienstbenachrichtigung")
-        MISC_NOTIFICATION = "BN", _("Benachrichtigung")
-
     notification_id = models.BigAutoField(primary_key=True)
     notification_type = models.CharField(
         "Benachrichtigungsart",

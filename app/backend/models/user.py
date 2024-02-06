@@ -38,7 +38,7 @@ class Volunteer(User):
         return str(self.username)
 
 class Adress(models.Model):
-    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    username = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     street = models.CharField("Straße", blank=True, max_length=40)
     house_number = models.CharField("Hausnummer", blank=True, max_length=40)
     postal_code = models.CharField("PLZ", blank=True, max_length=40)
