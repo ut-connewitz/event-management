@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import now
 
 class EventType(models.TextChoices):
     CINEMA = "CI", _("Kino")
@@ -44,7 +45,10 @@ class EventDay(models.Model):
     event_day_id = models.BigAutoField(primary_key=True)
     event_name = models.ForeignKey(Event, on_delete=models.CASCADE)
     date = models.DateField("Datum", null=True, blank=True)
-    start_time = models.DateTimeField("Veranstaltungsbeginn", null=True, blank=True)
+    #making start time unique assuming there can not be two events beginning at the exact same time within the ut
+    #standard exception handling seems viable
+    #NOTE: making this field pk will add duplicate instance with newly set time on update
+    start_time = models.DateTimeField("Veranstaltungsbeginn", default=now, unique=True)
     duration = models.DurationField("Veranstaltungsdauer", null=True, blank=True) #TODO: test how this works
     admission_time = models.DateTimeField("Einlassbeginn", null=True, blank=True)
 
