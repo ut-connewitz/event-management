@@ -1,13 +1,11 @@
 from django.contrib import admin
 
 
-from backend.models import (
-User, UTMember, Volunteer, Adress, Team, TeamMember,
-Event, EventDay, Act, EventAct,
-Task, Volunteering,
-Notification, TaskNotification, VolunteeringNotification,
-Setting, UserSettingValue, BoolValue, IntValue, EnumValue
-)
+from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
+from backend.models.user import (User, UTMember, Volunteer, Adress, Team, TeamMember)
+from backend.models.event import(Event, EventDay, Act, EventAct)
+from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
+from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering)
 
 
 # Register your models here.
