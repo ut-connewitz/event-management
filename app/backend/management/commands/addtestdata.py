@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.dateparse import parse_datetime, parse_duration
 from django.utils.timezone import get_current_timezone
+from django.contrib.auth.models import Group, Permission
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
-from backend.models.user import (User, UTMember, Volunteer, Adress, Team, TeamMember)
+from backend.models.user import (User, UTMember, Volunteer, Adress)
 from backend.models.event import(EventType, Event, EventDay, Act, EventAct)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering)
@@ -13,22 +14,32 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("running command addtestdata")
 
+        #group1 = Group.objects.create(name="utadmin")
+        #group1.save()
+        #group2 = Group.objects.create(name="küche")
+        #group2.save()
+        group3 = Group.objects.create(name="lichttechnik")
+        group3.save()
+        group4 = Group.objects.create(name="tontechnik")
+        group4.save()
+
         #base and testdata for class user
         utmember1 = UTMember(
             username="jd",
-            surname="Jane",
+            first_name="Jane",
             last_name="Doe",
             email="jane.doe@mail.de",
-            phone="012345678",
             member_number="123",
         )
+        utmember1.set_password('lazy1234')
         utmember1.save()
         volunteer1 = Volunteer(
             username="mm",
-            surname="Max",
+            first_name="Max",
             last_name="Mustermann",
             email="max@mustermail.net",
         )
+        volunteer1.set_password("lazy1234")
         volunteer1.save()
         adress_jd = Adress(
             username=utmember1,
@@ -37,14 +48,8 @@ class Command(BaseCommand):
             postal_code="43221",
         )
         adress_jd.save()
-        team_tontechnik = Team(team_name="Tontechnik") #base data
-        team_tontechnik.save()
-        team_lichttechnik = Team(team_name="Lichttechnik") #base data
-        team_lichttechnik.save()
-        team_küche = Team(team_name= "Küche") #base data
-        team_küche.save()
-        tontechnik_jd = TeamMember(username=utmember1, team_name=team_tontechnik)
-        tontechnik_jd.save()
+
+
 
         #base and testdata for event
         event1 = Event(

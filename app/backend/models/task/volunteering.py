@@ -6,7 +6,7 @@ from backend.models.user import User
 class Volunteering(models.Model):
     volunteering_id = models.BigAutoField(primary_key=True)
     task_id = models.ForeignKey(Task, on_delete=models.CASCADE)
-    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     confirmation_type = models.CharField(
         "Art der Zusage",
         max_length=15,

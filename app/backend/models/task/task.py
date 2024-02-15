@@ -3,7 +3,7 @@ from .task_type import TaskType
 from .team_restriction import TeamRestriction
 from .urgency import Urgency
 from .state import State
-from backend.models.event.event_day import EventDay
+from backend.models.event import EventDay
 
 class Task(models.Model):
     task_id = models.BigAutoField(primary_key=True)
