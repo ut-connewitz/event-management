@@ -48,7 +48,8 @@ class Command(BaseCommand):
         user2.set_password("lazy1234")
         user2.save()
 
-        volunteer1 = Volunteer(user=user2)
+        volunteer1 = Volunteer(user=User.objects.get(username="mm"))
+        volunteer1.save()
 
         adress_jd = Adress(
             user=User.objects.get(username="jd"),
@@ -100,7 +101,7 @@ class Command(BaseCommand):
         event2day1.save()
         act1 = Act(act_name="DJ Malhalla und DJ Petrike", person_count=2) #possibly base data
         act1.save()
-        
+
         eventact1 = EventAct(
             event_day=EventDay.objects.get(start_time=parse_datetime("2024-02-24 20:00:00").replace(tzinfo=get_current_timezone())),
             act=Act.objects.get(act_name="DJ Malhalla und DJ Petrike"),
