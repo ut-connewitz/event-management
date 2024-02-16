@@ -25,6 +25,13 @@ class User(AbstractUser):
     def __str__(self):
         return str(self.username)
 
+    def save(self, *args, **kwargs):
+        try:
+            super(User, self).save(*args, **kwargs)
+        except IntegrityError:
+            print("Username ist bereits vergeben")
+            pass
+
 # TeamMember class is placed here within the .user file in order to avoid circular dependencies during app initialisation
 # preferred option would be to have this within an own file like all other model classes
 # but since User class tries to import TeamMember in the through="TeamMember" field

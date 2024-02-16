@@ -2,7 +2,7 @@ from django.db import models
 from .user import User
 
 class Adress(models.Model):
-    username = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     street = models.CharField("Straße", blank=True, max_length=40)
     house_number = models.CharField("Hausnummer", blank=True, max_length=40)
     postal_code = models.CharField("PLZ", blank=True, max_length=40)
@@ -13,4 +13,4 @@ class Adress(models.Model):
         verbose_name_plural = "Adressen"
 
     def __str__(self):
-        return str(self.username) + "\'s Adresse"
+        return str(self.user) + "\'s Adresse"

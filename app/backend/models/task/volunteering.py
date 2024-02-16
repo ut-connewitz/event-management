@@ -5,7 +5,7 @@ from backend.models.user import User
 
 class Volunteering(models.Model):
     volunteering_id = models.BigAutoField(primary_key=True)
-    task_id = models.ForeignKey(Task, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     confirmation_type = models.CharField(
         "Art der Zusage",
@@ -19,4 +19,4 @@ class Volunteering(models.Model):
         verbose_name_plural = "Dienste"
 
     def __str__(self):
-        return str(self.username) + " " + str(self.task_id)
+        return str(self.user) + " " + str(self.task)

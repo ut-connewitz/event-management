@@ -6,7 +6,7 @@ from .event import Event
 
 class EventDay(models.Model):
     event_day_id = models.BigAutoField(primary_key=True)
-    event_name = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
     date = models.DateField("Datum", null=True, blank=True)
     #making start time unique assuming there can not be two events beginning at the exact same time within the ut
     #standard exception handling seems viable
@@ -20,7 +20,7 @@ class EventDay(models.Model):
         verbose_name_plural = "Veranstaltungstage"
 
     def __str__(self):
-        return str(self.event_name) + " " + str(self.date)
+        return str(self.event) + " " + str(self.date)
 
     # overwrite save methods with caution!
     # this is meant to prevent db crash wenn multiple event days with equal starting times are entered from addtestdata.py

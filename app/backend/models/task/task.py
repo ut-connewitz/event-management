@@ -7,7 +7,7 @@ from backend.models.event import EventDay
 
 class Task(models.Model):
     task_id = models.BigAutoField(primary_key=True)
-    event_day_id = models.ForeignKey(EventDay, on_delete=models.CASCADE)
+    event_day = models.ForeignKey(EventDay, on_delete=models.CASCADE)
     task_type = models.CharField(
         "Aufgabenart",
         max_length=2,
