@@ -1,12 +1,12 @@
 #from django.db import models
 #from django.db.utils import IntegrityError
-#from .user import User
 #from .team import Team
+#from .user import User
 
 #class TeamMember(models.Model):
 #    team_member_id = models.BigAutoField(primary_key=True)
-#    username = models.ForeignKey(User, on_delete=models.CASCADE)
-#    team_name = models.ForeignKey(Team, on_delete=models.CASCADE)
+#    user = models.ForeignKey(User, on_delete=models.CASCADE)
+#    team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
 #    class Meta:
 #        constraints = [
