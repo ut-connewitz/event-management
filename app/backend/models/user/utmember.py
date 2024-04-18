@@ -7,6 +7,9 @@ class UTMember(models.Model):
     member_number = models.PositiveIntegerField("Mitgliedsnummer")
 
     class Meta:
+        constraints = [
+        models.UniqueConstraint(fields=["member_number"], name="member_number is unique")
+        ]
         verbose_name = "Mitglied"
         verbose_name_plural = "Mitglieder"
 
@@ -16,6 +19,7 @@ class UTMember(models.Model):
     def save(self, *args, **kwargs):
         try:
             super(UTMember, self).save(*args, **kwargs)
-        except IntegrityError:
-            print("Person ist bereits als Mitglied eingetragen")
+        except IntegrityError as e:
+            error_message = e.__cause__
+            print(error_message)
             pass
