@@ -8,14 +8,35 @@ event-management/
 ├── Dockerfile
 ├── OTHER
 │   ├── ERD_v2.png
+│   ├── IDEF1X.dia
 │   ├── IDEF1X.png
 │   ├── plsql-scripts
-│   │   ├── 01_ut_create_tables.sql
-│   │   ├── 02_ut_index.sql
-│   │   └── 03_ut_create_trigger.sql
+│   ├── use-cases.md
 │   └── ut_db_schema - Tabellenblatt1.csv
 ├── README.md
 ├── app
+│   ├── backend
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── management
+│   │   │   ├── __init__.py
+│   │   │   └── commands
+│   │   ├── migrations
+│   │   ├── models
+│   │   │   ├── __init__.py
+│   │   │   ├── __pycache__
+│   │   │   ├── event
+│   │   │   ├── notification
+│   │   │   ├── setting
+│   │   │   ├── task
+│   │   │   └── user
+│   │   ├── templates
+│   │   │   └── master.html
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   └── views.py
 │   ├── events
 │   │   ├── __init__.py
 │   │   ├── __pycache__
@@ -25,18 +46,8 @@ event-management/
 │   │   └── wsgi.py
 │   ├── manage.py
 │   └── testbootstrap
-│       ├── __init__.py
-│       ├── __pycache__
-│       ├── admin.py
-│       ├── apps.py
-│       ├── migrations
-│       ├── models.py
-│       ├── templates
-│       ├── tests.py
-│       ├── urls.py
-│       └── views.py
 ├── data
-│   └── db
+│   └── db     
 ├── docker-compose.yml
 └── requirements.txt
 ```
@@ -66,5 +77,9 @@ event-management/
 - run `docker compose up`
 - run `docker compose exec events /bin/bash`
 - run `python3 manage.py makemigrations` & `python3 manage.py migrate` to initialize local test db
+- optionally run `python3 manage.py addbasedata` & `python3 manage.py addtestdata` to insert base and testdata
 - run `python3 manage.py createsuperuser` to create admin user
 - open `http://0.0.0.0:8000/`
+
+## IDEF1X model for the backend data structure
+![IDEF1X](OTHER/IDEF1X.png)
