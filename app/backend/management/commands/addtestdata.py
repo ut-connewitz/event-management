@@ -3,7 +3,7 @@ from django.utils.dateparse import parse_datetime, parse_duration
 from django.utils.timezone import get_current_timezone
 from django.contrib.auth.models import Group, Permission
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
-from backend.models.user import (User, UTMember, Volunteer, Adress, Team, TeamMember)
+from backend.models.user import (User, UTMember, Adress, Team, TeamMember)
 from backend.models.event import(EventType, Event, EventDay, Act, EventAct)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering)
@@ -47,9 +47,6 @@ class Command(BaseCommand):
         )
         user2.set_password("lazy1234")
         user2.save()
-
-        volunteer1 = Volunteer(user=User.objects.get(username="mm"))
-        volunteer1.save()
 
         adress_jd = Adress(
             user=User.objects.get(username="jd"),

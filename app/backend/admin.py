@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import GroupAdmin
 
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
-from backend.models.user import (User, UTMember, Volunteer, Adress, Team, TeamMember)
+from backend.models.user import (User, UTMember, Adress, Team, TeamMember)
 from backend.models.event import(Event, EventDay, Act, EventAct)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering)
@@ -11,15 +11,15 @@ from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task
 class UTMemberInLine(admin.TabularInline):
     model = UTMember
 
-class VolunteerInLine(admin.TabularInline):
-    model = Volunteer
+#class VolunteerInLine(admin.TabularInline):
+#    model = Volunteer
 
 class UserAdressInLine(admin.TabularInline):
     model = Adress
 
 class UserAdmin(admin.ModelAdmin):
     inlines = [
-        VolunteerInLine,
+        #VolunteerInLine,
         UTMemberInLine,
         UserAdressInLine,
     ]
@@ -53,10 +53,10 @@ class EventDayAdmin(admin.ModelAdmin):
 admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)
 admin.site.register(UTMember)
-admin.site.register(Volunteer)
+#admin.site.register(Volunteer) #deprecated
 admin.site.register(Adress)
-admin.site.register(Team, MyGroupAdmin) #deprecated
-admin.site.register(TeamMember)#deprecated
+admin.site.register(Team, MyGroupAdmin)
+admin.site.register(TeamMember)
 #admin.site.register(EventType)
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventDay, EventDayAdmin)
