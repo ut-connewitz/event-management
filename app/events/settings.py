@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'bootstrap5',
     'testbootstrap',
     'backend',
+    'events_calendar',
     #'django_extensions'
 ]
 
