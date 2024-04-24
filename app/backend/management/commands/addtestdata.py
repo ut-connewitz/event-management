@@ -14,15 +14,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("running command addtestdata")
 
-        team1 = Team.objects.create(name="utadmin")
-        team1.save()
-        team2 = Team.objects.create(name="küche")
-        team2.save()
-        team3 = Team.objects.create(name="lichttechnik")
-        team3.save()
-        team4 = Team.objects.create(name="tontechnik")
-        team4.save()
-
         user1 = User.objects.create(
             username="jd",
             first_name="Jane",

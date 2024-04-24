@@ -11,15 +11,11 @@ from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task
 class UTMemberInLine(admin.TabularInline):
     model = UTMember
 
-#class VolunteerInLine(admin.TabularInline):
-#    model = Volunteer
-
 class UserAdressInLine(admin.TabularInline):
     model = Adress
 
 class UserAdmin(admin.ModelAdmin):
     inlines = [
-        #VolunteerInLine,
         UTMemberInLine,
         UserAdressInLine,
     ]
@@ -53,7 +49,6 @@ class EventDayAdmin(admin.ModelAdmin):
 admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)
 admin.site.register(UTMember)
-#admin.site.register(Volunteer) #deprecated
 admin.site.register(Adress)
 admin.site.register(Team, MyGroupAdmin)
 admin.site.register(TeamMember)
