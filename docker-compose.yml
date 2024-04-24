@@ -1,3 +1,5 @@
+version: '3.7'
+
 services:
   db:
     container_name: events_db
@@ -13,12 +15,13 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./app:/code
+      - ./app:/app
     ports:
       - "8000:8000"
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - ALLOWED_HOSTS=0.0.0.0
     depends_on:
       - db

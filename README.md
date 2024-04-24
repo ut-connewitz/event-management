@@ -68,18 +68,36 @@ event-management/
 - SQL: Postgres
 
 
-## DEV-Setup
+## Local-Docker-Dev-Setup
 (*) *only needed for local IDE*
 
 - (*) set up virtual env with Python 3.11 and Django 4.2
 - clone into this repository
 - (*) run `python3 -m pip install -r requirements.txt`
 - run `docker compose up`
-- run `docker compose exec events /bin/bash`
-- run `python3 manage.py makemigrations` & `python3 manage.py migrate` to initialize local test db
-- optionally run `python3 manage.py addbasedata` & `python3 manage.py addtestdata` to insert base and testdata
-- run `python3 manage.py createsuperuser` to create admin user
+- run `docker exec events python3 manage.py makemigrations` & `docker exec events python3 manage.py migrate` to initialize local test db
+- optionally run `docker exec events python3 manage.py addbasedata` & `docker exec events python3 manage.py addtestdata` to insert base and test data
+- run `docker exec events python3 manage.py createsuperuser` to create admin user **fails due to: `Superuser creation skipped due to not running in a TTY. You can run `manage.py createsuperuser` in your project to create one manually.`**
+- run `docker compose exec events /bin/bash` to open the events container with CLI
+- within the container: `python3 manage.py createsuperuser`
 - open `http://0.0.0.0:8000/`
+
+## Docker Deployment
+
+1. Clone
+2. create .env
+3. Put the following
+4. Change
+```dotenv
+DEBUG=False
+
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+
+ALLOWED_HOSTS=???????? #tbd
+SECRET_KEY=samplesecret123
+```
 
 ## IDEF1X model for the backend data structure
 ![IDEF1X](OTHER/IDEF1X.png)
