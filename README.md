@@ -57,14 +57,30 @@ event-management/
 - SQL: Postgres
 
 
-## DEV-Setup
+## Local-Docker-Dev-Setup
 (*) *only needed for local IDE*
 
 - (*) set up virtual env with Python 3.11 and Django 4.2
 - clone into this repository
 - (*) run `python3 -m pip install -r requirements.txt`
 - run `docker compose up`
-- run `docker compose exec events /bin/bash`
-- run `python3 manage.py makemigrations` & `python3 manage.py migrate` to initialize local test db
-- run `python3 manage.py createsuperuser` to create admin user
+- run `docker exec events python3 app/manage.py makemigrations` & `docker exec events python3 app/manage.py migrate` to initialize local test db
+- run `docker exec events python3 app/manage.py createsuperuser` to create admin user
 - open `http://0.0.0.0:8000/`
+
+## Docker Deployment
+
+1. Clone
+2. create .env
+3. Put the following
+4. Change
+```dotenv
+DEBUG=False
+
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+
+ALLOWED_HOSTS=???????? #tbd
+SECRET_KEY=samplesecret123
+```
