@@ -77,7 +77,7 @@ event-management/
 - run `docker compose up`
 - run `docker exec events python3 manage.py makemigrations` & `docker exec events python3 manage.py migrate` to initialize local test db
 - optionally run `docker exec events python3 manage.py addbasedata` & `docker exec events python3 manage.py addtestdata` to insert base and test data
-- run `docker exec events python3 manage.py createsuperuser` to create admin user **fails due to: `Superuser creation skipped due to not running in a TTY. You can run `manage.py createsuperuser` in your project to create one manually.`**
+- run `docker exec events python3 manage.py createsuperuser` to create admin user **fails due to: ``Superuser creation skipped due to not running in a TTY. You can run `manage.py createsuperuser` in your project to create one manually.``**
 - run `docker compose exec events /bin/bash` to open the events container with CLI
 - within the container: `python3 manage.py createsuperuser`
 - open `http://0.0.0.0:8000/`
