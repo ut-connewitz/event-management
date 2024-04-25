@@ -15,10 +15,10 @@ class Calendar(HTMLCalendar):
         events_per_day = event_days.filter(start_time__day=day)
         d = ''
         for event_day in events_per_day:
-            d += f'<li>{event_day.event.event_name} <li>'
+            d += f'<li>{event_day.event.event_name} </li>'
 
-        if day!=0:
-            return f"<td<span class='date>'{day}</span><ul> {d} </ul></td>"
+        if day!= 0:
+            return f"<td><span class='date'>{day}</span><ul> {d} </ul></td>"
         return '<td></td>'
 
     #formats a week as tr
@@ -32,8 +32,8 @@ class Calendar(HTMLCalendar):
     #filters event_days by year and month
     def formatmonth(self, withyear=True):
         event_days = EventDay.objects.filter(start_time__year=self.year, start_time__month=self.month)
-        cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
-        cal += f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
+        #cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
+        cal = f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
         cal += f'{self.formatweekheader()}\n'
         for week in self.monthdays2calendar(self.year, self.month):
 		          cal += f'{self.formatweek(week, event_days)}\n'

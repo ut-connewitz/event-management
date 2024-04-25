@@ -1,7 +1,9 @@
 <!-- events_calendar/templates/events_calendar/calendar.html -->
 
-{'% extends 'events_calendar/base.html' %}
+{% extends 'events_calendar/base.html' %}
 
-{'% block content %}
-{'{ calendar }}
-{'% endblock %}
+{% block content %}
+<table border="0" cellpadding="0" cellspacing="0" class="calendar">
+  {{ calendar }}
+</table>
+{% endblock %}
