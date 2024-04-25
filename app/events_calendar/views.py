@@ -1,12 +1,15 @@
 from datetime import datetime, timedelta, date
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 import calendar
 
 from backend.models.event import EventDay
 from .utils import Calendar
+from .forms import EventDayForm
 
 class CalendarView(generic.ListView):
     model = EventDay
@@ -47,6 +50,19 @@ def next_month(d):
     next_month = last + timedelta(days=1)
     month = 'month=' + str(next_month.year) + '-' + str(next_month.month)
     return month
+
+def event_day(request, event_day_id=None):
+    instance = EventDay()
+    if event_day_id:
+        instance = get_object_or_404(EventDay, pk=event_day_id)
+    else:
+        instance = EventDay()
+
+    form = EventDayForm(request.POST or None, instance=instance)
+    if request.POST and form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('events_calendar:calendar'))
+    return render(request, 'events_calendar/event_day.html', {'form':form})
 
 def index(request):
     return HttpResponse('hello')
