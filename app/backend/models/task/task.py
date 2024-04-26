@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from .task_type import TaskType
 from .team_restriction import TeamRestriction
 from .urgency import Urgency
@@ -42,3 +43,8 @@ class Task(models.Model):
 
     def __str__(self):
         return str(self.task_id)
+
+    @property
+    def get_html_url(self):
+        url = reverse('events_calendar:task_edit', args=(self.task_id,))
+        return f'<a href="{url}"> {self.task_type} </a>'

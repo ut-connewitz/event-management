@@ -8,8 +8,9 @@ from django.utils.safestring import mark_safe
 import calendar
 
 from backend.models.event import EventDay
+from backend.models.task import Task
 from .utils import Calendar
-from .forms import EventDayForm
+from .forms import EventDayForm, TaskForm
 
 class CalendarView(generic.ListView):
     model = EventDay
@@ -63,6 +64,19 @@ def event_day(request, event_day_id=None):
         form.save()
         return HttpResponseRedirect(reverse('events_calendar:calendar'))
     return render(request, 'events_calendar/event_day.html', {'form':form})
+
+def task(request, task_id=None):
+    instance = Task()
+    if task_id:
+        instance = get_object_or_404(Task, pk=task_id)
+    else:
+        instance = Task()
+
+    form = TaskForm(request.POST or None, instance=instance)
+    if request.POST and form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('events_calendar:calendar'))
+    return render(request, 'events_calendar/task.html', {'form':form})
 
 def index(request):
     return HttpResponse('hello')

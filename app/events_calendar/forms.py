@@ -1,5 +1,6 @@
 from django.forms import ModelForm, DateInput
 from backend.models.event import EventDay
+from backend.models.task import Task
 
 class EventDayForm(ModelForm):
     class Meta:
@@ -14,3 +15,17 @@ class EventDayForm(ModelForm):
         super(EventDayForm, self).__init__(*args, **kwargs)
         self.fields['start_time'].input_formats = ('%Y-%m-%dT%H:%M',)
         self.fields['admission_time'].input_formats = ('%Y-%m-%dT%H:%M',)
+
+class TaskForm(ModelForm):
+    class Meta:
+        model = Task
+        widgets = {
+            'start_time': DateInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+            'finish_time': DateInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        }
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(TaskForm, self).__init__(*args, **kwargs)
+        self.fields['start_time'].input_formats = ('%Y-%m-%dT%H:%M',)
+        self.fields['finish_time'].input_formats = ('%Y-%m-%dT%H:%M',)

@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from backend.models.event import EventDay
+from backend.models.task import Task
 
 
 class Calendar(HTMLCalendar):
@@ -13,12 +14,21 @@ class Calendar(HTMLCalendar):
     #filters event_days by day
     def formatday(self, day, event_days):
         events_per_day = event_days.filter(start_time__day=day)
-        d = ''
+        day_content = ''
+
         for event_day in events_per_day:
-            d += f'<li>{event_day.get_html_url} </li>'
+            day_content += f'<li>{event_day.get_html_url} </li>'
+            tasks = Task.objects.filter(event_day=event_day)
+            task_html = ''
+
+            for task in tasks:
+                task_html += f'<li>{task.get_html_url} </li>'
+
+            if task_html != '':
+                day_content += f'<ul>' + task_html +f'</ul>'
 
         if day!= 0:
-            return f"<td><span class='date'>{day}</span><ul> {d} </ul></td>"
+            return f"<td><span class='date'>{day}</span><ul> {day_content} </ul></td>"
         return '<td></td>'
 
     #formats a week as tr
