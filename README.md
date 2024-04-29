@@ -8,14 +8,35 @@ event-management/
 ├── Dockerfile
 ├── OTHER
 │   ├── ERD_v2.png
+│   ├── IDEF1X.dia
 │   ├── IDEF1X.png
 │   ├── plsql-scripts
-│   │   ├── 01_ut_create_tables.sql
-│   │   ├── 02_ut_index.sql
-│   │   └── 03_ut_create_trigger.sql
+│   ├── use-cases.md
 │   └── ut_db_schema - Tabellenblatt1.csv
 ├── README.md
 ├── app
+│   ├── backend
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── management
+│   │   │   ├── __init__.py
+│   │   │   └── commands
+│   │   ├── migrations
+│   │   ├── models
+│   │   │   ├── __init__.py
+│   │   │   ├── __pycache__
+│   │   │   ├── event
+│   │   │   ├── notification
+│   │   │   ├── setting
+│   │   │   ├── task
+│   │   │   └── user
+│   │   ├── templates
+│   │   │   └── master.html
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   └── views.py
 │   ├── events
 │   │   ├── __init__.py
 │   │   ├── __pycache__
@@ -25,18 +46,8 @@ event-management/
 │   │   └── wsgi.py
 │   ├── manage.py
 │   └── testbootstrap
-│       ├── __init__.py
-│       ├── __pycache__
-│       ├── admin.py
-│       ├── apps.py
-│       ├── migrations
-│       ├── models.py
-│       ├── templates
-│       ├── tests.py
-│       ├── urls.py
-│       └── views.py
 ├── data
-│   └── db
+│   └── db     
 ├── docker-compose.yml
 └── requirements.txt
 ```
@@ -64,8 +75,11 @@ event-management/
 - clone into this repository
 - (*) run `python3 -m pip install -r requirements.txt`
 - run `docker compose up`
-- run `docker exec events python3 app/manage.py makemigrations` & `docker exec events python3 app/manage.py migrate` to initialize local test db
-- run `docker exec events python3 app/manage.py createsuperuser` to create admin user
+- run `docker exec events python3 manage.py makemigrations` & `docker exec events python3 manage.py migrate` to initialize local test db
+- optionally run `docker exec events python3 manage.py addbasedata` & `docker exec events python3 manage.py addtestdata` to insert base and test data
+- run `docker exec events python3 manage.py createsuperuser` to create admin user **fails due to: ``Superuser creation skipped due to not running in a TTY. You can run `manage.py createsuperuser` in your project to create one manually.``**
+- run `docker compose exec events /bin/bash` to open the events container with CLI
+- within the container: `python3 manage.py createsuperuser`
 - open `http://0.0.0.0:8000/`
 
 ## Docker Deployment
@@ -84,3 +98,6 @@ POSTGRES_PASSWORD=postgres
 ALLOWED_HOSTS=???????? #tbd
 SECRET_KEY=samplesecret123
 ```
+
+## IDEF1X model for the backend data structure
+![IDEF1X](OTHER/IDEF1X.png)
