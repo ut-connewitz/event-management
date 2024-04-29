@@ -25,7 +25,10 @@ class TaskForm(ModelForm):
         }
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
         super(TaskForm, self).__init__(*args, **kwargs)
         self.fields['start_time'].input_formats = ('%Y-%m-%dT%H:%M',)
         self.fields['finish_time'].input_formats = ('%Y-%m-%dT%H:%M',)
+
+        #if request.user.is_staff == False:
+        #    self.fields['event_day', 'task_type', 'team_restriction', 'urgency', 'state', 'start_time', 'finish_time', 'comment'].disabled = True

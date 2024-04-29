@@ -7,7 +7,9 @@
 <div class="clearfix">
 	<a class="btn btn-info left" href="{% url 'events_calendar:calendar' %}?{{ prev_month }}"> Vorheriger Monat </a>
 	<a class="btn btn-info right" href="{% url 'events_calendar:calendar' %}?{{ next_month }}"> Nächster Monat </a>
+  {% if request.user.is_staff %}
   <a class="btn btn-info right" href="{% url 'events_calendar:event_day_new' %}"> Veranstaltungstag hinzufügen </a>
+  {% endif %}
 </div>
 
 <table border="0" cellpadding="0" cellspacing="0" class="calendar">
