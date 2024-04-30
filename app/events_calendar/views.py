@@ -12,9 +12,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 from backend.models.event import EventDay
-from backend.models.task import Task
+from backend.models.task import Task, Volunteering
 from .utils import Calendar
-from .forms import EventDayForm, TaskForm
+from .forms import EventDayForm, TaskForm, VolunteeringForm
 
 
 class CalendarView(LoginRequiredMixin, generic.ListView):
@@ -79,31 +79,66 @@ def event_day(request, event_day_id=None):
     return render(request, 'events_calendar/event_day.html', {'form':form})
 
 @login_required
-def task(request, task_id=None):
-    instance = Task()
+def task(request, task_id=None, volunteering_id=None):
+    task_instance = Task()
     if task_id:
-        instance = get_object_or_404(Task, pk=task_id)
+        task_instance = get_object_or_404(Task, pk=task_id)
     else:
-        instance = Task()
+        task_instance = Task()
 
-    form = TaskForm(request.POST or None, instance=instance)
+    task_id = task_instance.task_id
+
+    # note: get_or_create() returns a tuple, with second, boolean field if creation was done
+    # this instance is written to the db and needs to be deleted, when the volunteering does not get saved
+    #volunteering_instance, created = Volunteering.objects.get_or_create(
+    #    task = task_instance,
+    #    user = request.user,
+    #)
+    volunteering_instance = Volunteering.objects.create(
+        task = task_instance,
+        user = request.user,
+    )
+
+    task_form = TaskForm(instance=task_instance)
+    volunteering_form = VolunteeringForm(instance=volunteering_instance)
+
     if not request.user.is_staff:
-        form.fields['event_day'].disabled = True
-        form.fields['task_type'].disabled = True
-        form.fields['team_restriction'].disabled = True
-        form.fields['urgency'].disabled = True
-        form.fields['state'].disabled = True
-        form.fields['start_time'].disabled = True
-        form.fields['finish_time'].disabled = True
-        form.fields['comment'].disabled = True
+        task_form.fields['event_day'].disabled = True
+        task_form.fields['task_type'].disabled = True
+        task_form.fields['team_restriction'].disabled = True
+        task_form.fields['urgency'].disabled = True
+        task_form.fields['state'].disabled = True
+        task_form.fields['start_time'].disabled = True
+        task_form.fields['finish_time'].disabled = True
+        task_form.fields['comment'].disabled = True
+        volunteering_form.fields['user'].disabled = True
+        volunteering_form.fields['task'].disabled = True
         # this loop did not work: File "/app/events_calendar/views.py", line 90, in task 'field.disabled = True'
         #for field in form.fields:
         #    field.disabled = True
+    if request.method == 'POST':
+        if 'edit_task' in request.POST:
+            task_form = TaskForm(request.POST or None, instance=task_instance)
+            if task_form.is_valid():
+                task_form.save()
+                return HttpResponseRedirect(reverse('events_calendar:calendar'))
 
-    if request.POST and form.is_valid():
-        form.save()
-        return HttpResponseRedirect(reverse('events_calendar:calendar'))
-    return render(request, 'events_calendar/task.html', {'form':form})
+        if 'edit_volunteering' in request.POST:
+            volunteering_form = VolunteeringForm(request.POST or None, instance=volunteering_instance)
+            if volunteering_form.is_valid():
+                volunteering_form.save()
+                return HttpResponseRedirect(reverse('events_calendar:calendar'))
+
+    context = {
+        'task_form': task_form,
+        'volunteering_form': volunteering_form,
+    }
+    return render(request, 'events_calendar/task.html', context=context)
+
+    #if request.POST and form.is_valid():
+    #    task_form.save()
+    #    return HttpResponseRedirect(reverse('events_calendar:calendar'))
+    #return render(request, 'events_calendar/task.html', {'form':form})
 
 def index(request):
     return HttpResponse('hello')

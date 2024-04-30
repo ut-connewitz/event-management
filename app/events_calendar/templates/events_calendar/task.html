@@ -24,13 +24,26 @@ Aufgabe
     {% endfor %}
 {% endif %}
 
+<h2> Aufgabe </h2>
 <form method="post">
-  {% csrf_token %}
   <table class="form form-table">
-    {{ form }}
+    {{ task_form.as_p }}
+    {% csrf_token %}
     {% if request.user.is_staff %}
     <tr><td colspan="2"><button type="submit" class="btn btn-info right"> Speichern </button></td></tr>
     {% endif %}
   </table>
 </form>
+<hr>
+
+<h2> Übernehmen? </h2>
+<form method="post">
+  <table class="form form-table">
+    {{ volunteering_form}}
+    {% csrf_token %}
+    <tr><td colspan="2"><button type="submit" class="btn btn-info right"> Speichern </button></td></tr>
+  </table>
+</form>
+<hr>
+
 {% endblock %}

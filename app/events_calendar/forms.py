@@ -1,6 +1,6 @@
-from django.forms import ModelForm, DateInput
+from django.forms import ModelForm, DateInput, BooleanField, HiddenInput
 from backend.models.event import EventDay
-from backend.models.task import Task
+from backend.models.task import Task, Volunteering
 
 class EventDayForm(ModelForm):
     class Meta:
@@ -17,6 +17,8 @@ class EventDayForm(ModelForm):
         self.fields['admission_time'].input_formats = ('%Y-%m-%dT%H:%M',)
 
 class TaskForm(ModelForm):
+    edit_task = BooleanField(widget=HiddenInput, initial=True)
+
     class Meta:
         model = Task
         widgets = {
@@ -25,10 +27,21 @@ class TaskForm(ModelForm):
         }
         fields = '__all__'
 
-    def __init__(self, request, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(TaskForm, self).__init__(*args, **kwargs)
         self.fields['start_time'].input_formats = ('%Y-%m-%dT%H:%M',)
         self.fields['finish_time'].input_formats = ('%Y-%m-%dT%H:%M',)
 
         #if request.user.is_staff == False:
         #    self.fields['event_day', 'task_type', 'team_restriction', 'urgency', 'state', 'start_time', 'finish_time', 'comment'].disabled = True
+
+
+class VolunteeringForm(ModelForm):
+    edit_volunteering = BooleanField(widget=HiddenInput, initial=True)
+
+    class Meta:
+        model = Volunteering
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(VolunteeringForm, self).__init__(*args, **kwargs)
