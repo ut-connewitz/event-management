@@ -6,4 +6,5 @@ class TaskType(models.TextChoices):
     SOUND = "TT", _("Tontechnik")
     LIGHT = "LT", _("Lichttechnik")
     KITCHEN = "KÜ", _("Küche")
+    BAR = "BR", _("Bar")
     OTHER = "OT", _("Sonstiges")

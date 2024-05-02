@@ -9,10 +9,11 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms import HiddenInput
 
 
 from backend.models.event import EventDay
-from backend.models.task import Task, Volunteering
+from backend.models.task import Task, Volunteering, ConfirmationType, State
 from .utils import Calendar
 from .forms import EventDayForm, TaskForm, VolunteeringForm
 
@@ -94,10 +95,16 @@ def task(request, task_id=None, volunteering_id=None):
     #    task = task_instance,
     #    user = request.user,
     #)
-    volunteering_instance = Volunteering.objects.create(
-        task = task_instance,
-        user = request.user,
-    )
+    volunteering_instance = Volunteering()
+    try:
+        volunteering_instance = Volunteering.objects.get(
+            task = task_instance,
+        )
+    except Volunteering.DoesNotExist:
+        volunteering_instance = Volunteering(
+            task = task_instance,
+            user = request.user,
+        )
 
     task_form = TaskForm(instance=task_instance)
     volunteering_form = VolunteeringForm(instance=volunteering_instance)
@@ -113,9 +120,15 @@ def task(request, task_id=None, volunteering_id=None):
         task_form.fields['comment'].disabled = True
         volunteering_form.fields['user'].disabled = True
         volunteering_form.fields['task'].disabled = True
+        if request.user != volunteering_instance.user and volunteering_instance.confirmation_type == ConfirmationType.CERTAIN:
+            volunteering_form.fields['confirmation_type'].disabled = True
+            volunteering_form.fields['user'].widget = HiddenInput()
+        elif request.user != volunteering_instance.user and volunteering_instance.confirmation_type == ConfirmationType.MAYBE:
+            volunteering_form.fields['user'].widget = HiddenInput()
         # this loop did not work: File "/app/events_calendar/views.py", line 90, in task 'field.disabled = True'
         #for field in form.fields:
         #    field.disabled = True
+
     if request.method == 'POST':
         if 'edit_task' in request.POST:
             task_form = TaskForm(request.POST or None, instance=task_instance)
@@ -125,8 +138,23 @@ def task(request, task_id=None, volunteering_id=None):
 
         if 'edit_volunteering' in request.POST:
             volunteering_form = VolunteeringForm(request.POST or None, instance=volunteering_instance)
-            if volunteering_form.is_valid():
+            if volunteering_form.is_valid() and request.POST.get('volunteering_button')=="volunteering":
+                confirmation_type = volunteering_form.cleaned_data["confirmation_type"]
                 volunteering_form.save()
+
+                if confirmation_type == ConfirmationType.NOT:
+                    task_instance.state = State.FREE
+                    task_instance.save()
+                    #Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).task.state = State.FREE
+                    Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).delete()
+                elif confirmation_type == ConfirmationType.CERTAIN:
+                    task_instance.state = State.TAKEN
+                    task_instance.save()
+                    #Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).task.state = State.TAKEN
+                elif confirmation_type == ConfirmationType.MAYBE:
+                    task_instance.state = State.MAYBE
+                    task_instance.save()
+                    #Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).task.state = State.MAYBE
                 return HttpResponseRedirect(reverse('events_calendar:calendar'))
 
     context = {

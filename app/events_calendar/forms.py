@@ -17,6 +17,8 @@ class EventDayForm(ModelForm):
         self.fields['admission_time'].input_formats = ('%Y-%m-%dT%H:%M',)
 
 class TaskForm(ModelForm):
+    # this hidden fields purpose is determine which form is submitted in the post request
+    # it is needed because there are two different forms (TaskForm and VolunteeringForm) on one page
     edit_task = BooleanField(widget=HiddenInput, initial=True)
 
     class Meta:

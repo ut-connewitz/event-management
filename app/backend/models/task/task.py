@@ -42,9 +42,9 @@ class Task(models.Model):
         verbose_name_plural = "Aufgaben"
 
     def __str__(self):
-        return str(self.task_id)
+        return str(self.event_day)+" "+self.get_task_type_display()
 
     @property
     def get_html_url(self):
         url = reverse('events_calendar:task_edit', args=(self.task_id,))
-        return f'<a href="{url}"> {self.task_type} </a>'
+        return f'<a href="{url}"> {self.get_task_type_display()} </a>'
