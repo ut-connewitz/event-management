@@ -38,10 +38,17 @@ Aufgabe
 
 <form method="post">
   <table class="form form-table">
+    {% if request.user == volunteering_instance.user %}
     <h2 style="text-align:center;"> Übernehmen? </h2>
+    {% endif %}
     {{ volunteering_form}}
     {% csrf_token %}
+    {% if request.user == volunteering_instance.user or request.user.is_staff %}
     <tr><td colspan="2"><button type="submit" class="btn btn-info right" name="volunteering_button" value="volunteering"> Speichern </button></td></tr>
+    {% endif %}
+    {% if request.user != volunteering_instance.user %}
+    <h3 style="text-align:center;"> – Bereits übernommen – </h3>
+    {% endif %}
   </table>
 </form>
 <hr>

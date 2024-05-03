@@ -118,13 +118,27 @@ def task(request, task_id=None, volunteering_id=None):
         task_form.fields['start_time'].disabled = True
         task_form.fields['finish_time'].disabled = True
         task_form.fields['comment'].disabled = True
-        volunteering_form.fields['user'].disabled = True
-        volunteering_form.fields['task'].disabled = True
-        if request.user != volunteering_instance.user and volunteering_instance.confirmation_type == ConfirmationType.CERTAIN:
-            volunteering_form.fields['confirmation_type'].disabled = True
-            volunteering_form.fields['user'].widget = HiddenInput()
-        elif request.user != volunteering_instance.user and volunteering_instance.confirmation_type == ConfirmationType.MAYBE:
-            volunteering_form.fields['user'].widget = HiddenInput()
+
+        volunteering_form.fields['user'].widget = HiddenInput()
+        volunteering_form.fields['task'].widget = HiddenInput()
+        #volunteering_form.fields['user'].widget.attrs['readonly'] = True
+        #volunteering_form.fields['task'].widget.attrs['readonly'] = True
+        if request.user != volunteering_instance.user:
+            volunteering_form.fields['confirmation_type'].widget = HiddenInput()
+            volunteering_form.fields['comment'].widget = HiddenInput()
+            #volunteering_form.fields['confirmation_type'].widget.attrs['readonly'] = True
+            #volunteering_form.fields['confirmation_type'].disabled
+
+        #    volunteering_form.fields['user'].widget = HiddenInput()
+
+        # experimental integration of ConfirmationType.MAYBE
+        # idea: show volunteering, but do not show, who cofirmed with maybe
+        # make it possible, to confirm with ConfirmationType.YES only and delete previous MAYBE confirmation
+        # problem: when save button is clicked without changing anything an error is thrown, that makes ALL form fields freely accesible
+        # so the user could select anyone for any task
+        #elif request.user != volunteering_instance.user and volunteering_instance.confirmation_type == ConfirmationType.MAYBE:
+        #    volunteering_form.fields['user'].widget = HiddenInput()
+
         # this loop did not work: File "/app/events_calendar/views.py", line 90, in task 'field.disabled = True'
         #for field in form.fields:
         #    field.disabled = True
@@ -136,30 +150,34 @@ def task(request, task_id=None, volunteering_id=None):
                 task_form.save()
                 return HttpResponseRedirect(reverse('events_calendar:calendar'))
 
-        if 'edit_volunteering' in request.POST:
+        if 'edit_volunteering' in request.POST and (request.user == volunteering_instance.user or request.user.is_staff):
             volunteering_form = VolunteeringForm(request.POST or None, instance=volunteering_instance)
             if volunteering_form.is_valid() and request.POST.get('volunteering_button')=="volunteering":
                 confirmation_type = volunteering_form.cleaned_data["confirmation_type"]
                 volunteering_form.save()
 
-                if confirmation_type == ConfirmationType.NOT:
-                    task_instance.state = State.FREE
-                    task_instance.save()
+                #if confirmation_type == ConfirmationType.NO:
+                    #task_instance.state = State.FREE
+                    #task_instance.save()
                     #Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).task.state = State.FREE
-                    Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).delete()
-                elif confirmation_type == ConfirmationType.CERTAIN:
-                    task_instance.state = State.TAKEN
-                    task_instance.save()
+                    #Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).delete()
+                #elif confirmation_type == ConfirmationType.YES:
+                    #task_instance.state = State.TAKEN
+                    #task_instance.save()
                     #Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).task.state = State.TAKEN
-                elif confirmation_type == ConfirmationType.MAYBE:
-                    task_instance.state = State.MAYBE
-                    task_instance.save()
+                # for now deprecated handling of ConfirmationType.MAYBE
+                #elif confirmation_type == ConfirmationType.MAYBE:
+                #    task_instance.state = State.MAYBE
+                #    task_instance.save()
                     #Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).task.state = State.MAYBE
                 return HttpResponseRedirect(reverse('events_calendar:calendar'))
 
+    # note: context variables are accessable within template code blocks
+    # e.g. {% if request.user == volunteering_instance.user %}
     context = {
         'task_form': task_form,
         'volunteering_form': volunteering_form,
+        'volunteering_instance': volunteering_instance,
     }
     return render(request, 'events_calendar/task.html', context=context)
 

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from backend.models.event import EventDay
-from backend.models.task import Task
+from backend.models.task import Task, State
 
 
 class Calendar(HTMLCalendar):
@@ -18,7 +18,7 @@ class Calendar(HTMLCalendar):
 
         for event_day in events_per_day:
             day_content += f'<li>{event_day.get_html_url} </li>'
-            tasks = Task.objects.filter(event_day=event_day)
+            tasks = Task.objects.filter(event_day=event_day, state=State.FREE)
             task_html = ''
 
             for task in tasks:
