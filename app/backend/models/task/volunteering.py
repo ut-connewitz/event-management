@@ -4,9 +4,14 @@ from .confirmation_type import ConfirmationType
 from .task import Task, State
 from backend.models.user import User
 
+# to overwrite the delete() method (or any method) for SQL queries the QuerySet must be adjusted
+# this is necessary for bulk operations like when using list operations via the admin panel
 class VolunteeringQuerySet(models.QuerySet):
     def delete(self):
-        print("deleting queryset")
+        for object in self:
+            task = object.task
+            task.state = State.FREE
+            task.save()
         return super().delete()
 
 class VolunteeringManager(models.Manager):
@@ -46,8 +51,9 @@ class Volunteering(models.Model):
             pass
 
     def delete(self, *args, **kwargs):
-        self.task.state = State.FREE
-        self.task.save()
+        task = self.task
+        task.state = State.FREE
+        task.save()
         super().delete(*args, **kwargs)
 
     def confirmation_type_change(self):
