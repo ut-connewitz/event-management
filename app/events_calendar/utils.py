@@ -1,14 +1,30 @@
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from backend.models.event import EventDay
-from backend.models.task import Task, State
+from backend.models.task import Task, State, Volunteering, TeamRestriction, Urgency
+from backend.models.user import TeamMember
 
 
 class Calendar(HTMLCalendar):
-    def __init__(self, year=None, month=None):
+    def __init__(self,  user, year=None, month=None):
         self.year = year
         self.month = month
+        self.user = user
         super(Calendar, self).__init__()
+
+    def check_team_restriction(self, team_restriction, user_teams):
+        for user_team in user_teams:
+            if team_restriction == TeamRestriction.NONE:
+                return True
+            elif team_restriction == TeamRestriction.LIGHT:
+                if user_team.team.name == "lichttechnik":
+                    return True
+            elif team_restriction == TeamRestriction.SOUND:
+                if user_team.team.name == "tontechnik":
+                    return True
+            elif team_restriction == TeamRestriction.OFFICE:
+                if user_team.team.name == "verwaltung":
+                    return True
 
     #formats a days as td
     #filters event_days by day
@@ -18,11 +34,30 @@ class Calendar(HTMLCalendar):
 
         for event_day in events_per_day:
             day_content += f'<li>{event_day.get_html_url} </li>'
-            tasks = Task.objects.filter(event_day=event_day, state=State.FREE)
+            free_tasks = Task.objects.filter(event_day=event_day, state=State.FREE)
+            taken_tasks = Task.objects.filter(event_day=event_day, state=State.TAKEN)
             task_html = ''
+            user_teams = TeamMember.objects.filter(user=self.user)
 
-            for task in tasks:
-                task_html += f'<li>{task.get_html_url} </li>'
+
+            for task in free_tasks:
+                team_restriction = task.team_restriction
+                pass_team_restriction = self.check_team_restriction(team_restriction, user_teams)
+                if self.user.is_staff or pass_team_restriction:
+                    if task.urgency == Urgency.URGENT:
+                        task_html += f'<li class ="urgency_urgent">{task.get_html_url} dringend!</li>'
+                    elif task.urgency == Urgency.IMPORTANT:
+                        task_html += f'<li class ="urgency_important">{task.get_html_url} !</li>'
+                    elif task.urgency == Urgency.MEDIUM:
+                        task_html += f'<li class ="urgency_medium">{task.get_html_url}</li>'
+                    else:
+                        task_html += f'<li>{task.get_html_url}</li>'
+
+
+            for task in taken_tasks:
+                task_volunteering = Volunteering.objects.get(task=task)
+                if self.user.is_staff or self.user == task_volunteering.user:
+                    task_html += f'<li class ="taken_task">{task.get_html_url} &#10003;</li>'
 
             if task_html != '':
                 day_content += f'<ul>' + task_html +f'</ul>'

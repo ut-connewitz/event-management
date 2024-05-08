@@ -30,6 +30,22 @@
   font-size: 16px;
 }
 
+.taken_task{
+  color: #84BD2B;
+}
+
+.urgency_urgent{
+  color: #DE372C;
+}
+
+.urgency_important{
+  color: #DE372C;
+}
+
+.urgency_medium{
+  color: #F1CE1C;
+}
+
 ul {
   height: 100%;
   padding: 0px 5px 0px 20px;
