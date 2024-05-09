@@ -20,8 +20,16 @@ class VolunteeringManager(models.Manager):
 
 class Volunteering(models.Model):
     volunteering_id = models.BigAutoField(primary_key=True)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    task = models.ForeignKey(
+        Task,
+        on_delete=models.CASCADE,
+        verbose_name = "Aufgabe",
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name = "Person",
+    )
     confirmation_type = models.CharField(
         "Zusage",
         max_length=15,

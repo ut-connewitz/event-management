@@ -7,7 +7,10 @@ from .event import Event
 
 class EventDay(models.Model):
     event_day_id = models.BigAutoField(primary_key=True)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        verbose_name = "Veranstaltung",)
     date = models.DateField("Datum", null=True, blank=True)
     #making start time unique assuming there can not be two events beginning at the exact same time within the ut
     #standard exception handling seems viable

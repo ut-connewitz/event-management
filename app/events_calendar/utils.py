@@ -45,9 +45,9 @@ class Calendar(HTMLCalendar):
                 pass_team_restriction = self.check_team_restriction(team_restriction, user_teams)
                 if self.user.is_staff or pass_team_restriction:
                     if task.urgency == Urgency.URGENT:
-                        task_html += f'<li class ="urgency_urgent">{task.get_html_url} dringend!</li>'
+                        task_html += f'<li class ="urgency_urgent">{task.get_html_url} (dringend!)</li>'
                     elif task.urgency == Urgency.IMPORTANT:
-                        task_html += f'<li class ="urgency_important">{task.get_html_url} !</li>'
+                        task_html += f'<li class ="urgency_important">{task.get_html_url} (!)</li>'
                     elif task.urgency == Urgency.MEDIUM:
                         task_html += f'<li class ="urgency_medium">{task.get_html_url}</li>'
                     else:

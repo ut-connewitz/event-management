@@ -7,8 +7,12 @@ from .state import State
 from backend.models.event import EventDay
 
 class Task(models.Model):
-    task_id = models.BigAutoField(primary_key=True)
-    event_day = models.ForeignKey(EventDay, on_delete=models.CASCADE)
+    task_id = models.BigAutoField("Veranstaltungstag", primary_key=True)
+    event_day = models.ForeignKey(
+        EventDay,
+        on_delete=models.CASCADE,
+        verbose_name = "Veranstaltungstag",
+        )
     task_type = models.CharField(
         "Aufgabenart",
         max_length=2,

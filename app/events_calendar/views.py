@@ -76,7 +76,7 @@ def event_day(request, event_day_id=None):
 
     if request.POST and form.is_valid():
         form.save()
-        return HttpResponseRedirect(reverse('events_calendar:calendar'))
+        return HttpResponseRedirect(reverse('ecal:calendar'))
     return render(request, 'events_calendar/event_day.html', {'form':form})
 
 @login_required
@@ -89,12 +89,6 @@ def task(request, task_id=None, volunteering_id=None):
 
     task_id = task_instance.task_id
 
-    # note: get_or_create() returns a tuple, with second, boolean field if creation was done
-    # this instance is written to the db and needs to be deleted, when the volunteering does not get saved
-    #volunteering_instance, created = Volunteering.objects.get_or_create(
-    #    task = task_instance,
-    #    user = request.user,
-    #)
     volunteering_instance = Volunteering()
     try:
         volunteering_instance = Volunteering.objects.get(
@@ -148,29 +142,17 @@ def task(request, task_id=None, volunteering_id=None):
             task_form = TaskForm(request.POST or None, instance=task_instance)
             if task_form.is_valid():
                 task_form.save()
-                return HttpResponseRedirect(reverse('events_calendar:calendar'))
+                return HttpResponseRedirect(reverse('ecal:calendar'))
 
         if 'edit_volunteering' in request.POST and (request.user == volunteering_instance.user or request.user.is_staff):
             volunteering_form = VolunteeringForm(request.POST or None, instance=volunteering_instance)
             if volunteering_form.is_valid() and request.POST.get('volunteering_button')=="volunteering":
                 confirmation_type = volunteering_form.cleaned_data["confirmation_type"]
                 volunteering_form.save()
+                # volunteering state change logic located at model file (backend/models/task/volunteering.py)
+                # in order to make it effective regardless of the source of the change
 
-                #if confirmation_type == ConfirmationType.NO:
-                    #task_instance.state = State.FREE
-                    #task_instance.save()
-                    #Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).task.state = State.FREE
-                    #Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).delete()
-                #elif confirmation_type == ConfirmationType.YES:
-                    #task_instance.state = State.TAKEN
-                    #task_instance.save()
-                    #Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).task.state = State.TAKEN
-                # for now deprecated handling of ConfirmationType.MAYBE
-                #elif confirmation_type == ConfirmationType.MAYBE:
-                #    task_instance.state = State.MAYBE
-                #    task_instance.save()
-                    #Volunteering.objects.get(task = volunteering_form.cleaned_data["task"]).task.state = State.MAYBE
-                return HttpResponseRedirect(reverse('events_calendar:calendar'))
+                return HttpResponseRedirect(reverse('ecal:calendar'))
 
     # note: context variables are accessable within template code blocks
     # e.g. {% if request.user == volunteering_instance.user %}
@@ -180,11 +162,3 @@ def task(request, task_id=None, volunteering_id=None):
         'volunteering_instance': volunteering_instance,
     }
     return render(request, 'events_calendar/task.html', context=context)
-
-    #if request.POST and form.is_valid():
-    #    task_form.save()
-    #    return HttpResponseRedirect(reverse('events_calendar:calendar'))
-    #return render(request, 'events_calendar/task.html', {'form':form})
-
-def index(request):
-    return HttpResponse('hello')
