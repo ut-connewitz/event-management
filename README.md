@@ -6,27 +6,34 @@ Development repository for event management services.
 ```
 event-management/
 ├── Dockerfile
+├── Dockerfile_deploy
 ├── OTHER
-│   ├── ERD_v2.png
-│   ├── IDEF1X.dia
-│   ├── IDEF1X.png
-│   ├── plsql-scripts
-│   ├── use-cases.md
-│   └── ut_db_schema - Tabellenblatt1.csv
+│   ├── USE-CASES.md
+│   ├── db-model
+│   │   ├── ERD_v2.png
+│   │   ├── IDEF1X.dia
+│   │   ├── IDEF1X.png
+│   │   └── ut_db_schema.csv
+│   ├── frontend-screenshots
+│   │   ├── calendar_admin.png
+│   │   ├── calendar_user.png
+│   │   ├── login.png
+│   │   ├── task_admin.png
+│   │   └── task_user.png
+│   ├── frontend.md
+│   └── plsql-scripts
+│       ├── 01_ut_create_tables.sql
+│       ├── 02_ut_index.sql
+│       └── 03_ut_create_trigger.sql
 ├── README.md
 ├── app
 │   ├── backend
-│   │   ├── __init__.py
-│   │   ├── __pycache__
 │   │   ├── admin.py
 │   │   ├── apps.py
 │   │   ├── management
-│   │   │   ├── __init__.py
 │   │   │   └── commands
 │   │   ├── migrations
 │   │   ├── models
-│   │   │   ├── __init__.py
-│   │   │   ├── __pycache__
 │   │   │   ├── event
 │   │   │   ├── notification
 │   │   │   ├── setting
@@ -38,18 +45,44 @@ event-management/
 │   │   ├── urls.py
 │   │   └── views.py
 │   ├── events
-│   │   ├── __init__.py
-│   │   ├── __pycache__
 │   │   ├── asgi.py
 │   │   ├── settings.py
 │   │   ├── urls.py
 │   │   └── wsgi.py
+│   ├── events_calendar
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── forms.py
+│   │   ├── migrations
+│   │   ├── models.py
+│   │   ├── static
+│   │   │   └── events_calendar
+│   │   │       └── css
+│   │   ├── templates
+│   │   │   ├── events_calendar
+│   │   │   │   ├── base.html
+│   │   │   │   ├── calendar.html
+│   │   │   │   ├── event_day.html
+│   │   │   │   └── task.html
+│   │   │   └── registration
+│   │   │       └── login.html
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   ├── utils.py
+│   │   └── views.py
 │   ├── manage.py
 │   └── testbootstrap
 ├── data
-│   └── db     
+│   └── db
+├── docker-compose-deploy.yml
 ├── docker-compose.yml
-└── requirements.txt
+├── nginx
+│   ├── Dockerfile
+│   ├── default.conf
+│   └── uwsgi_params
+├── requirements.txt
+└── scripts
+    └── entrypoint.sh
 ```
 
 ## TODO
@@ -100,4 +133,12 @@ SECRET_KEY=samplesecret123
 ```
 
 ## IDEF1X model for the backend data structure
-![IDEF1X](OTHER/IDEF1X.png)
+![IDEF1X](OTHER/db-model/IDEF1X.png)
+
+## Frontend
+### genreal development links
+- Admin Interface: `http://0.0.0.0:8000/admin/`
+- Calendar: `http://0.0.0.0:8000/ecal/calendar/`
+- Logout: `http://0.0.0.0:8000/accounts/logout/`
+
+[Collection of current frontend screenshots](OTHER/frontend.md)
