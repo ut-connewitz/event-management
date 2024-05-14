@@ -1,0 +1,27 @@
+<!-- events_calendar/templates/events_calendar/base.html -->
+
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap -->
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+
+  <link rel="stylesheet" type="text/css" href="{% static 'events_calendar/css/styles.css' %}">
+  <title>Veranstaltungskalender</title>
+</head>
+<body>
+
+  {% block content %}
+  {% endblock %}
+
+  {% block script %}
+  {% endblock %}
+</body>
+</html>

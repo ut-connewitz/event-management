@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from .task_type import TaskType
 from .team_restriction import TeamRestriction
 from .urgency import Urgency
@@ -6,8 +7,12 @@ from .state import State
 from backend.models.event import EventDay
 
 class Task(models.Model):
-    task_id = models.BigAutoField(primary_key=True)
-    event_day = models.ForeignKey(EventDay, on_delete=models.CASCADE)
+    task_id = models.BigAutoField("Veranstaltungstag", primary_key=True)
+    event_day = models.ForeignKey(
+        EventDay,
+        on_delete=models.CASCADE,
+        verbose_name = "Veranstaltungstag",
+        )
     task_type = models.CharField(
         "Aufgabenart",
         max_length=2,
@@ -41,4 +46,9 @@ class Task(models.Model):
         verbose_name_plural = "Aufgaben"
 
     def __str__(self):
-        return str(self.task_id)
+        return str(self.event_day)+" "+self.get_task_type_display()
+
+    @property
+    def get_html_url(self):
+        url = reverse('events_calendar:task_edit', args=(self.task_id,))
+        return f'<a href="{url}"> {self.get_task_type_display()} </a>'

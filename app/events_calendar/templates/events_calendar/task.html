@@ -1,0 +1,56 @@
+{% extends 'events_calendar/base.html' %}
+
+{% block title %}
+Aufgabe
+{% endblock %}
+
+{% block content %}
+<div class="clearfix">
+  <a class="btn btn-info left" href="{% url 'ecal:calendar' %}"> Kalender </a>
+</div>
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                {{ field.label }} <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ field.label }} <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method="post">
+  <table class="form form-table">
+    <h2 style="text-align:center;"> Aufgabe </h2>
+    {{ task_form }}
+    {% csrf_token %}
+    {% if request.user.is_staff %}
+    <tr><td colspan="2"><button type="submit" class="btn btn-info right" name="task_button" value="task"> Speichern </button></td></tr>
+    {% endif %}
+  </table>
+</form>
+<hr>
+
+<form method="post">
+  <table class="form form-table">
+    {% if request.user == volunteering_instance.user %}
+    <h2 style="text-align:center;"> Übernehmen? </h2>
+    {% endif %}
+    {{ volunteering_form}}
+    {% csrf_token %}
+    {% if request.user == volunteering_instance.user or request.user.is_staff %}
+    <tr><td colspan="2"><button type="submit" class="btn btn-info right" name="volunteering_button" value="volunteering"> Speichern </button></td></tr>
+    {% endif %}
+    {% if request.user != volunteering_instance.user %}
+    <h3 style="text-align:center;"> – Bereits übernommen – </h3>
+    {% endif %}
+  </table>
+</form>
+<hr>
+
+{% endblock %}

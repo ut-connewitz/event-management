@@ -19,5 +19,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', include('testbootstrap.urls')),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path('bootstrap', include('testbootstrap.urls')),
+    path('ecal/', include(('events_calendar.urls'), namespace='ecal')),
 ]
