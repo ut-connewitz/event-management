@@ -1,0 +1,27 @@
+{% extends 'profile_page/base.html' %}
+
+{% block title %}
+Übersicht
+{% endblock %}
+
+{% block content %}
+<div class="clearfix">
+  <a class="btn btn-info left" href="{% url 'profile:account' |add user_pk}"> Account </a>
+</div>
+<div class="clearfix">
+  <a class="btn btn-info left" href="{% url 'ecal:calendar' %}"> Dienste </a>
+</div>
+<div class="clearfix">
+  <a class="btn btn-info left" href="{% url 'ecal:calendar' %}"> Kalender </a>
+</div>
+
+<div class="clearfix">
+  {{account_url}}
+</div>
+
+<div class="clearfix">
+  <a href="{% url 'profile:account' |add user_pk}">hello </a>
+</div>
+
+
+{% endblock %}

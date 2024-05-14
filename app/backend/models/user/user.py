@@ -4,6 +4,7 @@ from .team import Team
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.db.utils import IntegrityError
+from django.urls import reverse
 
 class User(AbstractUser):
     phone = models.CharField("Telefon", blank=True, max_length=20)
@@ -31,6 +32,15 @@ class User(AbstractUser):
         except IntegrityError:
             print("Username ist bereits vergeben")
             pass
+
+    def get_absolute_url(self):
+        return reverse("profile:account", kwargs={"pk": self.pk})
+
+    @property
+    def get_html_url(self):
+        url = reverse('profile:account', args=(self.pk,))
+        return f'<a href="{url}"> {self.username} </a>'
+
 
 # TeamMember class is placed here within the .user file in order to avoid circular dependencies during app initialisation
 # preferred option would be to have this within an own file like all other model classes
