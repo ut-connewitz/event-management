@@ -44,3 +44,11 @@ a {
 h2 {
   text-align: center;
 }
+
+.membership {
+  margin: auto;
+  width: 50%;
+  border: 3px solid #73AD21;
+  border-radius: 15px;
+  text-align: center;
+}

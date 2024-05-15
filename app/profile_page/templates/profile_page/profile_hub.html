@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="clearfix">
-  <a class="btn btn-info left" href="{% url 'profile:account' |add user_pk}"> Account </a>
+  <a class="btn btn-info left" href="{% url 'profile:account' pk=user_pk %}"> Account </a>
 </div>
 <div class="clearfix">
   <a class="btn btn-info left" href="{% url 'ecal:calendar' %}"> Dienste </a>

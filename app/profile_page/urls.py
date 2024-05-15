@@ -7,5 +7,5 @@ from . import views
 app_name = 'profile_page'
 urlpatterns = [
     path('hub/', views.ProfileHub.as_view(), name='hub'),
-    path('account/<int:pk>/', views.Account.as_view(), name='account')
+    path('account/<int:pk>/', views.Account.as_view(), name='account'),
 ]
