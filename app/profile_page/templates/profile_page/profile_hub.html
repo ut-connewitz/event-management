@@ -8,20 +8,29 @@
 <div class="clearfix">
   <a class="btn btn-info left" href="{% url 'profile:account' pk=user_pk %}"> Account </a>
 </div>
+{% if adress is not None %}
 <div class="clearfix">
-  <a class="btn btn-info left" href="{% url 'ecal:calendar' %}"> Dienste </a>
+  <a class="btn btn-info left" href="{% url 'profile:adress_edit' pk=user_pk %}"> Adresse </a>
 </div>
+{% endif %}
+{% if adress is None %}
+<div class="clearfix">
+  <a class="btn btn-info left" href="{% url 'profile:adress_create' %}"> Adresse </a>
+</div>
+{% endif %}
+
 <div class="clearfix">
   <a class="btn btn-info left" href="{% url 'ecal:calendar' %}"> Kalender </a>
 </div>
 
 <div class="clearfix">
-  {{account_url}}
+  <h2> Meine Dienste </h2>
+  <table border="0" cellpadding="0" cellspacing="0">
+    {{ user_task_html }}
+  </table>
 </div>
 
-<div class="clearfix">
-  <a href="{% url 'profile:account' |add user_pk}">hello </a>
-</div>
+
 
 
 {% endblock %}

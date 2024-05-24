@@ -8,4 +8,6 @@ app_name = 'profile_page'
 urlpatterns = [
     path('hub/', views.ProfileHub.as_view(), name='hub'),
     path('account/<int:pk>/', views.Account.as_view(), name='account'),
+    path('adress/edit/<int:pk>/', views.UpdateAdress.as_view(), name='adress_edit'),
+    path('adress/create/', views.CreateAdress.as_view(), name='adress_create'),
 ]
