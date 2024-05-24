@@ -11,7 +11,7 @@ class EventDay(models.Model):
         Event,
         on_delete=models.CASCADE,
         verbose_name = "Veranstaltung",)
-    date = models.DateField("Datum", null=True, blank=True)
+    date = models.DateField("Datum", null=False, blank=False)
     #making start time unique assuming there can not be two events beginning at the exact same time within the ut
     #standard exception handling seems viable
     #NOTE: making this field pk will add duplicate instance with newly set time on update
@@ -34,8 +34,9 @@ class EventDay(models.Model):
     def save(self, *args, **kwargs):
         try:
             super(EventDay, self).save(*args, **kwargs)
-        except IntegrityError:
-            print("Zu dieser Zeit findet bereits eine Veranstaltung statt")
+        except IntegrityError as e:
+            error_message = e.__cause__
+            print(error_message)
             pass
 
     @property

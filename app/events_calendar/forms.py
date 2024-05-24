@@ -6,6 +6,12 @@ class EventDayForm(ModelForm):
     class Meta:
         model = EventDay
         widgets = {
+            'date': DateInput(
+                format=('%Y-%m-%d'),
+                attrs={'class': 'form-control',
+                    'placeholder': 'Datum wählen',
+                    'type': 'date',
+                    }),
             'start_time': DateInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
             'admission_time': DateInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
         }
