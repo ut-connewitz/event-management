@@ -9,22 +9,9 @@ event-management/
 ├── Dockerfile_deploy
 ├── OTHER
 │   ├── db-model
-│   │   ├── ERD_v2.png
-│   │   ├── IDEF1X.dia
-│   │   ├── IDEF1X.png
-│   │   └── ut_db_schema.csv
 │   ├── frontend-screenshots
-│   │   ├── calendar_admin.png
-│   │   ├── calendar_user.png
-│   │   ├── login.png
-│   │   ├── profile_page.png
-│   │   ├── task_admin.png
-│   │   └── task_user.png
 │   ├── frontend.md
 │   ├── plsql-scripts
-│   │   ├── 01_ut_create_tables.sql
-│   │   ├── 02_ut_index.sql
-│   │   └── 03_ut_create_trigger.sql
 │   └── use-cases.md
 ├── README.md
 ├── app
