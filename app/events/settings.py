@@ -140,8 +140,7 @@ STATIC_ROOT = '/vol/web/static'
 MEDIA_ROOT = '/vol/web/media'
 
 STATICFILES_DIRS = [
-    '/app/events_calendar/static/events_calendar/css',
-    '/app/profile_page/static/profile_page/css',
+    os.path.join(BASE_DIR, "static")
 ]
 
 # Default primary key field type
