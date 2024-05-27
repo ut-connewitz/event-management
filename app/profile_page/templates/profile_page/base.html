@@ -1,53 +1,12 @@
 <!-- profile_page/templates/profile_page/base.html -->
 
+{% extends 'base.html' %}
 {% load static %}
-<!doctype html>
-<html lang="en">
+
 
 <head>
   <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <!-- Bootstrap -->
-  {% load bootstrap5 %}
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
 
-  <link rel="stylesheet" type="text/css" href="{% static 'profile_page/css/styles.css' %}">
-  <title>Profilseite</title>
+  {% block stylesheet %} <link rel="stylesheet" type="text/css" href="{% static 'profile_page/css/styles.css' %}"> {% endblock %}
+
 </head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#"> UT-Connewitz Jobbar </a>
-    <button class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr auto">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'ecal:calendar' %}"> Kalender </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'profile:hub' %}"> Dienste und Einstellungen </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}""> Ausloggen </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  {% block content %}
-  {% endblock %}
-
-  {% block script %}
-  {% endblock %}
-</body>
-</html>
