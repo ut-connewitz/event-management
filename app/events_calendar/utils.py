@@ -55,7 +55,12 @@ class Calendar(HTMLCalendar):
 
 
             for task in taken_tasks:
-                task_volunteering = Volunteering.objects.get(task=task)
+                try:
+                    task_volunteering = Volunteering.objects.get(task=task)
+                    volunteering_user = task_volunteering.user
+                except Volunteering.DoesNotExist:
+                    volunteering_user = None
+                    
                 if self.user.is_staff or self.user == task_volunteering.user:
                     task_html += f'<li class ="taken_task">{task.get_html_url} &#10003;</li>'
 

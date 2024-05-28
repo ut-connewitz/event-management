@@ -1,7 +1,9 @@
 from datetime import datetime
+import logging
 
 from django.db import models
 from django.db.utils import IntegrityError
+from django.utils.timezone import get_current_timezone
 from .confirmation_type import ConfirmationType
 from .task import Task, State
 from .deleted_volunteering import DeletedVolunteering
@@ -69,7 +71,7 @@ class Volunteering(models.Model):
 
     def confirmation_type_change(self):
         if self.confirmation_type == ConfirmationType.NO:
-            timestamp = datetime.now()
+            timestamp = datetime.now(tz=get_current_timezone())
             deleted_instance = DeletedVolunteering.objects.create(
                 task = self.task,
                 user = self.user,
@@ -77,10 +79,16 @@ class Volunteering(models.Model):
                 comment = self.comment,
             )
             deleted_instance.save()
+            logger = logging.getLogger(__name__)
+            logger.info('deleted volunteering saved')
+            logger.error('this is not an error')
             self.delete()
         elif self.confirmation_type == ConfirmationType.YES:
             self.task.state = State.TAKEN
-            deleted_instance = DeletedVolunteering.objects.get(task=self.task)
+            try:
+                deleted_instance = DeletedVolunteering.objects.get(task=self.task)
+            except DeletedVolunteering.DoesNotExist:
+                deleted_instance = None
             if deleted_instance != None:
                 deleted_instance.delete()
             self.task.save()

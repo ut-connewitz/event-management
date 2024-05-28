@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.db.utils import IntegrityError
 from .task_type import TaskType
 from .team_restriction import TeamRestriction
 from .urgency import Urgency
@@ -48,7 +49,20 @@ class Task(models.Model):
     def __str__(self):
         return str(self.event_day)+" "+self.get_task_type_display()
 
+    def save(self, *args, **kwargs):
+        try:
+            super(Task, self).save(*args, **kwargs)
+            self.check_state_change()
+        except IntegrityError as e:
+            error_message = e.__cause__
+            print(error_message)
+            pass
+
     @property
     def get_html_url(self):
         url = reverse('events_calendar:task_edit', args=(self.task_id,))
         return f'<a href="{url}"> {self.get_task_type_display()} </a>'
+
+    def check_state_change(self):
+        if self.state != State.FREE:
+            self.deletedvolunteering_set.clear()
