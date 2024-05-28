@@ -8,6 +8,15 @@ from backend.models.event import(Event, EventDay, Act, EventAct)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering)
 
+# some admin site customisation
+# link to website
+admin.site.site_url = "/ecal/calendar"
+admin.site.site_header = "UT Connewitz Veranstaltungen"
+admin.site.site_title = "UT Connewitz Veranstaltungen"
+admin.site.index_title = "Administration"
+
+
+
 class UTMemberInLine(admin.TabularInline):
     model = UTMember
 
