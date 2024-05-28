@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from django.db import models
 from django.db.utils import IntegrityError
 from .confirmation_type import ConfirmationType
 from .task import Task, State
+from .deleted_volunteering import DeletedVolunteering
 from backend.models.user import User
 
 # to overwrite the delete() method (or any method) for SQL queries the QuerySet must be adjusted
@@ -66,7 +69,18 @@ class Volunteering(models.Model):
 
     def confirmation_type_change(self):
         if self.confirmation_type == ConfirmationType.NO:
+            timestamp = datetime.now()
+            deleted_instance = DeletedVolunteering.objects.create(
+                task = self.task,
+                user = self.user,
+                timestamp = timestamp,
+                comment = self.comment,
+            )
+            deleted_instance.save()
             self.delete()
         elif self.confirmation_type == ConfirmationType.YES:
             self.task.state = State.TAKEN
+            deleted_instance = DeletedVolunteering.objects.get(task=self.task)
+            if deleted_instance != None:
+                deleted_instance.delete()
             self.task.save()

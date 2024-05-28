@@ -6,7 +6,7 @@ from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntVal
 from backend.models.user import (User, UTMember, Adress, Team, TeamMember)
 from backend.models.event import(Event, EventDay, Act, EventAct)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
-from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering)
+from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering, DeletedVolunteering)
 
 # some admin site customisation
 # link to website
@@ -73,6 +73,7 @@ admin.site.register(EventAct)
 #admin.site.register(ConfirmationType)
 admin.site.register(Task)
 admin.site.register(Volunteering)
+admin.site.register(DeletedVolunteering) #debug, unregister later
 #admin.site.register(NotificationType)
 #admin.site.register(Notification)
 #admin.site.register(TaskNotification)
