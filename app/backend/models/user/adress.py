@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from .user import User
 
 class Adress(models.Model):
@@ -14,3 +15,6 @@ class Adress(models.Model):
 
     def __str__(self):
         return str(self.user) + "\'s Adresse"
+
+    def get_absolute_url(self):
+        return reverse("profile:adress_edit", kwargs={"pk": self.user.pk})

@@ -1,0 +1,54 @@
+/* profile_page/static/profile_page/css/styles.css */
+
+ul {
+  height: 100%;
+  padding: 0px 5px 0px 20px;
+}
+
+a {
+  color: #17a2b8;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.btn {
+  outline: none;
+  color: black;
+  background-color: transparent;
+  box-shadow: 0 0 0 0;
+}
+
+.clearfix {
+  margin: 15px;
+}
+
+.form {
+  margin: auto;
+}
+
+.form input, .form select, .form textarea {
+  border-radius: 5px;
+  border: 1px solid #17a2b8;
+  outline: none;
+  background: none;
+  padding: 5px;
+  width: 100%;
+}
+
+h2 {
+  text-align: center;
+}
+
+.membership {
+  margin: auto;
+  width: 50%;
+  border: 3px solid #73AD21;
+  border-radius: 15px;
+  text-align: center;
+}

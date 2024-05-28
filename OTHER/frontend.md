@@ -22,3 +22,6 @@ Documentation of the current frontend appearance.
 ### User Task
 ![user task](frontend-screenshots/task_user.png)
 
+
+### Profile Page
+![profile page](frontend-screenshots/profile_page.png)

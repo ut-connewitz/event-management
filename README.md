@@ -8,23 +8,11 @@ event-management/
 ├── Dockerfile
 ├── Dockerfile_deploy
 ├── OTHER
-│   ├── USE-CASES.md
 │   ├── db-model
-│   │   ├── ERD_v2.png
-│   │   ├── IDEF1X.dia
-│   │   ├── IDEF1X.png
-│   │   └── ut_db_schema.csv
 │   ├── frontend-screenshots
-│   │   ├── calendar_admin.png
-│   │   ├── calendar_user.png
-│   │   ├── login.png
-│   │   ├── task_admin.png
-│   │   └── task_user.png
 │   ├── frontend.md
-│   └── plsql-scripts
-│       ├── 01_ut_create_tables.sql
-│       ├── 02_ut_index.sql
-│       └── 03_ut_create_trigger.sql
+│   ├── plsql-scripts
+│   └── use-cases.md
 ├── README.md
 ├── app
 │   ├── backend
@@ -32,6 +20,8 @@ event-management/
 │   │   ├── apps.py
 │   │   ├── management
 │   │   │   └── commands
+│   │   │       ├── addbasedata.py
+│   │   │       └── addtestdata.py
 │   │   ├── migrations
 │   │   ├── models
 │   │   │   ├── event
@@ -71,9 +61,33 @@ event-management/
 │   │   ├── utils.py
 │   │   └── views.py
 │   ├── manage.py
+│   ├── profile_page
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── forms.py
+│   │   ├── migrations
+│   │   ├── models.py
+│   │   ├── static
+│   │   │   └── profile_page
+│   │   │       └── css
+│   │   ├── templates
+│   │   │   ├── profile_page
+│   │   │   │   ├── account.html
+│   │   │   │   ├── adress.html
+│   │   │   │   ├── base.html
+│   │   │   │   └── profile_hub.html
+│   │   │   └── registration
+│   │   │       └── login.html
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── static
+│   │   └── css
+│   │       └── base.css
+│   ├── templates
+│   │   └── base.html
 │   └── testbootstrap
 ├── data
-│   └── db
 ├── docker-compose-deploy.yml
 ├── docker-compose.yml
 ├── nginx
@@ -136,9 +150,10 @@ SECRET_KEY=samplesecret123
 ![IDEF1X](OTHER/db-model/IDEF1X.png)
 
 ## Frontend
-### genreal development links
+### general development links
 - Admin Interface: `http://0.0.0.0:8000/admin/`
 - Calendar: `http://0.0.0.0:8000/ecal/calendar/`
+- Profile Page: `http://0.0.0.0:8000/profile/hub/`
 - Logout: `http://0.0.0.0:8000/accounts/logout/`
 
 [Collection of current frontend screenshots](OTHER/frontend.md)
