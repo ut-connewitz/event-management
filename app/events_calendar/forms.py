@@ -12,8 +12,8 @@ class EventDayForm(ModelForm):
                     'placeholder': 'Datum wählen',
                     'type': 'date',
                     }),
-            'start_time': TimeInput(format=('%H:%M'), attrs={'type': 'time'}),
-            'admission_time': TimeInput(format=('%H:%M'), attrs={'type': 'time'}),
+            'start_time': TimeInput(format=('%H:%M'), attrs={'type': 'time', 'class': 'timepicker'}),
+            'admission_time': TimeInput(format=('%H:%M'), attrs={'type': 'time', 'class': 'timepicker'}),
         }
         fields = '__all__'
 
@@ -30,8 +30,8 @@ class TaskForm(ModelForm):
     class Meta:
         model = Task
         widgets = {
-            'start_time': TimeInput(format=('%H:%M'), attrs={'type': 'time'}),
-            'finish_time': TimeInput(format=('%H:%M'), attrs={'type': 'time'}),
+            'start_time': TimeInput(format=('%H:%M'), attrs={'type': 'time', 'class': 'timepicker'}),
+            'finish_time': TimeInput(format=('%H:%M'), attrs={'type': 'time', 'class': 'timepicker'}),
         }
         fields = '__all__'
 

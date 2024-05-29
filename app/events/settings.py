@@ -125,6 +125,11 @@ LANGUAGE_CODE = 'de-DE'
 
 TIME_ZONE = 'Europe/Berlin'
 
+TIME_INPUT_FORMATS = [
+    '%H:%M',
+    '%H:%M:%S',
+]
+
 USE_I18N = True
 
 USE_TZ = True

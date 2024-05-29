@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, date
 import calendar
+import logging
 
 from django.conf import settings
 from django.shortcuts import redirect, render, get_object_or_404
@@ -65,6 +66,9 @@ def event_day(request, event_day_id=None):
         instance = get_object_or_404(EventDay, pk=event_day_id)
     else:
         instance = EventDay()
+        event_day_id = instance.event_day_id
+        logger = logging.getLogger(__name__) #debug
+        logger.error('new instance id: '+str(event_day_id)) #debug
 
     form = EventDayForm(request.POST or None, instance=instance)
     if not request.user.is_staff:
@@ -77,10 +81,15 @@ def event_day(request, event_day_id=None):
     if request.POST and form.is_valid():
         form.save()
         return HttpResponseRedirect(reverse('ecal:calendar'))
-    return render(request, 'events_calendar/event_day.html', {'form':form})
+
+    context = {
+        'event_day_id' : event_day_id,
+        'form': form,
+    }
+    return render(request, 'events_calendar/event_day.html', context=context)
 
 @login_required
-def task(request, task_id=None, volunteering_id=None):
+def task(request, task_id=None, volunteering_id=None, event_day_id=None):
     task_instance = Task()
     if task_id:
         task_instance = get_object_or_404(Task, pk=task_id)
@@ -100,7 +109,12 @@ def task(request, task_id=None, volunteering_id=None):
             user = request.user,
         )
 
-    task_form = TaskForm(instance=task_instance)
+    if event_day_id:
+        event_day = EventDay.objects.get(event_day_id=event_day_id)
+        task_form = TaskForm(instance=task_instance, initial={'event_day': event_day})
+    else:
+        task_form = TaskForm(instance=task_instance)
+
     volunteering_form = VolunteeringForm(instance=volunteering_instance)
 
     if not request.user.is_staff:
