@@ -8,12 +8,21 @@ class EventDayForm(ModelForm):
         widgets = {
             'date': DateInput(
                 format=('%Y-%m-%d'),
-                attrs={'class': 'form-control',
+                attrs={
+                    'class': 'form-control',
                     'placeholder': 'Datum wählen',
                     'type': 'date',
                     }),
-            'start_time': TimeInput(format=('%H:%M'), attrs={'type': 'time', 'class': 'timepicker'}),
-            'admission_time': TimeInput(format=('%H:%M'), attrs={'type': 'time', 'class': 'timepicker'}),
+            'start_time': TimeInput(
+                format=('%H:%M'),
+                attrs={
+                    'type': 'time-local',
+                    'class': 'form-control'}),
+            'admission_time': TimeInput(
+                format=('%H:%M'),
+                attrs={
+                'type': 'time-local',
+                'class': 'form-control'}),
         }
         fields = '__all__'
 
@@ -30,8 +39,16 @@ class TaskForm(ModelForm):
     class Meta:
         model = Task
         widgets = {
-            'start_time': TimeInput(format=('%H:%M'), attrs={'type': 'time', 'class': 'timepicker'}),
-            'finish_time': TimeInput(format=('%H:%M'), attrs={'type': 'time', 'class': 'timepicker'}),
+            'start_time': TimeInput(
+                format=('%H:%M'),
+                attrs={
+                    'type': 'time-local',
+                    'class': 'form-control'}),
+            'finish_time': TimeInput(
+                format=('%H:%M'),
+                attrs={
+                    'type': 'time-local',
+                    'class': 'form-control'}),
         }
         fields = '__all__'
 
