@@ -79,9 +79,8 @@ class Volunteering(models.Model):
                 comment = self.comment,
             )
             deleted_instance.save()
-            logger = logging.getLogger(__name__)
-            logger.info('deleted volunteering saved')
-            logger.error('this is not an error')
+            #logger = logging.getLogger(__name__) #debug
+            #logger.error('this is not an error') #debug
             self.delete()
         elif self.confirmation_type == ConfirmationType.YES:
             self.task.state = State.TAKEN

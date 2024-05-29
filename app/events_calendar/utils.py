@@ -29,7 +29,7 @@ class Calendar(HTMLCalendar):
     #formats a days as td
     #filters event_days by day
     def formatday(self, day, event_days):
-        events_per_day = event_days.filter(start_time__day=day)
+        events_per_day = event_days.filter(date__day=day)
         day_content = ''
 
         for event_day in events_per_day:
@@ -60,7 +60,7 @@ class Calendar(HTMLCalendar):
                     volunteering_user = task_volunteering.user
                 except Volunteering.DoesNotExist:
                     volunteering_user = None
-                    
+
                 if self.user.is_staff or self.user == task_volunteering.user:
                     task_html += f'<li class ="taken_task">{task.get_html_url} &#10003;</li>'
 
@@ -81,7 +81,7 @@ class Calendar(HTMLCalendar):
     #formats a month as a table
     #filters event_days by year and month
     def formatmonth(self, withyear=True):
-        event_days = EventDay.objects.filter(start_time__year=self.year, start_time__month=self.month)
+        event_days = EventDay.objects.filter(date__year=self.year, date__month=self.month)
         #cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
         cal = f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
         cal += f'{self.formatweekheader()}\n'

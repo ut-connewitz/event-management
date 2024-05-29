@@ -4,20 +4,19 @@ from django.db.utils import IntegrityError
 from .task import Task, State
 from backend.models.user import User
 
-class DeletedVolunteeringQuerySet(models.QuerySet):
-    def update(self, *args, **kwargs):
-        logger = logging.getLogger(__name__)
-        for object in self:
-            logger.error("updating")
-            #object.apply_task_state
-            if object.task == None:
-                object.delete()
+#class DeletedVolunteeringQuerySet(models.QuerySet):
+#    def update(self, *args, **kwargs):
+#        logger = logging.getLogger(__name__)
+#        for object in self:
+#            logger.error("updating")
+#            #object.apply_task_state
+#            if object.task == None:
+#                object.delete()
+#        super().update(*args, **kwargs)
 
-        super().update(*args, **kwargs)
-
-class DeletedVolunteeringManager(models.Manager):
-    def get_queryset(self):
-        return DeletedVolunteeringQuerySet(model=self.model, using=self._db, hints=self._hints)
+#class DeletedVolunteeringManager(models.Manager):
+#    def get_queryset(self):
+#        return DeletedVolunteeringQuerySet(model=self.model, using=self._db, hints=self._hints)
 
 class DeletedVolunteering(models.Model):
     task = models.ForeignKey(
@@ -37,7 +36,7 @@ class DeletedVolunteering(models.Model):
 
     comment = models.TextField("Kommentar", blank=True, max_length=300)
 
-    objects = DeletedVolunteeringManager()
+#    objects = DeletedVolunteeringManager()
 
 
     class Meta:
@@ -52,15 +51,15 @@ class DeletedVolunteering(models.Model):
 
     def save(self, *args, **kwargs):
         try:
-            self.apply_task_state
+            #self.apply_task_state
             super(DeletedVolunteering, self).save(*args, **kwargs)
         except IntegrityError as e:
             error_message = e.__cause__
             print(error_message)
             pass
 
-    def apply_task_state(self):
-        logger = logging.getLogger(__name__)
-        logger.info("applying task state")
-        if self.task == None:
-            self.delete()
+#    def apply_task_state(self):
+#        logger = logging.getLogger(__name__)
+#        logger.info("applying task state")
+#        if self.task == None:
+#            self.delete()
