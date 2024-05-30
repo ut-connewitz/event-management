@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, date
 import calendar
-import logging
+#import logging
 
 from django.conf import settings
 from django.shortcuts import redirect, render, get_object_or_404
@@ -67,8 +67,8 @@ def event_day(request, event_day_id=None):
     else:
         instance = EventDay()
         event_day_id = instance.event_day_id
-        logger = logging.getLogger(__name__) #debug
-        logger.error('new instance id: '+str(event_day_id)) #debug
+        #logger = logging.getLogger(__name__) #debug
+        #logger.error('new instance id: '+str(event_day_id)) #debug
 
     form = EventDayForm(request.POST or None, instance=instance)
     if not request.user.is_staff:

@@ -1,4 +1,4 @@
-import logging
+#import logging
 from django.db import models
 from django.db.utils import IntegrityError
 from .task import Task, State
