@@ -122,7 +122,7 @@ def task(request, task_id=None, volunteering_id=None, event_day_id=None):
         task_form.fields['task_type'].disabled = True
         task_form.fields['team_restriction'].disabled = True
         task_form.fields['urgency'].disabled = True
-        task_form.fields['state'].disabled = True
+        #task_form.fields['state'].disabled = True # set to 'editable=False' in model, so it doesnt exist as field here
         task_form.fields['start_time'].disabled = True
         task_form.fields['finish_time'].disabled = True
         task_form.fields['comment'].disabled = True
