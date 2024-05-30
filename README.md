@@ -129,6 +129,12 @@ event-management/
 - within the container: `python3 manage.py createsuperuser`
 - open `http://0.0.0.0:8000/`
 
+### Print to docker console from any .py file
+1. add `import logging` to the imports
+2. instantiate logger: `logger = logging.getLogger(__name__)`
+3. define output: `logger.error('some string '+str(some_variable))`
+(currently only `logger.error` is shown, maybe due to local docker/logging config idk)
+
 ## Docker Deployment
 
 1. Clone
@@ -145,12 +151,6 @@ POSTGRES_PASSWORD=postgres
 ALLOWED_HOSTS=???????? #tbd
 SECRET_KEY=samplesecret123
 ```
-
-## Print to docker console from any .py file
-1. add `import logging` to the imports
-2. instantiate logger: `logger = logging.getLogger(__name__)`
-3. define output: `logger.error('some string '+str(some_variable))`
-(currently only `logger.error` is shown, maybe due to local docker/logging config idk)
 
 ## IDEF1X model for the backend data structure
 ![IDEF1X](OTHER/db-model/IDEF1X.png)
