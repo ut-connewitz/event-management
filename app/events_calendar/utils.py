@@ -1,3 +1,4 @@
+#import logging
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from backend.models.event import EventDay
@@ -13,18 +14,19 @@ class Calendar(HTMLCalendar):
         super(Calendar, self).__init__()
 
     def check_team_restriction(self, team_restriction, user_teams):
-        for user_team in user_teams:
-            if team_restriction == TeamRestriction.NONE:
-                return True
-            elif team_restriction == TeamRestriction.LIGHT:
-                if user_team.team.name == "lichttechnik":
-                    return True
-            elif team_restriction == TeamRestriction.SOUND:
-                if user_team.team.name == "tontechnik":
-                    return True
-            elif team_restriction == TeamRestriction.OFFICE:
-                if user_team.team.name == "verwaltung":
-                    return True
+        if team_restriction == TeamRestriction.NONE:
+            return True
+        else:
+            for user_team in user_teams:
+                if team_restriction == TeamRestriction.LIGHT:
+                    if user_team.team.name == "lichttechnik":
+                        return True
+                elif team_restriction == TeamRestriction.SOUND:
+                    if user_team.team.name == "tontechnik":
+                        return True
+                elif team_restriction == TeamRestriction.OFFICE:
+                    if user_team.team.name == "verwaltung":
+                        return True
 
     #formats a days as td
     #filters event_days by day
@@ -35,6 +37,8 @@ class Calendar(HTMLCalendar):
         for event_day in events_per_day:
             day_content += f'<li>{event_day.get_html_url} </li>'
             free_tasks = Task.objects.filter(event_day=event_day, state=State.FREE)
+            #logger = logging.getLogger(__name__) #debug
+            #logger.error(str(free_tasks)) #debug
             taken_tasks = Task.objects.filter(event_day=event_day, state=State.TAKEN)
             task_html = ''
             user_teams = TeamMember.objects.filter(user=self.user)
