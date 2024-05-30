@@ -1,3 +1,4 @@
+#import logging
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from backend.models.event import EventDay
@@ -13,28 +14,31 @@ class Calendar(HTMLCalendar):
         super(Calendar, self).__init__()
 
     def check_team_restriction(self, team_restriction, user_teams):
-        for user_team in user_teams:
-            if team_restriction == TeamRestriction.NONE:
-                return True
-            elif team_restriction == TeamRestriction.LIGHT:
-                if user_team.team.name == "lichttechnik":
-                    return True
-            elif team_restriction == TeamRestriction.SOUND:
-                if user_team.team.name == "tontechnik":
-                    return True
-            elif team_restriction == TeamRestriction.OFFICE:
-                if user_team.team.name == "verwaltung":
-                    return True
+        if team_restriction == TeamRestriction.NONE:
+            return True
+        else:
+            for user_team in user_teams:
+                if team_restriction == TeamRestriction.LIGHT:
+                    if user_team.team.name == "lichttechnik":
+                        return True
+                elif team_restriction == TeamRestriction.SOUND:
+                    if user_team.team.name == "tontechnik":
+                        return True
+                elif team_restriction == TeamRestriction.OFFICE:
+                    if user_team.team.name == "verwaltung":
+                        return True
 
     #formats a days as td
     #filters event_days by day
     def formatday(self, day, event_days):
-        events_per_day = event_days.filter(start_time__day=day)
+        events_per_day = event_days.filter(date__day=day)
         day_content = ''
 
         for event_day in events_per_day:
             day_content += f'<li>{event_day.get_html_url} </li>'
             free_tasks = Task.objects.filter(event_day=event_day, state=State.FREE)
+            #logger = logging.getLogger(__name__) #debug
+            #logger.error(str(free_tasks)) #debug
             taken_tasks = Task.objects.filter(event_day=event_day, state=State.TAKEN)
             task_html = ''
             user_teams = TeamMember.objects.filter(user=self.user)
@@ -55,7 +59,12 @@ class Calendar(HTMLCalendar):
 
 
             for task in taken_tasks:
-                task_volunteering = Volunteering.objects.get(task=task)
+                try:
+                    task_volunteering = Volunteering.objects.get(task=task)
+                    volunteering_user = task_volunteering.user
+                except Volunteering.DoesNotExist:
+                    volunteering_user = None
+
                 if self.user.is_staff or self.user == task_volunteering.user:
                     task_html += f'<li class ="taken_task">{task.get_html_url} &#10003;</li>'
 
@@ -76,7 +85,7 @@ class Calendar(HTMLCalendar):
     #formats a month as a table
     #filters event_days by year and month
     def formatmonth(self, withyear=True):
-        event_days = EventDay.objects.filter(start_time__year=self.year, start_time__month=self.month)
+        event_days = EventDay.objects.filter(date__year=self.year, date__month=self.month)
         #cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
         cal = f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
         cal += f'{self.formatweekheader()}\n'

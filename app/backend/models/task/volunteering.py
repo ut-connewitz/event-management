@@ -1,7 +1,12 @@
+from datetime import datetime
+import logging
+
 from django.db import models
 from django.db.utils import IntegrityError
+from django.utils.timezone import get_current_timezone
 from .confirmation_type import ConfirmationType
 from .task import Task, State
+from .deleted_volunteering import DeletedVolunteering
 from backend.models.user import User
 
 # to overwrite the delete() method (or any method) for SQL queries the QuerySet must be adjusted
@@ -66,7 +71,23 @@ class Volunteering(models.Model):
 
     def confirmation_type_change(self):
         if self.confirmation_type == ConfirmationType.NO:
+            timestamp = datetime.now(tz=get_current_timezone())
+            deleted_instance = DeletedVolunteering.objects.create(
+                task = self.task,
+                user = self.user,
+                timestamp = timestamp,
+                comment = self.comment,
+            )
+            deleted_instance.save()
+            #logger = logging.getLogger(__name__) #debug
+            #logger.error('this is not an error') #debug
             self.delete()
         elif self.confirmation_type == ConfirmationType.YES:
             self.task.state = State.TAKEN
+            try:
+                deleted_instance = DeletedVolunteering.objects.get(task=self.task)
+            except DeletedVolunteering.DoesNotExist:
+                deleted_instance = None
+            if deleted_instance != None:
+                deleted_instance.delete()
             self.task.save()

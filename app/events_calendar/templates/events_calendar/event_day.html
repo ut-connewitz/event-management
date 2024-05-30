@@ -36,7 +36,11 @@ Veranstaltungstag
 
 <div class="clearfix">
   {% if request.user.is_staff %}
-  <a class="btn btn-info right" href="{% url 'ecal:task_new' %}"> Aufgabe hinzufügen </a>
+    {% if event_day_id is None %}
+    <a class="btn btn-info right" href="{% url 'ecal:task_new' %}"> Aufgabe hinzufügen </a>
+    {% else %}
+    <a class="btn btn-info right" href="{% url 'ecal:event_task_new' event_day_id=event_day_id %}"> Aufgabe hinzufügen </a>
+    {% endif %}
   {% endif %}
 </div>
 {% endblock %}

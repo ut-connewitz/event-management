@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from django.utils.dateparse import parse_datetime, parse_duration
+from django.utils.dateparse import parse_datetime, parse_duration, parse_time
 from django.utils.timezone import get_current_timezone
 from django.contrib.auth.models import Group, Permission
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
@@ -66,37 +66,37 @@ class Command(BaseCommand):
         event1day1 = EventDay(
             event=Event.objects.get(event_name="BAIKALTRAIN DISCO"),
             date=parse_datetime("2024-02-24"),
-            start_time=parse_datetime("2024-02-24 20:00:00").replace(tzinfo=get_current_timezone()),
+            start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
             duration=parse_duration("0 5:00:00"),
-            admission_time=parse_datetime("2024-02-24 19:30:00").replace(tzinfo=get_current_timezone()),
+            admission_time=parse_time("19:30:00").replace(tzinfo=get_current_timezone()),
         )
         event1day1.save()
         event1day2 = EventDay(
             event=Event.objects.get(event_name="BAIKALTRAIN DISCO"),
             date=parse_datetime("2024-03-08"),
-            start_time=parse_datetime("2024-03-08 20:00:00").replace(tzinfo=get_current_timezone()),
+            start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
             duration=parse_duration("0 5:00:00"),
-            admission_time=parse_datetime("2024-03-08 19:30:00").replace(tzinfo=get_current_timezone()),
+            admission_time=parse_time("19:30:00").replace(tzinfo=get_current_timezone()),
         )
         event1day2.save()
         event2day1 = EventDay(
             event=Event.objects.get(event_name="JOHNNY & ME"),
             date=parse_datetime("2024-02-12"),
-            start_time=parse_datetime("2024-02-12 20:00:00").replace(tzinfo=get_current_timezone()),
+            start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
             duration=parse_duration("0 2:17:00"),
-            admission_time=parse_datetime("2024-02-12 19:50:00").replace(tzinfo=get_current_timezone()),
+            admission_time=parse_time("19:50:00").replace(tzinfo=get_current_timezone()),
         )
         event2day1.save()
         act1 = Act(act_name="DJ Malhalla und DJ Petrike", person_count=2) #possibly base data
         act1.save()
 
         eventact1 = EventAct(
-            event_day=EventDay.objects.get(start_time=parse_datetime("2024-02-24 20:00:00").replace(tzinfo=get_current_timezone())),
+            event_day=EventDay.objects.get(date=parse_datetime("2024-02-24").replace(tzinfo=get_current_timezone())),
             act=Act.objects.get(act_name="DJ Malhalla und DJ Petrike"),
         )
         eventact1.save()
         eventact2 = EventAct(
-            event_day=EventDay.objects.get(start_time=parse_datetime("2024-03-08 20:00:00").replace(tzinfo=get_current_timezone())),
+            event_day=EventDay.objects.get(date=parse_datetime("2024-03-08").replace(tzinfo=get_current_timezone())),
             act=Act.objects.get(act_name="DJ Malhalla und DJ Petrike"),
         )
         eventact2.save()

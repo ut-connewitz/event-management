@@ -12,12 +12,9 @@ class EventDay(models.Model):
         on_delete=models.CASCADE,
         verbose_name = "Veranstaltung",)
     date = models.DateField("Datum", null=False, blank=False)
-    #making start time unique assuming there can not be two events beginning at the exact same time within the ut
-    #standard exception handling seems viable
-    #NOTE: making this field pk will add duplicate instance with newly set time on update
-    start_time = models.DateTimeField("Veranstaltungsbeginn", default=now, unique=True)
+    start_time = models.TimeField("Veranstaltungsbeginn", default=now)
     duration = models.DurationField("Veranstaltungsdauer", null=True, blank=True) #TODO: test how this works
-    admission_time = models.DateTimeField("Einlassbeginn", null=True, blank=True)
+    admission_time = models.TimeField("Einlassbeginn", null=True, blank=True)
 
     class Meta:
         verbose_name = "Veranstaltungstag"
