@@ -2,10 +2,13 @@
 
 # Create Rabbitmq user
 ( rabbitmqctl wait --timeout 60 $RABBITMQ_PID_FILE ; \
-rabbitmqctl add_user $RABBITMQ_USER $RABBITMQ_PASSWORD 2>/dev/null ; \
-rabbitmqctl set_user_tags $RABBITMQ_USER administrator ; \
-rabbitmqctl set_permissions -p / $RABBITMQ_USER  ".*" ".*" ".*" ; \
-echo "*** User '$RABBITMQ_USER' with password '$RABBITMQ_PASSWORD' completed. ***" ; \
+rabbitmqctl add_user $RABBITMQ_ADMIN $RABBITMQ_ADMIN_PASS 2>/dev/null ; \
+rabbitmqctl set_user_tags $RABBITMQ_ADMIN administrator ; \
+rabbitmqctl set_permissions -p / $RABBITMQ_ADMIN  ".*" ".*" ".*" ; \
+echo "*** User '$RABBITMQ_ADMIN' with password '$RABBITMQ_ADMIN_PASS' completed. ***" ; \
+rabbitmqctl add_user $RABBITMQ_WORKER $RABBITMQ_WORKER_PASS 2>/dev/null ; \
+rabbitmqctl set_permissions -p / $RABBITMQ_WORKER  ".*" ".*" ".*" ; \
+echo "*** User '$RABBITMQ_WORKER' with password '$RABBITMQ_WORKER_PASS' completed. ***" ; \
 echo "*** Log in the WebUI at port 15672 (example: http:/localhost:15672) ***") &
 
 # $@ is used to pass arguments to the rabbitmq-server command.

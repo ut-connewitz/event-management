@@ -8,8 +8,10 @@ FROM rabbitmq:3.13-management-alpine
 
 
 # Define environment variables.
-ENV RABBITMQ_USER user
-ENV RABBITMQ_PASSWORD user
+ENV RABBITMQ_ADMIN admin
+ENV RABBITMQ_ADMIN_PASS admin
+ENV RABBITMQ_WORKER worker
+ENV RABBITMQ_WORKER_PASS worker
 ENV RABBITMQ_PID_FILE /var/lib/rabbitmq/mnesia/rabbitmq
 
 ADD init.sh /init.sh
