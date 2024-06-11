@@ -13,4 +13,11 @@ RUN chmod +x /scripts/*
 RUN adduser -disabled-login user
 USER user
 
-CMD ["celery.sh"]
+USER root
+
+RUN chown -R root /scripts
+RUN chgrp root /scripts
+RUN chmod -R 755 /scripts
+
+
+CMD ["scripts/celery.sh"]

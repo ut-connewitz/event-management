@@ -15,6 +15,9 @@ services:
     build: .
     command: >
       sh -cx "python manage.py runserver 0.0.0.0:8000 &&
+              echo "*** going to sleep ***" &&
+              sleep 60s &&
+              echo "*** docker compose celery starup ***" &&
               celery -A events beat -l debug &&
               celery -A events worker -l info"
     volumes:
