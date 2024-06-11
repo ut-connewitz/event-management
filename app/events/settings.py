@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap5',
+    'django_apscheduler',
     'testbootstrap',
     'backend',
     'events_calendar',
@@ -178,3 +179,8 @@ LOGGING = {
             }
         },
     }
+
+# Apscheduler Settings
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25 # seconds
