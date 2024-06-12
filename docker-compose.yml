@@ -10,9 +10,12 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
   events:
     container_name: events
-    build: .
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile_django
     volumes:
       - ./app:/app
     ports:
@@ -24,7 +27,38 @@ services:
       - ALLOWED_HOSTS=0.0.0.0
     depends_on:
       - db
+
+  celery_worker:
+    container_name: celery_worker
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile_celery
+    volumes:
+      - ./app:/app
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - events
       - rabbitmq
+      - db
+
+  celery_beat:
+    container_name: celery_beat
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile_celery_beat
+    volumes:
+      - ./app:/app
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - events
+      - rabbitmq
+      - db
 
   rabbitmq:
     container_name: events_rabbit
