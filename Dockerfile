@@ -5,3 +5,9 @@ WORKDIR /app
 COPY requirements.txt /app/
 RUN pip install -r requirements.txt
 COPY app /app/
+
+RUN mkdir -p /scripts
+COPY ./scripts/ /scripts
+RUN chmod +x /scripts/init.sh
+
+CMD ["/scripts/init.sh"]
