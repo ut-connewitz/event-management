@@ -1,9 +1,13 @@
 #!/bin/sh
 
-echo "*** dockerfile script goind to sleep ***" ; \
-sleep 60s &&
-echo "*** beginning dockerfile script celery initialisation ***" ; \
-celery -A events beat -l debug &&
-celery -A events worker -l info &&
-tail -f /dev/null
-echo "*** celery initialisation done ***" ; \
+python3 manage.py runserver 0.0.0.0:8000 &
+
+python3 manage.py collectstatic &
+
+python3 manage.py migrate &
+
+sleep 60s
+
+celery -A events beat -l debug &
+
+celery -A events worker -l info

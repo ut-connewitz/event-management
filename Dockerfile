@@ -6,18 +6,8 @@ COPY requirements.txt /app/
 RUN pip install -r requirements.txt
 COPY app /app/
 
-WORKDIR /app
-COPY ./scripts /scripts
-RUN chmod +x /scripts/*
+RUN mkdir -p /scripts
+COPY ./scripts/ /scripts
+RUN chmod +x /scripts/celery.sh
 
-RUN adduser -disabled-login user
-USER user
-
-USER root
-
-RUN chown -R root /scripts
-RUN chgrp root /scripts
-RUN chmod -R 755 /scripts
-
-
-CMD ["scripts/celery.sh"]
+CMD ["/scripts/celery.sh"]
