@@ -12,5 +12,4 @@ exec celery --app=events worker \
             --loglevel=INFO --logfile=/var/log/celery/events.log \
             --statedb=/var/run/celery/events@%h.state \
             --hostname=events@%h \
-            --queues=celery.events -O fair \
             --uid=nobody --gid=nogroup
