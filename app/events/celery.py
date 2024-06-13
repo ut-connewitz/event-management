@@ -1,5 +1,6 @@
 import os
-
+import celery
+import logging
 from celery import Celery
 
 #setting up environment variable for using django settings file
@@ -20,6 +21,13 @@ app.autodiscover_tasks()
 @app.task(bind=True, ignore_result=True)
 def debug_task(self):
     print(f'Request: {self.reguest!r}')
+
+@celery.signals.after_setup_logger.connect
+def on_after_setup_logger(**kwargs):
+    logger = logging.getLogger('celery')
+    logger.propagate = True
+    logger = logging.getLogger('celery.app.trace')
+    logger.propagate = True
 
 if __name__ == '__main__':
     app.start()
