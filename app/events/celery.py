@@ -9,6 +9,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'events.settings')
 #celery app as entry point for using the tasks
 app = Celery('events',
             broker = 'amqp://worker:worker@events_rabbit:5676//',
+            #backend = 'amqp://worker:worker@events_rabbit:5676//',
             include = ['events.tasks',]
             )
 

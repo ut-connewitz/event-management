@@ -212,7 +212,10 @@ CELERY_BEAT_SCHEDULE = {
 #    'schedule': 30.0,
 #    'args': (16, 16)
 #    },
-    'delete_past_eventdays':{
-    'schedule': 30.0,
+
+    'delete_past_eventdays_daily':{
+        'task': 'events.tasks.delete_past_eventdays',
+        'schedule': 30.0,
     },
+
 }
