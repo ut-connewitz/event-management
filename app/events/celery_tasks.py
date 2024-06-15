@@ -15,8 +15,10 @@ celery_logger2 = logging.getLogger('celery')
 def delete_past_eventdays():
     today = datetime.now(tz=get_current_timezone()).date()
     yesterday = today - timedelta(hours=24)
-    past_eventdays=EventDay.objects.filter(date__lte=yesterday)
+    # saving the queryset containing the event names and dates to return als result
+    past_eventdays=list(EventDay.objects.filter(date__lte=yesterday))
 
+    #trying to get any logger to work as expected :(
     #logger.info('info celery task deleting: \n'+ str(past_eventdays)) #debug
     #logger.error('error celery task deleting: \n'+ str(past_eventdays)) #debug
     #celery_logger.info('info celery task deleting: \n'+ str(past_eventdays)) #debug
@@ -25,6 +27,10 @@ def delete_past_eventdays():
     #celery_logger2.error('error celery task deleting: \n'+ str(past_eventdays)) #debug
     #print('print celery task deleting: \n'+ str(past_eventdays))
 
+    #actually deleting the objects in the db
+    EventDay.objects.filter(date__lte=yesterday).delete()
+
+    #return the above variable to show in the results what has been deleted
     return 'deleted past eventdays: ' +str(past_eventdays)
 
 

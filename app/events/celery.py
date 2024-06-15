@@ -10,7 +10,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'events.settings')
 app = Celery('events',
             broker = 'amqp://worker:worker@events_rabbit:5676//',
             #backend = 'amqp://worker:worker@events_rabbit:5676//',
-            include = ['events.tasks',]
+            include = ['events.celery_tasks', ]
             )
 
 #using django settings file to configure app

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -213,9 +214,16 @@ CELERY_BEAT_SCHEDULE = {
 #    'args': (16, 16)
 #    },
 
-    'delete_past_eventdays_daily':{
-        'task': 'events.tasks.delete_past_eventdays',
+    #remove this for the deploy
+    'delete_past_eventdays_test':{
+        'task': 'events.celery_tasks.delete_past_eventdays',
         'schedule': 30.0,
     },
+
+    'delete_past_eventdays_daily':{
+        'task': 'events.celery_tasks.delete_past_eventdays',
+        'schedule': crontab(hour='3', minute='0'),
+    },
+
 
 }
