@@ -8,6 +8,6 @@ COPY app /app/
 
 RUN mkdir -p /scripts
 COPY ./scripts/ /scripts
-RUN chmod +x /scripts/celery.sh
+RUN chmod +x /scripts/celery_worker.sh
 
-CMD ["/scripts/celery.sh"]
+CMD ["/scripts/celery_worker.sh"]
