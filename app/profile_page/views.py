@@ -22,7 +22,7 @@ class ProfileHub(LoginRequiredMixin, TemplateView):
         # SELECT * from volunteering
         # WHERE (user = user AND task.event_day.date > today)
         # it returns a queryset not a list of objects
-        user_volunteerings = Volunteering.objects.filter(user=user).filter(task__event_day__date__gte=today)
+        user_volunteerings = Volunteering.objects.filter(user=user).filter(task__event__date__gte=today)
 
         return user_volunteerings
 
@@ -30,7 +30,7 @@ class ProfileHub(LoginRequiredMixin, TemplateView):
         user_task_html = ''
 
         for volunteering in user_volunteerings:
-            user_task_html += f'<li>{volunteering.task.get_html_url} {volunteering.task.event_day}</li>'
+            user_task_html += f'<li>{volunteering.task.get_html_url} {volunteering.task.event}</li>'
 
         if user_task_html != '':
             return f"<td><ul> {user_task_html} </ul></td>"
@@ -39,7 +39,7 @@ class ProfileHub(LoginRequiredMixin, TemplateView):
     def get_deleted_volunteerings(self):
         today = datetime.now(tz=get_current_timezone()).date()
         next_week = today + timedelta(hours=168)
-        deleted_volunteerings = DeletedVolunteering.objects.filter(task__event_day__date__gte=today).filter(task__event_day__date__lte=next_week)
+        deleted_volunteerings = DeletedVolunteering.objects.filter(task__event__date__gte=today).filter(task__event__date__lte=next_week)
         return deleted_volunteerings
 
     def generate_deleted_volunteering_links(self, deleted_volunteerings):
@@ -49,7 +49,7 @@ class ProfileHub(LoginRequiredMixin, TemplateView):
             return '<td>Keine kurzfristig abgesagten Dienste</td>'
         else:
             for volunteering in deleted_volunteerings:
-                deleted_volunteerings_html += f'<li>{volunteering.task.get_html_url} {volunteering.task.event_day}</li>'
+                deleted_volunteerings_html += f'<li>{volunteering.task.get_html_url} {volunteering.task.event}</li>'
             return f"<td><ul> {deleted_volunteerings_html} </ul></td>"
 
 
@@ -69,7 +69,7 @@ class ProfileHub(LoginRequiredMixin, TemplateView):
         deleted_volunteerings = self.get_deleted_volunteerings()
         deleted_volunteerings_html = self.generate_deleted_volunteering_links(deleted_volunteerings)
         context['user_task_html'] = mark_safe(user_task_html)
-        context['deletd_volunteerings_html'] = mark_safe(deleted_volunteerings_html)
+        context['deleted_volunteerings_html'] = mark_safe(deleted_volunteerings_html)
 
         context['user_pk'] = user_pk
         context['adress'] = adress

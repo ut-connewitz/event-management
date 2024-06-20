@@ -1,10 +1,10 @@
 from django.forms import ModelForm, DateInput, TimeInput, BooleanField, HiddenInput
-from backend.models.event import EventDay
+from backend.models.event import Event
 from backend.models.task import Task, Volunteering
 
-class EventDayForm(ModelForm):
+class EventForm(ModelForm):
     class Meta:
-        model = EventDay
+        model = Event
         widgets = {
             'date': DateInput(
                 format=('%Y-%m-%d'),
@@ -27,7 +27,7 @@ class EventDayForm(ModelForm):
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
-        super(EventDayForm, self).__init__(*args, **kwargs)
+        super(EventForm, self).__init__(*args, **kwargs)
         self.fields['start_time'].input_formats = ('%H:%M',)
         self.fields['admission_time'].input_formats = ('%H:%M',)
 

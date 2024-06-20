@@ -13,7 +13,7 @@ Kalender
 	<a class="btn btn-info right" href="{% url 'ecal:calendar' %}?{{ next_month }}"> Nächster Monat </a>
   {% if request.user.is_staff %}
   <div class="d-grip gap-2 col-6 mx-auto">
-    <a class="btn btn-info" href="{% url 'ecal:event_day_new' %}"> Veranstaltungstag hinzufügen </a>
+    <a class="btn btn-info" href="{% url 'ecal:event_new' %}"> Veranstaltung hinzufügen </a>
     <a class="btn btn-info" href="{% url 'ecal:task_new' %}"> Aufgabe hinzufügen </a>
   </div>
   {% endif %}

@@ -4,7 +4,7 @@ from django.contrib.auth.admin import GroupAdmin
 
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
 from backend.models.user import (User, UTMember, Adress, Team, TeamMember)
-from backend.models.event import(Event, EventDay, Act, EventAct)
+from backend.models.event import(Event, EventSeries, Act, EventAct)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering, DeletedVolunteering)
 
@@ -38,18 +38,18 @@ class MyGroupAdmin(GroupAdmin):
         UserGroupInLine,
     ]
 
-class EventDayInLine(admin.TabularInline):
-    model = EventDay
+class EventInLine(admin.TabularInline):
+    model = Event
 
-class EventAdmin(admin.ModelAdmin):
+class EventSeriesAdmin(admin.ModelAdmin):
     inlines = [
-        EventDayInLine,
+        EventInLine,
     ]
 
 class TaskInline(admin.TabularInline):
     model = Task
 
-class EventDayAdmin(admin.ModelAdmin):
+class EventAdmin(admin.ModelAdmin):
     inlines = [
         TaskInline
     ]
@@ -62,8 +62,8 @@ admin.site.register(Adress)
 admin.site.register(Team, MyGroupAdmin)
 admin.site.register(TeamMember)
 #admin.site.register(EventType)
+admin.site.register(EventSeries, EventSeriesAdmin)
 admin.site.register(Event, EventAdmin)
-admin.site.register(EventDay, EventDayAdmin)
 admin.site.register(Act)
 admin.site.register(EventAct)
 #admin.site.register(TaskType)

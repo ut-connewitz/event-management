@@ -2,6 +2,6 @@
 
 from .event import Event
 from .event_type import EventType
-from .event_day import EventDay
+from .event_series import EventSeries
 from .act import Act
 from .event_act import EventAct

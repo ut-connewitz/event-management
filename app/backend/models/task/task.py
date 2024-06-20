@@ -5,14 +5,14 @@ from .task_type import TaskType
 from .team_restriction import TeamRestriction
 from .urgency import Urgency
 from .state import State
-from backend.models.event import EventDay
+from backend.models.event import Event
 
 class Task(models.Model):
-    task_id = models.BigAutoField("Veranstaltungstag", primary_key=True)
-    event_day = models.ForeignKey(
-        EventDay,
+    task_id = models.BigAutoField(primary_key=True)
+    event = models.ForeignKey(
+        Event,
         on_delete=models.CASCADE,
-        verbose_name = "Veranstaltungstag",
+        verbose_name = "Veranstaltung",
         )
     task_type = models.CharField(
         "Aufgabenart",
@@ -50,7 +50,7 @@ class Task(models.Model):
         verbose_name_plural = "Aufgaben"
 
     def __str__(self):
-        return str(self.event_day)+" "+self.get_task_type_display()
+        return str(self.event)+" "+self.get_task_type_display()
 
     def save(self, *args, **kwargs):
         try:
