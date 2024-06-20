@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_results',
+    'django_celery_beat',
     'bootstrap5',
     'testbootstrap',
     'backend',
@@ -165,16 +168,62 @@ LOGGING = {
         },
         'handlers': {
             'console': {
-                'level': 'DEBUG',
+                'level': 'INFO',
                 'class': 'logging.StreamHandler',
                 'formatter': 'default',
+            },
+            'celery': {
+                'level': 'INFO',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': 'celery.log',
+                'formatter': 'default',
+                'maxBytes': 1024 * 1024 * 5,
+                'backupCount': 3,
             }
         },
         'loggers': {
             '*': {
                 'handlers': ['console'],
-                'level': 'DEBUG',
+                'level': 'INFO',
                 'propagate': False,
-            }
+            },
+            'celery': {
+                'handlers': ['celery', 'console'],
+                'level': 'INFO'
+            },
         },
     }
+
+# celery settings
+CELERY_HIJACK_ROOT_LOGGER = False
+CELERY_SEND_EVENTS = False
+CELERY_TASK_RESULT_EXPIRES = 3600
+CELERY_RESULT_PERSISTENT = False
+CELERY_TIMEZONE = 'Europe/Berlin'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30*60
+CELERY_BROKER_URL = 'amqp://worker:worker@events_rabbit:5672//'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BEAT_SCHEDULE = {
+#    'add':{
+#    'schedule': 30.0,
+#    'args': (16, 16)
+#    },
+
+    #remove this for the deploy
+    'delete_past_eventdays_test':{
+        'task': 'events.celery_tasks.delete_past_eventdays',
+        'schedule': 30.0,
+    },
+
+    'delete_past_eventdays_daily':{
+        'task': 'events.celery_tasks.delete_past_eventdays',
+        'schedule': crontab(hour='3', minute='0'),
+    },
+
+
+}

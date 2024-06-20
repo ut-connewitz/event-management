@@ -3,17 +3,19 @@ version: '3.7'
 services:
   db:
     container_name: events_db
-    image: postgres
+    image: postgres:16.3
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
   events:
     container_name: events
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile_app
     volumes:
       - ./app:/app
     ports:
@@ -25,3 +27,67 @@ services:
       - ALLOWED_HOSTS=0.0.0.0
     depends_on:
       - db
+
+  rabbitmq:
+    container_name: events_rabbit
+    hostname: rabbit_host
+    build:
+      context: ./rabbitmq
+    #volumes:
+    #    - ./etc/rabbitmq/conf:/etc/rabbitmq/
+    #    - ./etc/rabbitmq/data/:/var/lib/rabbitmq/
+    #    - ./etc/rabbitmq/logs/:/var/log/rabbitmq/
+    #    - ./rabbit_enabled_plugins:/etc/rabbitmq/rabbit_enabled_plugins
+    environment:
+            - RABBITMQ_ERLANG_COOKIE=test
+
+    ports:
+            - 5672:5672    #amqp
+            - 15672:15672  #http
+            - 15692:15692  #prometheus
+
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672"]
+      interval: 5s
+      timeout: 20s
+      retries: 5
+
+  celery_worker:
+    container_name: events_celery_worker
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile_celery_worker
+    volumes:
+      - ./app:/app
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - events
+      - rabbitmq
+      - db
+
+  celery_beat:
+    container_name: events_celery_beat
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile_celery_beat
+    volumes:
+      - ./app:/app
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - events
+      - rabbitmq
+      - db
+
+
+
+#    networks:
+#      - events_network
+
+#networks:
+#  events_network: {}

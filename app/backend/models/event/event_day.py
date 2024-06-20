@@ -20,6 +20,10 @@ class EventDay(models.Model):
         verbose_name = "Veranstaltungstag"
         verbose_name_plural = "Veranstaltungstage"
 
+        constraints = [
+        models.UniqueConstraint(fields=["date", "start_time"], name="prevent event_day duplicates constraint")
+        ]
+
     def __str__(self):
         return str(self.event) + " " + str(self.date)
 
