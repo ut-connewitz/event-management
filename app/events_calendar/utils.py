@@ -1,7 +1,7 @@
 #import logging
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
-from backend.models.event import EventDay
+from backend.models.event import Event
 from backend.models.task import Task, State, Volunteering, TeamRestriction, Urgency
 from backend.models.user import TeamMember
 
@@ -30,16 +30,16 @@ class Calendar(HTMLCalendar):
 
     #formats a days as td
     #filters event_days by day
-    def formatday(self, day, event_days):
-        events_per_day = event_days.filter(date__day=day)
+    def formatday(self, day, events):
+        events_per_day = events.filter(date__day=day)
         day_content = ''
 
-        for event_day in events_per_day:
-            day_content += f'<li>{event_day.get_html_url} </li>'
-            free_tasks = Task.objects.filter(event_day=event_day, state=State.FREE)
+        for event in events_per_day:
+            day_content += f'<li>{event.get_html_url} </li>'
+            free_tasks = Task.objects.filter(event=event, state=State.FREE)
             #logger = logging.getLogger(__name__) #debug
             #logger.error(str(free_tasks)) #debug
-            taken_tasks = Task.objects.filter(event_day=event_day, state=State.TAKEN)
+            taken_tasks = Task.objects.filter(event=event, state=State.TAKEN)
             task_html = ''
             user_teams = TeamMember.objects.filter(user=self.user)
 
@@ -76,20 +76,20 @@ class Calendar(HTMLCalendar):
         return '<td></td>'
 
     #formats a week as tr
-    def formatweek(self, theweek, event_days):
+    def formatweek(self, theweek, events):
         week = ''
         for d, weekday in theweek:
-            week += self.formatday(d, event_days)
+            week += self.formatday(d, events)
         return f'<tr> {week} </tr>'
 
     #formats a month as a table
     #filters event_days by year and month
     def formatmonth(self, withyear=True):
-        event_days = EventDay.objects.filter(date__year=self.year, date__month=self.month)
+        events = Event.objects.filter(date__year=self.year, date__month=self.month)
         #cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
         cal = f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
         cal += f'{self.formatweekheader()}\n'
         for week in self.monthdays2calendar(self.year, self.month):
-		          cal += f'{self.formatweek(week, event_days)}\n'
+		          cal += f'{self.formatweek(week, events)}\n'
         cal += f'</table>'
         return cal

@@ -41,7 +41,7 @@ class DeletedVolunteering(models.Model):
 
     class Meta:
         constraints = [
-        models.UniqueConstraint(fields=["task"], name="prevent multiple deletd volunteerings for one task constraint")
+        models.UniqueConstraint(fields=["task"], name="prevent multiple deleted volunteerings for one task constraint")
         ]
         verbose_name = "Gelöschter Dienst"
         verbose_name_plural = "Gelöschte Dienste"

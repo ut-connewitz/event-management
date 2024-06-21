@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from backend.models.event import (Event, Act, EventDay, EventType)
+from backend.models.event import (EventSeries, Act, Event, EventType)
 from backend.models.task import (Task, ConfirmationType, State, TaskType, TeamRestriction, Urgency, Volunteering)
 from backend.models.user import (User, UTMember, Adress, Team, TeamMember)
 from backend import models
@@ -9,9 +9,9 @@ from django.db.utils import IntegrityError
 
 TEAM_PERMISSIONS = {
     'utadmin':{
-        models.event.Event: ['add', 'change', 'delete', 'view'],
+        models.event.EventSeries: ['add', 'change', 'delete', 'view'],
         models.event.Act: ['add', 'change', 'delete', 'view'],
-        models.event.EventDay: ['add', 'change', 'delete', 'view'],
+        models.event.Event: ['add', 'change', 'delete', 'view'],
         models.task.Task: ['add', 'change', 'delete', 'view'],
         models.task.Volunteering: ['add', 'change', 'delete', 'view'],
         models.user.Adress: ['add', 'change', 'delete', 'view'],
@@ -37,16 +37,16 @@ class Command(BaseCommand):
         team4 = Team.objects.create(name="tontechnik")
         team4.save()
 
-        #ct = ContentType.objects.get_for_model(Event)
+        #ct = ContentType.objects.get_for_model(EventSeries)
 
-        #permission_add_event = Permission.objects.create(
-        #    codename='can_add_event',
-        #    name='Can add event',
+        #permission_add_eventseries = Permission.objects.create(
+        #    codename='can_add_eventseries',
+        #    name='Can add eventseries',
         #    content_type=ct
         #)
 
         #utadmin_team=Team.objects.get(name="utadmin")
-        #utadmin_team.permissions.add(permission_add_event)
+        #utadmin_team.permissions.add(permission_add_eventseries)
 
         #
         for team_name in TEAM_PERMISSIONS:

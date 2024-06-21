@@ -13,14 +13,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import HiddenInput
 
 
-from backend.models.event import EventDay
+from backend.models.event import Event
 from backend.models.task import Task, Volunteering, ConfirmationType, State
 from .utils import Calendar
-from .forms import EventDayForm, TaskForm, VolunteeringForm
+from .forms import EventForm, TaskForm, VolunteeringForm
 
 
 class CalendarView(LoginRequiredMixin, generic.ListView):
-    model = EventDay
+    model = Event
     template_name = 'events_calendar/calendar.html'
 
     def get_context_data(self, **kwargs,):
@@ -60,19 +60,19 @@ def next_month(d):
     return month
 
 @login_required
-def event_day(request, event_day_id=None):
-    instance = EventDay()
-    if event_day_id:
-        instance = get_object_or_404(EventDay, pk=event_day_id)
+def event(request, event_id=None):
+    instance = Event()
+    if event_id:
+        instance = get_object_or_404(Event, pk=event_id)
     else:
-        instance = EventDay()
-        event_day_id = instance.event_day_id
+        instance = Event()
+        event_id = instance.event_id
         #logger = logging.getLogger(__name__) #debug
         #logger.error('new instance id: '+str(event_day_id)) #debug
 
-    form = EventDayForm(request.POST or None, instance=instance)
+    form = EventForm(request.POST or None, instance=instance)
     if not request.user.is_staff:
-        form.fields['event'].disabled = True
+        form.fields['event_series'].disabled = True
         form.fields['date'].disabled = True
         form.fields['start_time'].disabled = True
         form.fields['duration'].disabled = True
@@ -83,13 +83,13 @@ def event_day(request, event_day_id=None):
         return HttpResponseRedirect(reverse('ecal:calendar'))
 
     context = {
-        'event_day_id' : event_day_id,
+        'event_id' : event_id,
         'form': form,
     }
-    return render(request, 'events_calendar/event_day.html', context=context)
+    return render(request, 'events_calendar/event.html', context=context)
 
 @login_required
-def task(request, task_id=None, volunteering_id=None, event_day_id=None):
+def task(request, task_id=None, volunteering_id=None, event_id=None):
     task_instance = Task()
     if task_id:
         task_instance = get_object_or_404(Task, pk=task_id)
@@ -109,16 +109,16 @@ def task(request, task_id=None, volunteering_id=None, event_day_id=None):
             user = request.user,
         )
 
-    if event_day_id:
-        event_day = EventDay.objects.get(event_day_id=event_day_id)
-        task_form = TaskForm(instance=task_instance, initial={'event_day': event_day})
+    if event_id:
+        event = Event.objects.get(event_id=event_id)
+        task_form = TaskForm(instance=task_instance, initial={'event': event})
     else:
         task_form = TaskForm(instance=task_instance)
 
     volunteering_form = VolunteeringForm(instance=volunteering_instance)
 
     if not request.user.is_staff:
-        task_form.fields['event_day'].disabled = True
+        task_form.fields['event'].disabled = True
         task_form.fields['task_type'].disabled = True
         task_form.fields['team_restriction'].disabled = True
         task_form.fields['urgency'].disabled = True

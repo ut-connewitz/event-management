@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group, Permission
 
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
 from backend.models.user import (User, UTMember, Adress, Team, TeamMember)
-from backend.models.event import(EventType, Event, EventDay, Act, EventAct)
+from backend.models.event import(EventType, EventSeries, Event, Act, EventAct)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering)
 
@@ -58,94 +58,94 @@ class Command(BaseCommand):
 
 
         #base and testdata for event
-        # add some events
-        event1 = Event(
+        # add some event series
+        event_series1 = EventSeries(
             event_name="BAIKALTRAIN DISCO",
             event_type=EventType.EXTRA,
             event_description="Disko mit DJ Malhalla und DJ Petrike",
             event_press="Knackige Tanzmusik vom Balkan bis zum Baikal. \"Von der Eisenbahn in den Club. Die Leute sind nicht zu bremsen.\"",
         ) #possibly base data
-        event1.save()
+        event_series1.save()
 
-        event2 = Event(
+        event_series2 = EventSeries(
             event_name="JOHNNY & ME",
             event_type=EventType.CINEMA,
             event_description="Eine Zeitreise mit Johnny Heartfield",
         )
-        event2.save()
+        event_series2.save()
 
         #add some event days
-        event1day1 = EventDay(
-            event=Event.objects.get(event_name="BAIKALTRAIN DISCO"),
+        event1 = Event(
+            series=EventSeries.objects.get(event_name="BAIKALTRAIN DISCO"),
             date=parse_datetime("2024-02-24"),
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
             duration=parse_duration("0 5:00:00"),
             admission_time=parse_time("19:30:00").replace(tzinfo=get_current_timezone()),
         )
-        event1day1.save()
+        event1.save()
 
-        event1day2 = EventDay(
-            event=Event.objects.get(event_name="BAIKALTRAIN DISCO"),
+        event2 = Event(
+            series=EventSeries.objects.get(event_name="BAIKALTRAIN DISCO"),
             date=parse_datetime("2024-03-08"),
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
             duration=parse_duration("0 5:00:00"),
             admission_time=parse_time("19:30:00").replace(tzinfo=get_current_timezone()),
         )
-        event1day2.save()
+        event2.save()
 
-        event1day3 = EventDay(
-            event=Event.objects.get(event_name="BAIKALTRAIN DISCO"),
+        event3 = Event(
+            series=EventSeries.objects.get(event_name="BAIKALTRAIN DISCO"),
             date=date_within_the_week_after,
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
             duration=parse_duration("0 5:00:00"),
             admission_time=parse_time("19:30:00").replace(tzinfo=get_current_timezone()),
         )
-        event1day3.save()
+        event3.save()
 
-        event2day1 = EventDay(
-            event=Event.objects.get(event_name="JOHNNY & ME"),
+        event4 = Event(
+            series=EventSeries.objects.get(event_name="JOHNNY & ME"),
             date=parse_datetime("2024-02-12"),
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
             duration=parse_duration("0 2:17:00"),
             admission_time=parse_time("19:50:00").replace(tzinfo=get_current_timezone()),
         )
-        event2day1.save()
+        event4.save()
 
-        event2day2 = EventDay(
-            event=Event.objects.get(event_name="JOHNNY & ME"),
+        event5 = Event(
+            series=EventSeries.objects.get(event_name="JOHNNY & ME"),
             date=date_within_next_week,
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
             duration=parse_duration("0 2:17:00"),
             admission_time=parse_time("19:50:00").replace(tzinfo=get_current_timezone()),
         )
-        event2day2.save()
+        event5.save()
 
-        event2day3 = EventDay(
-            event=Event.objects.get(event_name="JOHNNY & ME"),
+        event6 = Event(
+            series=EventSeries.objects.get(event_name="JOHNNY & ME"),
             date=date_in_the_past,
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
             duration=parse_duration("0 2:17:00"),
             admission_time=parse_time("19:50:00").replace(tzinfo=get_current_timezone()),
         )
-        event2day3.save()
+        event6.save()
 
         #add some tasks
         task1 = Task(
-            event_day=EventDay.objects.get(date=date_within_the_week_after),
+            event=Event.objects.get(date=date_within_the_week_after),
             task_type = TaskType.ADMISSION,
             urgency = Urgency.IMPORTANT,
         )
         task1.save()
 
         task2 = Task(
-            event_day=EventDay.objects.get(date=date_within_the_week_after),
+            event=Event.objects.get(date=date_within_the_week_after),
             task_type = TaskType.BAR,
             urgency = Urgency.MEDIUM,
         )
         task2.save()
 
         task3 = Task(
-            event_day=EventDay.objects.get(date=date_within_the_week_after),
+            event=Event.objects.get(date=date_within_the_week_after),
             task_type = TaskType.SOUND,
             team_restriction = TeamRestriction.SOUND,
             urgency = Urgency.IMPORTANT,
@@ -153,49 +153,49 @@ class Command(BaseCommand):
         task3.save()
 
         task4 = Task(
-            event_day=EventDay.objects.get(date=parse_datetime("2024-02-24")),
+            event=Event.objects.get(date=parse_datetime("2024-02-24")),
             task_type = TaskType.BAR,
             urgency = Urgency.MEDIUM,
         )
         task4.save()
 
         task5 = Task(
-            event_day=EventDay.objects.get(date=parse_datetime("2024-02-24")),
+            event=Event.objects.get(date=parse_datetime("2024-02-24")),
             task_type = TaskType.ADMISSION,
             urgency = Urgency.URGENT,
         )
         task5.save()
 
         task6 = Task(
-            event_day=EventDay.objects.get(date=date_within_next_week),
+            event=Event.objects.get(date=date_within_next_week),
             task_type = TaskType.ADMISSION,
             urgency = Urgency.URGENT,
         )
         task6.save()
 
         task7 = Task(
-            event_day=EventDay.objects.get(date=date_within_next_week),
+            event=Event.objects.get(date=date_within_next_week),
             task_type = TaskType.BAR,
             urgency = Urgency.MEDIUM,
         )
         task7.save()
 
         task8 = Task(
-            event_day=EventDay.objects.get(date=date_in_the_past),
+            event=Event.objects.get(date=date_in_the_past),
             task_type = TaskType.ADMISSION,
             urgency = Urgency.URGENT,
         )
         task8.save()
 
         task9 = Task(
-            event_day=EventDay.objects.get(date=date_in_the_past),
+            event=Event.objects.get(date=date_in_the_past),
             task_type = TaskType.BAR,
             urgency = Urgency.MEDIUM,
         )
         task9.save()
 
         task10 = Task(
-            event_day=EventDay.objects.get(date=date_within_next_week),
+            event=Event.objects.get(date=date_within_next_week),
             task_type = TaskType.SOUND,
             team_restriction = TeamRestriction.SOUND,
             urgency = Urgency.IMPORTANT,
@@ -203,7 +203,7 @@ class Command(BaseCommand):
         task10.save()
 
         task11 = Task(
-            event_day=EventDay.objects.get(date=date_within_the_week_after),
+            event=Event.objects.get(date=date_within_the_week_after),
             task_type = TaskType.LIGHT,
             team_restriction = TeamRestriction.LIGHT,
             urgency = Urgency.IMPORTANT,
@@ -214,12 +214,12 @@ class Command(BaseCommand):
         act1.save()
 
         eventact1 = EventAct(
-            event_day=EventDay.objects.get(date=parse_datetime("2024-02-24").replace(tzinfo=get_current_timezone())),
+            event=Event.objects.get(date=parse_datetime("2024-02-24").replace(tzinfo=get_current_timezone())),
             act=Act.objects.get(act_name="DJ Malhalla und DJ Petrike"),
         )
         eventact1.save()
         eventact2 = EventAct(
-            event_day=EventDay.objects.get(date=parse_datetime("2024-03-08").replace(tzinfo=get_current_timezone())),
+            event=Event.objects.get(date=parse_datetime("2024-03-08").replace(tzinfo=get_current_timezone())),
             act=Act.objects.get(act_name="DJ Malhalla und DJ Petrike"),
         )
         eventact2.save()

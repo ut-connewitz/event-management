@@ -7,9 +7,9 @@ from . import views
 app_name = 'events_calendar'
 urlpatterns = [
     path('calendar/', views.CalendarView.as_view(), name='calendar'),
-    path('event_day/new/', views.event_day, name='event_day_new'),
-    path('event_day/edit/(?<event_day_id>\d+)/', views.event_day, name='event_day_edit'),
+    path('event/new/', views.event, name='event_new'),
+    path('event/edit/(?<event_id>\d+)/', views.event, name='event_edit'),
     path('task/edit/(?<task_id>\d+)/', views.task, name='task_edit'),
     path('task/new/', views.task, name='task_new'),
-    path('task/new/<int:event_day_id>', views.task, name='event_task_new'),
+    path('task/new/<int:event_id>', views.task, name='event_task_new'),
 ]

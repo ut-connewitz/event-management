@@ -215,13 +215,13 @@ CELERY_BEAT_SCHEDULE = {
 #    },
 
     #remove this for the deploy
-    'delete_past_eventdays_test':{
-        'task': 'events.celery_tasks.delete_past_eventdays',
+    'delete_past_events_test':{
+        'task': 'events.celery_tasks.delete_past_events',
         'schedule': 30.0,
     },
 
-    'delete_past_eventdays_daily':{
-        'task': 'events.celery_tasks.delete_past_eventdays',
+    'delete_past_events_daily':{
+        'task': 'events.celery_tasks.delete_past_events',
         'schedule': crontab(hour='3', minute='0'),
     },
 
