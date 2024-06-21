@@ -8,7 +8,7 @@ from backend import models
 from django.db.utils import IntegrityError
 
 TEAM_PERMISSIONS = {
-    'utadmin':{
+    'UT-Admin':{
         models.event.EventSeries: ['add', 'change', 'delete', 'view'],
         models.event.Act: ['add', 'change', 'delete', 'view'],
         models.event.Event: ['add', 'change', 'delete', 'view'],
@@ -28,14 +28,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("running command addtestdata")
 
-        team1 = Team.objects.create(name="utadmin")
+        team1 = Team.objects.create(name="UT-Admin")
         team1.save()
-        team2 = Team.objects.create(name="küche")
+        team2 = Team.objects.create(name="Küche")
         team2.save()
-        team3 = Team.objects.create(name="lichttechnik")
+        team3 = Team.objects.create(name="Licht")
         team3.save()
-        team4 = Team.objects.create(name="tontechnik")
+        team4 = Team.objects.create(name="Ton")
         team4.save()
+        team5 = Team.objects.create(name="Verwaltung")
+        team5.save()
 
         #ct = ContentType.objects.get_for_model(EventSeries)
 

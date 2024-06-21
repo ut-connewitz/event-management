@@ -8,6 +8,7 @@ class Team(Group):
     class Meta:
         verbose_name = "Team"
         verbose_name_plural = "Teams"
+        proxy = True
 
     def __str__(self):
         return str(self.name)

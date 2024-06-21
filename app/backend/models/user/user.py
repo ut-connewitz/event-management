@@ -55,8 +55,8 @@ class TeamMember(models.Model):
         constraints = [
         models.UniqueConstraint(fields=["user", "team"], name="prevent multiple memberships of one person in one team constraint")
         ]
-        verbose_name = "Teammitglied"
-        verbose_name_plural = "Teammitglieder"
+        verbose_name = "Teammitgliedschaft"
+        verbose_name_plural = "Teammitgliedschaften"
 
     def __str__(self):
         return str(self.team) + " " + str(self.user)
@@ -68,6 +68,14 @@ class TeamMember(models.Model):
     # exception handling in the admin panel is not affected
     def save(self, *args, **kwargs):
         try:
+            if self.user.groups.filter(name="UT-Admin"):
+                self.user.is_staff = True
+            # this else makes it only possible to give users access to the admin interface
+            # by adding them to the UT Admin group
+            # if this turns out to be unwanted, remove this.
+            # Removing a user from the UT-Admin group would leave the is_staff attribute unchanged though
+            else:
+                self.user.is_staff = False
             super(TeamMember, self).save(*args, **kwargs)
         except IntegrityError:
             print("Person ist bereits in diesem Team")

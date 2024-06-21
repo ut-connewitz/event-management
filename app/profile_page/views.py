@@ -89,7 +89,7 @@ class Account(LoginRequiredMixin, UpdateView):
     # used here to check if the user instance given by the url belongs to the logged in user
     def dispatch(self, request, *args, **kwargs):
         if self.get_object().pk != request.user.id:
-            raise Http404('Falscher Account.')
+            raise Http404('Falscher Account.') # PermissionDenied() from django.core.exceptions
         return super(Account, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs,):

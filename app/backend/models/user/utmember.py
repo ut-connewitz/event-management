@@ -10,8 +10,8 @@ class UTMember(models.Model):
         constraints = [
         models.UniqueConstraint(fields=["member_number"], name="member_number is unique")
         ]
-        verbose_name = "Mitglied"
-        verbose_name_plural = "Mitglieder"
+        verbose_name = "Vereinsmitglied"
+        verbose_name_plural = "Vereinsmitglieder"
 
     def __str__(self):
         return str(self.user)

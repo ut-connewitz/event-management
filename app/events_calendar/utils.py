@@ -19,13 +19,13 @@ class Calendar(HTMLCalendar):
         else:
             for user_team in user_teams:
                 if team_restriction == TeamRestriction.LIGHT:
-                    if user_team.team.name == "lichttechnik":
+                    if user_team.team.name == "Licht":
                         return True
                 elif team_restriction == TeamRestriction.SOUND:
-                    if user_team.team.name == "tontechnik":
+                    if user_team.team.name == "Ton":
                         return True
                 elif team_restriction == TeamRestriction.OFFICE:
-                    if user_team.team.name == "verwaltung":
+                    if user_team.team.name == "Verwaltung":
                         return True
 
     #formats a days as td
