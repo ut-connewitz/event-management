@@ -1,9 +1,13 @@
 from typing import Set
 
+from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import (GroupAdmin, UserAdmin)
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.core.exceptions import ValidationError
 
+from backend.forms import CustomUserCreationForm, CustomUserChangeForm
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
 from backend.models.user import (User, UTMember, Adress, Team, TeamMember)
 from backend.models.event import(Event, EventSeries, Act, EventAct)
@@ -28,12 +32,12 @@ class UserAdressInLine(admin.TabularInline):
 class TeamMemberInLine(admin.TabularInline):
     model = TeamMember
 
-class UserAdmin(admin.ModelAdmin):
-    inlines = [
-        TeamMemberInLine,
-        UTMemberInLine,
-        UserAdressInLine,
-    ]
+#class UserAdmin(admin.ModelAdmin):
+#    inlines = [
+#        TeamMemberInLine,
+#        UTMemberInLine,
+#        UserAdressInLine,
+#    ]
 
 class UserGroupInLine(admin.TabularInline):
     model = User.groups.through
@@ -64,15 +68,48 @@ class EventAdmin(admin.ModelAdmin):
 #admin.site.unregister(User)
 
 #register own model admin
-@admin.register(User)
-class CustomUserAdmin(UserAdmin):
+#@admin.register(User)
+class CustomUserAdmin(admin.ModelAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+
+    model = User
+    list_display = ["username", "is_staff"]
+    list_filter = ["is_staff"]
+    fieldsets = [
+        (None, {"fields": ["username", "password"]}),
+        ("Person", {"fields": ["first_name", "last_name"]}),
+        ("Berechtigungen", {"fields": ["is_superuser", "is_staff", "is_active", "user_permissions"]}),
+    ]
+
+    add_fieldsets = [
+        (
+            None,
+            {
+                "fields": ["username", "email", "password1", "password2", "is_staff", "is_active", "user_permissions"],
+            },
+        ),
+    ]
+
+    search_fields = ["username"]
+    ordering = ["username"]
+    filter_horizontal = []
+
+
     def get_form(self, request, obj=None, **kwargs):
+        if obj is None:
+            kwargs["form"] = CustomUserCreationForm
+        else:
+            kwargs["form"] = CustomUserChangeForm
+
         form = super().get_form(request, obj, **kwargs)
+
         is_superuser = request.user.is_superuser
         disabled_fields = set()
         # prevent permission escalation
         if not is_superuser:
             disabled_fields |= {
+                'is_staff',
                 'username',
                 'is_superuser',
                 'user_permissions',
@@ -84,25 +121,60 @@ class CustomUserAdmin(UserAdmin):
             and obj == request.user
         ):
             disabled_fields |= {
-                'is_staff', # maybe move this the list above
+                'is_staff',
                 'is_superuser',
                 'groups',
                 'user_permissions',
+            }
+
+        if (
+            not is_superuser
+            and obj is not None
+            and obj.is_superuser == True
+        ):
+            disabled_fields |= {
+                'is_staff',
+                'is_superuser',
+                'groups',
+                'user_permissions',
+                'is_active',
+                'password',
+                'last_login',
+                'date_joined',
+                'username',
+                'first_name',
+                'last_name',
+                'phone',
+                'email',
+            }
+
+        if obj is None: # when a new user object is created, the username should be editable
+            disabled_fields -= {
+                'username',
             }
 
         for field in disabled_fields:
             if field in form.base_fields:
                 form.base_fields[field].disabled = True
 
+        #kwargs["form"] = form
+        #return super().get_form(request, obj, **kwargs)
         return form
 
 
     readonly_fields = [
         'date_joined',
+        'last_login',
     ]
 
     actions = [
         'activate_users',
+    ]
+
+    inlines = [
+        TeamMemberInLine,
+        UTMemberInLine,
+        UserAdressInLine,
     ]
 
     def activate_users(self, request, queryset):
@@ -120,7 +192,7 @@ class CustomUserAdmin(UserAdmin):
 
 # Register your models here.
 admin.site.unregister(Group)
-#admin.site.register(User, UserAdmin)
+admin.site.register(User, CustomUserAdmin)
 admin.site.register(UTMember)
 admin.site.register(Adress)
 admin.site.register(Team, MyGroupAdmin)

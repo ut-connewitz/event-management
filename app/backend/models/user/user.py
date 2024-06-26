@@ -2,10 +2,38 @@ from django.db import models
 from .team import Team
 
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.db.utils import IntegrityError
 from django.urls import reverse
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username, email, password = None):
+        if not username:
+            raise ValueError("Username erforderlich")
+
+        user = self.model(
+            username = username,
+            email = self.normalize_email(email),
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, email, password = None):
+        if not username:
+            raise ValueError("Username erforderlich")
+
+        user = self.model(
+            username = username,
+            password = password,
+            email = self.normalize_email(email),
+        )
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
 
 class User(AbstractUser):
     phone = models.CharField("Telefon", blank=True, max_length=20)
@@ -18,6 +46,8 @@ class User(AbstractUser):
         related_query_name = "user",
         through="TeamMember"
     )
+
+    objects = CustomUserManager()
 
     class Meta:
         verbose_name = "Person"
@@ -56,8 +86,9 @@ class TeamMemberQuerySet(models.QuerySet):
         for object in self:
             if object.team.name == "UT-Admin":
                 user = object.user
-                user.is_staff = False
-                user.save()
+                if user.is_superuser == False: #superusers should not be affected by this
+                    user.is_staff = False
+                    user.save()
         return super().delete()
 
 class TeamMemberManager(models.Manager):
@@ -98,7 +129,10 @@ class TeamMember(models.Model):
     def delete(self, *args, **kwargs):
         user = self.user
         super().delete(*args, **kwargs)
-        if not user.groups.filter(name="UT-Admin"):
+        if (
+                not user.groups.filter(name="UT-Admin")
+                and user.is_superuser == False #superusers should not be affected by this
+        ):
             user.is_staff = False
             user.save()
 
