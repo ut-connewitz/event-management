@@ -1,6 +1,7 @@
 from django.db import models
 from .team import Team
-#from .team_member import TeamMember
+
+from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.db.utils import IntegrityError
@@ -46,10 +47,29 @@ class User(AbstractUser):
 # preferred option would be to have this within an own file like all other model classes
 # but since User class tries to import TeamMember in the through="TeamMember" field
 # and TeamMember tries to import User in the user field, a circular dependency error is thrown
+
+# to overwrite the delete() method (or any method) for SQL queries the QuerySet must be adjusted
+# this is necessary for bulk operations like when using list operations via the admin panel
+class TeamMemberQuerySet(models.QuerySet):
+    # this delete method is triggered, when multiple objects are deleted (e.g via TeamMember list in admin panel)
+    def delete(self):
+        for object in self:
+            if object.team.name == "UT-Admin":
+                user = object.user
+                user.is_staff = False
+                user.save()
+        return super().delete()
+
+class TeamMemberManager(models.Manager):
+    def get_queryset(self):
+        return TeamMemberQuerySet(model=self.model, using=self._db, hints=self._hints)
+
+
 class TeamMember(models.Model):
     team_member_id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    objects = TeamMemberManager()
 
     class Meta:
         constraints = [
@@ -68,15 +88,21 @@ class TeamMember(models.Model):
     # exception handling in the admin panel is not affected
     def save(self, *args, **kwargs):
         try:
-            if self.user.groups.filter(name="UT-Admin"):
-                self.user.is_staff = True
-            # this else makes it only possible to give users access to the admin interface
-            # by adding them to the UT Admin group
-            # if this turns out to be unwanted, remove this.
-            # Removing a user from the UT-Admin group would leave the is_staff attribute unchanged though
-            else:
-                self.user.is_staff = False
             super(TeamMember, self).save(*args, **kwargs)
+            self.set_user_is_staff()
         except IntegrityError:
             print("Person ist bereits in diesem Team")
             pass
+
+    # this delete method is triggered, when one single object is deleted (e.g. while editing teammembership of a single user)
+    def delete(self, *args, **kwargs):
+        user = self.user
+        super().delete(*args, **kwargs)
+        if not user.groups.filter(name="UT-Admin"):
+            user.is_staff = False
+            user.save()
+
+    def set_user_is_staff(self):
+        if self.user.groups.filter(name="UT-Admin"):
+            self.user.is_staff = True
+            self.user.save()
