@@ -68,25 +68,77 @@ class EventAdmin(admin.ModelAdmin):
 #admin.site.unregister(User)
 
 #register own model admin
-#@admin.register(User)
-class CustomUserAdmin(admin.ModelAdmin):
+@admin.register(User)
+class CustomUserAdmin(UserAdmin):
+    # assign the custom forms to the add_form (user creation) and form (user editing) variables
+    # these variables should be automatically used by django
+    # since the get_form() method of this class is overwritten (see further below)
+    # the specific form is used depending on an user object is already exisiting or not
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
 
     model = User
-    list_display = ["username", "is_staff"]
-    list_filter = ["is_staff"]
+    # defining how users are represented in the user list in the admin panel
+    list_display = ["username", "is_staff", "is_active"]
+    list_filter = ["is_staff", "is_active", "groups"]
+    # defining the fields shown when editing a user
     fieldsets = [
-        (None, {"fields": ["username", "password"]}),
-        ("Person", {"fields": ["first_name", "last_name"]}),
-        ("Berechtigungen", {"fields": ["is_superuser", "is_staff", "is_active", "user_permissions"]}),
-    ]
-
-    add_fieldsets = [
-        (
-            None,
+        (None,
             {
-                "fields": ["username", "email", "password1", "password2", "is_staff", "is_active", "user_permissions"],
+                "fields": [
+                    "username",
+                    "password",
+                    ],
+            },
+        ),
+        ("Person",
+            {
+                "fields": [
+                    "first_name",
+                    "last_name",
+                    ],
+            },
+        ),
+        ("Kontakt",
+            {
+                "fields": [
+                    "email",
+                    "phone",
+                    ],
+            },
+        ),
+        ("Berechtigungen",
+            {
+                "fields": [
+                    "is_superuser",
+                    "is_staff",
+                    "is_active",
+                    "user_permissions",
+                    ],
+            },
+        ),
+        ("Aktivität",
+            {
+                "fields": [
+                    "date_joined",
+                    "last_login",
+                    ],
+            },
+        ),
+    ]
+    # defining the fields when creating a user
+    add_fieldsets = [
+        (None,
+            {
+                "classes": [
+                    "wide",
+                    ],
+                "fields": [
+                    "username",
+                    "email",
+                    "password1",
+                    "password2",
+                    ],
             },
         ),
     ]
@@ -95,8 +147,25 @@ class CustomUserAdmin(admin.ModelAdmin):
     ordering = ["username"]
     filter_horizontal = []
 
+    readonly_fields = [
+        'date_joined',
+        'last_login',
+    ]
 
+    actions = [
+        'activate_users',
+    ]
+
+    inlines = [
+        TeamMemberInLine,
+        UTMemberInLine,
+        UserAdressInLine,
+    ]
+
+    # this modifies the form for creating/editing users depending on the
+    # logged in accounts status / permissions
     def get_form(self, request, obj=None, **kwargs):
+        # here it is explicitly set, which form to use depending on if a user object is given or not
         if obj is None:
             kwargs["form"] = CustomUserCreationForm
         else:
@@ -107,6 +176,8 @@ class CustomUserAdmin(admin.ModelAdmin):
         is_superuser = request.user.is_superuser
         disabled_fields = set()
         # prevent permission escalation
+        # not superusers should not be able to edit admin and superuser status
+        # or the username of other users
         if not is_superuser:
             disabled_fields |= {
                 'is_staff',
@@ -114,7 +185,8 @@ class CustomUserAdmin(admin.ModelAdmin):
                 'is_superuser',
                 'user_permissions',
             }
-
+        # not superusers should not be able to edit their own permissions
+        # but they should be able to edit the username during account creation
         if (
             not is_superuser
             and obj is not None
@@ -126,7 +198,7 @@ class CustomUserAdmin(admin.ModelAdmin):
                 'groups',
                 'user_permissions',
             }
-
+        # additional protection for superuser accounts
         if (
             not is_superuser
             and obj is not None
@@ -147,8 +219,8 @@ class CustomUserAdmin(admin.ModelAdmin):
                 'phone',
                 'email',
             }
-
-        if obj is None: # when a new user object is created, the username should be editable
+        # when a new user object is created, the username should be editable
+        if obj is None:
             disabled_fields -= {
                 'username',
             }
@@ -160,22 +232,6 @@ class CustomUserAdmin(admin.ModelAdmin):
         #kwargs["form"] = form
         #return super().get_form(request, obj, **kwargs)
         return form
-
-
-    readonly_fields = [
-        'date_joined',
-        'last_login',
-    ]
-
-    actions = [
-        'activate_users',
-    ]
-
-    inlines = [
-        TeamMemberInLine,
-        UTMemberInLine,
-        UserAdressInLine,
-    ]
 
     def activate_users(self, request, queryset):
         assert request.user.has_perm('backend.change_user')
@@ -192,7 +248,7 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.unregister(Group)
-admin.site.register(User, CustomUserAdmin)
+#admin.site.register(User, CustomUserAdmin)
 admin.site.register(UTMember)
 admin.site.register(Adress)
 admin.site.register(Team, MyGroupAdmin)

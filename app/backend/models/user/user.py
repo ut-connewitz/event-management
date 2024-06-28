@@ -7,32 +7,44 @@ from django.utils.translation import gettext_lazy as _
 from django.db.utils import IntegrityError
 from django.urls import reverse
 
-class CustomUserManager(BaseUserManager):
-    def create_user(self, username, email, password = None):
+# custom manager for overwriting the create_user and create_superuser methods
+# in the current state there is no practical difference to the default methods
+# but having this setup make possible future customisations (e.g using email instead of username) easier
+class UserManager(BaseUserManager):
+    def create_user(self, username, email=None, password=None, **extra_fields):
         if not username:
             raise ValueError("Username erforderlich")
 
         user = self.model(
             username = username,
             email = self.normalize_email(email),
+            **extra_fields,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password = None):
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
         if not username:
             raise ValueError("Username erforderlich")
 
-        user = self.model(
-            username = username,
-            password = password,
-            email = self.normalize_email(email),
-        )
-        user.is_admin = True
-        user.save(using=self._db)
-        return user
+        #for k, v in extra_fields.items(): #debug
+        #    print(k, v)
+
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+
+        for k, v in extra_fields.items(): #debug
+            print(k, v)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError(_("Superuser must have is_staff=True"))
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError(_("Superuser must have is_superuser=True"))
+
+        return self.create_user(username, email, password, **extra_fields)
 
 
 class User(AbstractUser):
@@ -47,7 +59,7 @@ class User(AbstractUser):
         through="TeamMember"
     )
 
-    objects = CustomUserManager()
+    objects = UserManager()
 
     class Meta:
         verbose_name = "Person"
