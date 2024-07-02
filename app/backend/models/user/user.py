@@ -103,6 +103,11 @@ class TeamMemberQuerySet(models.QuerySet):
                     user.save()
         return super().delete()
 
+    def update(self, *args, **kwargs):
+        for object in self:
+            object.save()
+        return super().update(*args, **kwargs)
+
 class TeamMemberManager(models.Manager):
     def get_queryset(self):
         return TeamMemberQuerySet(model=self.model, using=self._db, hints=self._hints)
