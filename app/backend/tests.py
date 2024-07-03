@@ -133,10 +133,50 @@ class UsersManagersTests(TestCase):
 
 
         admin_group, created = Team.objects.get_or_create(name="UT-Admin")
-        #admin_group.user_set.add(admin)
-        admin.groups.add(admin_group)
-        admin.save()
-        print(str(list(TeamMember.objects.filter(user=admin))))
-        admin = User.objects.get(username="admin")
-        self.assertTrue(admin.is_staff)
+        #admin_group.user_set.add(admin) #does not call save() of TeamMember
+        #admin.groups.add(admin_group) #does not call save() on TeamMember
+        #admin.save()
+        # use this for assigning users to admin group via code for automatically setting user.is_staff = True
+        membership, created = TeamMember.objects.get_or_create(user=admin, team=admin_group)
+        print("1"+ str(list(TeamMember.objects.filter(user=admin))))
+        admin.refresh_from_db()
+        try:
+            self.assertTrue(admin.is_staff)
+        except AssertionError:
+            print(str(admin.is_staff) + " is not true")
+            pass
         self.assertFalse(admin.is_superuser)
+
+        # testing the bulk deletion method from the QuerySet
+        admin.groups.remove(admin_group)
+        #admin.save()
+        print("post bulk delete " +str(admin.is_staff))
+        # bulk deletion of teammembership needs db refresh for the user object
+        self.assertTrue(admin.is_staff)
+        admin.refresh_from_db()
+        self.assertFalse(admin.is_staff)
+        print("post bulk delete refresh " +str(admin.is_staff))
+        print("2"+ str(list(TeamMember.objects.filter(user=admin))))
+
+        membership, created = TeamMember.objects.get_or_create(user=admin, team=admin_group)
+        print("3"+ str(list(TeamMember.objects.filter(user=admin))))
+        admin.refresh_from_db()
+        try:
+            self.assertTrue(admin.is_staff)
+        except AssertionError:
+            print(str(admin.is_staff) + " is not true")
+            pass
+
+        # testing the model instance delete() method
+        # model instance deletion of teammembership does not need db refresh for the user object
+        membership.delete()
+        print("4"+ str(list(TeamMember.objects.filter(user=admin))))
+        print("post instance delete" +str(admin.is_staff))
+        try:
+            self.assertTrue(admin.is_staff)
+        except AssertionError:
+            print(str(admin.is_staff) + " is not true (expected)")
+            pass
+        admin.refresh_from_db()
+        print("post instance delete refresh " +str(admin.is_staff))
+        self.assertFalse(admin.is_staff)

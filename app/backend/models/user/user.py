@@ -93,20 +93,36 @@ class User(AbstractUser):
 # to overwrite the delete() method (or any method) for SQL queries the QuerySet must be adjusted
 # this is necessary for bulk operations like when using list operations via the admin panel
 class TeamMemberQuerySet(models.QuerySet):
+    def create(self, *args, **kwargs):
+        user = kwargs["user"]
+        team = kwargs["team"]
+        if team.name == "UT-Admin":
+            user.is_staff=True
+            user.save()
+
+        return super().create(*args, **kwargs)
+
+
     # this delete method is triggered, when multiple objects are deleted (e.g via TeamMember list in admin panel)
     def delete(self):
         for object in self:
+            # print("bulk deleting team membership " +str(object.user)+str(object.team)) #debug
             if object.team.name == "UT-Admin":
                 user = object.user
                 if user.is_superuser == False: #superusers should not be affected by this
+                    # print("bulk deleting team membership setting is_staff" +str(user)+str(object.team)) #debug
                     user.is_staff = False
+                    # print("bulk deleting team membership setting is_staff" +str(user.is_staff)) #debug
                     user.save()
+            # print("bulk deleting team membership" +str(user.is_staff)) #debug
         return super().delete()
 
     def update(self, *args, **kwargs):
+        print("updating")
+        super().update(*args, **kwargs)
         for object in self:
-            object.save()
-        return super().update(*args, **kwargs)
+            print("setting" + str(object))
+            object.set_user_is_staff()
 
 class TeamMemberManager(models.Manager):
     def get_queryset(self):
@@ -126,6 +142,15 @@ class TeamMember(models.Model):
         verbose_name = "Teammitgliedschaft"
         verbose_name_plural = "Teammitgliedschaften"
 
+#  __init__() is called on python object instantiation, not on creation of db records
+#    def __init__(self, *args, **kwargs):
+#        super(TeamMember, self).__init__(*args, **kwargs)
+#        try:
+#            if self.team.name == "UT-Admin":
+#                self.user.is_staff = True
+#        except Team.DoesNotExist:
+#            pass
+
     def __str__(self):
         return str(self.team) + " " + str(self.user)
 
@@ -136,6 +161,7 @@ class TeamMember(models.Model):
     # exception handling in the admin panel is not affected
     def save(self, *args, **kwargs):
         try:
+            # print("saving") #debug
             super(TeamMember, self).save(*args, **kwargs)
             self.set_user_is_staff()
         except IntegrityError:
@@ -145,7 +171,9 @@ class TeamMember(models.Model):
     # this delete method is triggered, when one single object is deleted (e.g. while editing teammembership of a single user)
     def delete(self, *args, **kwargs):
         user = self.user
+        # print("instance deleting team membership " +str(user)+str(self.team)) #debug
         super().delete(*args, **kwargs)
+        user.refresh_from_db()
         if (
                 not user.groups.filter(name="UT-Admin")
                 and user.is_superuser == False #superusers should not be affected by this
