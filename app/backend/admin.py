@@ -4,10 +4,10 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import (GroupAdmin, UserAdmin)
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, AdminPasswordChangeForm
 from django.core.exceptions import ValidationError
 
-from backend.forms import CustomUserCreationForm, CustomUserChangeForm
+from backend.forms import CustomUserCreationForm, CustomUserChangeForm, CustomAdminPasswordChangeForm
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
 from backend.models.user import (User, UTMember, Adress, Team, TeamMember)
 from backend.models.event import(Event, EventSeries, Act, EventAct)
@@ -32,21 +32,23 @@ class UserAdressInLine(admin.TabularInline):
 class TeamMemberInLine(admin.TabularInline):
     model = TeamMember
 
-#class UserAdmin(admin.ModelAdmin):
-#    inlines = [
-#        TeamMemberInLine,
-#        UTMemberInLine,
-#        UserAdressInLine,
-#    ]
-
 class UserGroupInLine(admin.TabularInline):
     model = User.groups.through
     raw_id_fields=("user",)
 
-class MyGroupAdmin(GroupAdmin):
+class EventActInLine(admin.TabularInline):
+    model = EventAct
+
+class TeamAdmin(GroupAdmin):
     inlines = [
         UserGroupInLine,
     ]
+
+class TeamMemberAdmin(admin.ModelAdmin):
+    model = TeamMember
+    ordering = ["user"]
+    list_display = ["user", "team"]
+    list_filter = ["user", "team"]
 
 class EventInLine(admin.TabularInline):
     model = Event
@@ -55,14 +57,23 @@ class EventSeriesAdmin(admin.ModelAdmin):
     inlines = [
         EventInLine,
     ]
+    ordering = ["event_name"]
+    list_display = ["event_name", "event_type"]
+    list_filter = ["event_name", "event_type"]
+
 
 class TaskInline(admin.TabularInline):
     model = Task
 
 class EventAdmin(admin.ModelAdmin):
+    model = Event
     inlines = [
-        TaskInline
+        TaskInline,
+        EventActInLine,
     ]
+    ordering = ["date"]
+    list_display = ["series", "date", "start_time"]
+    list_filter = ["series", "date"]
 
 # unregister the provided admin
 #admin.site.unregister(User)
@@ -76,6 +87,7 @@ class CustomUserAdmin(UserAdmin):
     # the specific form is used depending on an user object is already exisiting or not
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
+    change_password_form = CustomAdminPasswordChangeForm
 
     model = User
     # defining how users are represented in the user list in the admin panel
@@ -225,6 +237,11 @@ class CustomUserAdmin(UserAdmin):
                 'username',
             }
 
+        if obj == request.user:
+            disabled_fields -= {
+                'username',
+            }
+
         for field in disabled_fields:
             if field in form.base_fields:
                 form.base_fields[field].disabled = True
@@ -251,8 +268,8 @@ admin.site.unregister(Group)
 #admin.site.register(User, CustomUserAdmin)
 admin.site.register(UTMember)
 admin.site.register(Adress)
-admin.site.register(Team, MyGroupAdmin)
-admin.site.register(TeamMember)
+admin.site.register(Team, TeamAdmin)
+admin.site.register(TeamMember, TeamMemberAdmin)
 #admin.site.register(EventType)
 admin.site.register(EventSeries, EventSeriesAdmin)
 admin.site.register(Event, EventAdmin)

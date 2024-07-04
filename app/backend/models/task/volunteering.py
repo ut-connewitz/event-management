@@ -41,7 +41,11 @@ class Volunteering(models.Model):
         choices=ConfirmationType.choices,
         default=ConfirmationType.YES,
     )
-    comment = models.TextField("Kommentar", blank=True, max_length=300)
+    comment = models.TextField(
+        "Kommentar",
+        blank=True,
+        max_length=300,
+    )
 
     objects = VolunteeringManager()
 

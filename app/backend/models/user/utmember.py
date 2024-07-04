@@ -3,7 +3,11 @@ from .user import User
 from django.db.utils import IntegrityError
 
 class UTMember(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Person",
+    )
     member_number = models.PositiveIntegerField("Mitgliedsnummer")
 
     class Meta:

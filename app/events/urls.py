@@ -16,11 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from backend.views import CustomAdminPasswordChangeView
 
 urlpatterns = [
+    #path('admin/backend/', include('backend.urls')),
+    path(
+        'admin/backend/user/<int:pk>/password/',
+        CustomAdminPasswordChangeView.as_view(),
+    ),
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
     path('bootstrap', include('testbootstrap.urls')),
     path('ecal/', include(('events_calendar.urls'), namespace='ecal')),
     path('profile/', include(('profile_page.urls'), namespace='profile')),
+
 ]

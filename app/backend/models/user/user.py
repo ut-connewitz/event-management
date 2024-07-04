@@ -99,7 +99,6 @@ class TeamMemberQuerySet(models.QuerySet):
         if team.name == "UT-Admin":
             user.is_staff=True
             user.save()
-
         return super().create(*args, **kwargs)
 
 
@@ -118,11 +117,12 @@ class TeamMemberQuerySet(models.QuerySet):
         return super().delete()
 
     def update(self, *args, **kwargs):
-        print("updating")
+        #print("updating") #debug
         super().update(*args, **kwargs)
         for object in self:
-            print("setting" + str(object))
-            object.set_user_is_staff()
+            #print("setting" + str(object)) #debug
+            if object.team.name == "UT-Admin":
+                object.set_user_is_staff()
 
 class TeamMemberManager(models.Manager):
     def get_queryset(self):
@@ -131,8 +131,16 @@ class TeamMemberManager(models.Manager):
 
 class TeamMember(models.Model):
     team_member_id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name = "Person",
+    )
+    team = models.ForeignKey(
+        Team,
+        on_delete=models.CASCADE,
+        verbose_name = "Team",
+    )
     objects = TeamMemberManager()
 
     class Meta:
@@ -154,7 +162,6 @@ class TeamMember(models.Model):
     def __str__(self):
         return str(self.team) + " " + str(self.user)
 
-    # overwrite save methods with caution!
     # this is meant to prevent db crash if one person is added to the same team more than once from addtestdata.py
     # this may occur, when addtestdata.py is run multiple times for development/testing reasons
     # for now, only unique fields are problematic since primary key duplicates just wont be inserted (as expected) without crashing the db

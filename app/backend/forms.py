@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, AdminPasswordChangeForm
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from backend.models.user import User
 
@@ -31,8 +32,22 @@ class CustomUserCreationForm(forms.ModelForm):
         return user
 
 class CustomUserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField()
+    password = ReadOnlyPasswordHashField(
+        label=_("Passwort"),
+        help_text = _(
+            "Passwörter werden nicht als Text gespeichert, deswegen ist es nicht möglich"
+            "das Passwort dieser Person zu sehen. Es kann jedoch geändert werden unter "
+            " <a href=\"../password/\">diesem Link</a>"
+        ),
+    )
 
     class Meta:
         model = User
         fields = ["username", "email", "password", "is_active", "is_superuser", "is_staff", "first_name", "last_name"]
+
+class CustomAdminPasswordChangeForm(AdminPasswordChangeForm):
+    password1 = forms.CharField(label="Passwort", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Passwort Bestätigung", widget=forms.PasswordInput)
+
+    class Meta:
+        model = User

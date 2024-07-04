@@ -41,9 +41,20 @@ class Task(models.Model):
         # this is to avoid triggering unwanted db behavoiour by manually setting a Task.State
         # Task.States can now only be set by confirming to / stepping back from a Volunteering
     )
-    start_time = models.TimeField("Beginn", null=True, blank=True)
-    finish_time = models.TimeField("Ende", null=True, blank=True)
-    comment = models.TextField("Kommentar", blank=True)
+    start_time = models.TimeField(
+        "Beginn",
+        null=True,
+        blank=True,
+    )
+    finish_time = models.TimeField(
+        "Ende",
+        null=True,
+        blank=True,
+    )
+    comment = models.TextField(
+        "Kommentar",
+        blank=True,
+    )
 
     class Meta:
         verbose_name = "Aufgabe"
