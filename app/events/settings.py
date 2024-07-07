@@ -100,7 +100,8 @@ DATABASES = {
 AUTH_USER_MODEL = 'backend.User'
 
 # change back to default ('accounts/profile'/) once its implemented
-LOGIN_REDIRECT_URL = '/events_calendar/calendar/'
+LOGIN_REDIRECT_URL = '/ecal/calendar/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
