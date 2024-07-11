@@ -32,7 +32,7 @@
     </p>
 {% endif %}
 
-<p>{% blocktranslate with username=original %}Enter a new password for the user <strong>{{ username }}</strong>.{% endblocktranslate %}</p>
+<p> Um ein neues Passwort für <strong>{{ username }}</strong> einzustellen, geben Sie es bitte zweimal ein:</p>
 {% if not form.user.has_usable_password %}
   <p>{% blocktranslate %}This action will <strong>enable</strong> password-based authentication for this user.{% endblocktranslate %}</p>
 {% endif %}
