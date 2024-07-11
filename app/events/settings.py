@@ -121,6 +121,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # development use
+
+# https://docs.djangoproject.com/en/4.2/topics/email/#smtp-backend
+# for production use the following pattern
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com' #tbd
+# EMAIL_PORT = 587 #tbd
+# EMAIL_USE_TLS = True #tbd
+# EMAIL_HOST_USER = $EMAIL_HOST_USER #tbd
+# EMAIL_HOST_PASSWORD = $EMAIL_HOST_PASSWORD #tbd
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
