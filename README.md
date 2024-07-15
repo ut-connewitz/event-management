@@ -30,6 +30,12 @@ Development repository for event management services.
 3. define output: `logger.error('some string '+str(some_variable))`
 (currently only `logger.error` is shown, maybe due to local docker/logging config idk)
 
+### Tests
+Within the file `tests_user.py` in `/app/backend/tests` there are a few tests for the user creation methods:
+- within the running events container enter:
+- `python3 manage.py test backend.tests`
+- [django docs: testing](https://docs.djangoproject.com/en/4.2/topics/testing/overview/)
+
 ## Docker Deployment
 
 1. Clone
@@ -51,6 +57,12 @@ RABBITMQ_WORKER_PASS=?
 
 ALLOWED_HOSTS=???????? #tbd
 SECRET_KEY=samplesecret123
+
+EMAIL_HOST = 'smtp.gmail.com' #tbd
+EMAIL_PORT = 587 #tbd
+EMAIL_HOST_USER = ? #tbd
+EMAIL_HOST_PASSWORD = ? #tbd
+
 ```
 ## Project Structure
 ### Directory
@@ -64,6 +76,7 @@ event-management/
 │   ├── backend
 │   │   ├── admin.py
 │   │   ├── apps.py
+│   │   ├── forms.py
 │   │   ├── management
 │   │   │   └── commands
 │   │   │       ├── addbasedata.py
@@ -76,7 +89,10 @@ event-management/
 │   │   │   ├── task
 │   │   │   └── user
 │   │   ├── templates
-│   │   ├── tests.py
+│   │   │   ├── admin_change_pw.html
+│   │   │   └── master.html
+│   │   ├── tests
+│   │   │   └── tests_user.py
 │   │   ├── urls.py
 │   │   └── views.py
 │   ├── events

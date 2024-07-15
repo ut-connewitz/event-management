@@ -10,11 +10,28 @@ class Event(models.Model):
     series = models.ForeignKey(
         EventSeries,
         on_delete=models.CASCADE,
-        verbose_name = "Veranstaltungsreihe",)
-    date = models.DateField("Datum", null=False, blank=False, default=now)
-    start_time = models.TimeField("Veranstaltungsbeginn", default=now)
-    duration = models.DurationField("Veranstaltungsdauer", null=True, blank=True) #TODO: test how this works
-    admission_time = models.TimeField("Einlassbeginn", null=True, blank=True)
+        verbose_name = "Veranstaltungsreihe",
+    )
+    date = models.DateField(
+        "Datum",
+        null=False,
+        blank=False,
+        default=now,
+    )
+    start_time = models.TimeField(
+        "Veranstaltungsbeginn",
+        default=now,
+    )
+    duration = models.DurationField(
+        "Veranstaltungsdauer",
+        null=True,
+        blank=True,
+    ) #TODO: test how this works
+    admission_time = models.TimeField(
+        "Einlassbeginn",
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = "Veranstaltung"

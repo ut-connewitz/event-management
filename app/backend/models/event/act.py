@@ -15,8 +15,8 @@ class Act(models.Model):
     act_phone = models.CharField("Telefon", blank=True, max_length=15)
 
     class Meta:
-        verbose_name = "Akt"
-        verbose_name_plural = "Akte"
+        verbose_name = "Ensemble"
+        verbose_name_plural = "Ensembles"
 
     def __str__(self):
         return str(self.act_name)

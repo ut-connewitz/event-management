@@ -100,7 +100,8 @@ DATABASES = {
 AUTH_USER_MODEL = 'backend.User'
 
 # change back to default ('accounts/profile'/) once its implemented
-LOGIN_REDIRECT_URL = '/events_calendar/calendar/'
+LOGIN_REDIRECT_URL = '/ecal/calendar/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -120,6 +121,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# https://docs.djangoproject.com/en/4.2/topics/email/#smtp-backend
+# necessary settings for sending emails from the django app
+# for development, we can just print the emails to the console:
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# for production use the following pattern and set the variables in the .env file
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = $EMAIL_HOST #tbd
+# EMAIL_PORT = $EMAIL_PORT #tbd
+# EMAIL_USE_TLS = True #tbd
+# EMAIL_HOST_USER = $EMAIL_HOST_USER #tbd
+# EMAIL_HOST_PASSWORD = $EMAIL_HOST_PASSWORD #tbd
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

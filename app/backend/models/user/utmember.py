@@ -3,15 +3,19 @@ from .user import User
 from django.db.utils import IntegrityError
 
 class UTMember(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Person",
+    )
     member_number = models.PositiveIntegerField("Mitgliedsnummer")
 
     class Meta:
         constraints = [
         models.UniqueConstraint(fields=["member_number"], name="member_number is unique")
         ]
-        verbose_name = "Mitglied"
-        verbose_name_plural = "Mitglieder"
+        verbose_name = "Vereinsmitglied"
+        verbose_name_plural = "Vereinsmitglieder"
 
     def __str__(self):
         return str(self.user)

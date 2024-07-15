@@ -32,9 +32,17 @@ class DeletedVolunteering(models.Model):
         verbose_name = "Person",
     )
 
-    timestamp = models.DateTimeField("Zeitpunkt", null=False, blank=False)
+    timestamp = models.DateTimeField(
+        "Zeitpunkt",
+        null=False,
+        blank=False,
+    )
 
-    comment = models.TextField("Kommentar", blank=True, max_length=300)
+    comment = models.TextField(
+        "Kommentar",
+        blank=True,
+        max_length=300,
+    )
 
 #    objects = DeletedVolunteeringManager()
 
