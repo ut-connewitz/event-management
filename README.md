@@ -57,6 +57,12 @@ RABBITMQ_WORKER_PASS=?
 
 ALLOWED_HOSTS=???????? #tbd
 SECRET_KEY=samplesecret123
+
+EMAIL_HOST = 'smtp.gmail.com' #tbd
+EMAIL_PORT = 587 #tbd
+EMAIL_HOST_USER = ? #tbd
+EMAIL_HOST_PASSWORD = ? #tbd
+
 ```
 ## Project Structure
 ### Directory

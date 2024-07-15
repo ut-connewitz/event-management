@@ -121,13 +121,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # development use
-
 # https://docs.djangoproject.com/en/4.2/topics/email/#smtp-backend
-# for production use the following pattern
+# necessary settings for sending emails from the django app
+# for development, we can just print the emails to the console:
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# for production use the following pattern and set the variables in the .env file
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com' #tbd
-# EMAIL_PORT = 587 #tbd
+# EMAIL_HOST = $EMAIL_HOST #tbd
+# EMAIL_PORT = $EMAIL_PORT #tbd
 # EMAIL_USE_TLS = True #tbd
 # EMAIL_HOST_USER = $EMAIL_HOST_USER #tbd
 # EMAIL_HOST_PASSWORD = $EMAIL_HOST_PASSWORD #tbd
