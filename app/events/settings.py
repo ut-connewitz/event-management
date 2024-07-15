@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_celery_results',
     'django_celery_beat',
-    'bootstrap5',
+    'django_bootstrap5',
     'testbootstrap',
     'backend',
     'events_calendar',
