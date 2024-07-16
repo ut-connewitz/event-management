@@ -1,6 +1,64 @@
 /* app/static/css/styles.css */
 
+body {
+  min-height: 100rem;
+  padding-top: 7rem;
+  padding-right: 2.7rem;
+  padding-bottom: 2.7rem;
+  padding-left: 2.7rem;
+  background-color: rgba(76, 103, 21, 0.1)
+}
 
 .navbar{
   padding: 2%;
+  background-color: rgba(76, 103, 21, 0.95);
+}
+
+ul {
+  height: 100%;
+  padding: 0px 5px 0px 20px;
+}
+
+a {
+  color: #77A221;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.btn-success {
+  outline: none;
+  color: black;
+  background-color: YellowGreen;
+  border-color: YellowGreen;
+  --bs-btn-hover-bg: #77A221;
+  --bs-btn-hover-border: #77A221;
+  --bs-btn-active-border-color: #77A221;
+  box-shadow: 0 0 0 0;
+}
+
+.clearfix {
+  margin: 15px;
+}
+
+.form {
+  margin: auto;
+}
+
+.form input, .form select, .form textarea {
+  border-radius: 5px;
+  border: 1px solid YellowGreen;
+  outline: none;
+  background: none;
+  padding: 5px;
+  width: 100%;
+}
+
+h2 {
+  text-align: center;
 }
