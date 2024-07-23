@@ -6,7 +6,7 @@ Veranstaltung
 
 {% block content %}
 <div class="clearfix">
-  <a class="btn btn-success left" href="{% url 'ecal:calendar' %}"> Kalender </a>
+  <a class="btn btn-secondary left" href="{% url 'ecal:calendar' %}"> Kalender </a>
 </div>
 
 {% if form.errors %}
@@ -29,7 +29,7 @@ Veranstaltung
   <table class="form form-table">
     {{ form }}
     {% if request.user.is_staff %}
-    <tr><td colspan="2"><button type="submit" class="btn btn-success right"> Speichern </button></td></tr>
+    <tr><td colspan="2"><button type="submit" class="btn btn-secondary right"> Speichern </button></td></tr>
     {% endif %}
   </table>
 </form>
@@ -37,9 +37,9 @@ Veranstaltung
 <div class="clearfix">
   {% if request.user.is_staff %}
     {% if event_id is None %}
-    <a class="btn btn-success right" href="{% url 'ecal:task_new' %}"> Aufgabe hinzufügen </a>
+    <a class="btn btn-secondary right" href="{% url 'ecal:task_new' %}"> Aufgabe hinzufügen </a>
     {% else %}
-    <a class="btn btn-success right" href="{% url 'ecal:event_task_new' event_id=event_id %}"> Aufgabe hinzufügen </a>
+    <a class="btn btn-secondary right" href="{% url 'ecal:event_task_new' event_id=event_id %}"> Aufgabe hinzufügen </a>
     {% endif %}
   {% endif %}
 </div>

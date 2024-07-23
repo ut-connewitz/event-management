@@ -6,7 +6,7 @@ Aufgabe
 
 {% block content %}
 <div class="clearfix">
-  <a class="btn btn-success left" href="{% url 'ecal:calendar' %}"> Kalender </a>
+  <a class="btn btn-secondary left" href="{% url 'ecal:calendar' %}"> Kalender </a>
 </div>
 
 {% if form.errors %}
@@ -30,7 +30,7 @@ Aufgabe
     {{ task_form }}
     {% csrf_token %}
     {% if request.user.is_staff %}
-    <tr><td colspan="2"><button type="submit" class="btn btn-success right" name="task_button" value="task"> Speichern </button></td></tr>
+    <tr><td colspan="2"><button type="submit" class="btn btn-secondary right" name="task_button" value="task"> Speichern </button></td></tr>
     {% endif %}
   </table>
 </form>
@@ -44,7 +44,7 @@ Aufgabe
     {{ volunteering_form}}
     {% csrf_token %}
     {% if request.user == volunteering_instance.user or request.user.is_staff %}
-    <tr><td colspan="2"><button type="submit" class="btn btn-success right" name="volunteering_button" value="volunteering"> Speichern </button></td></tr>
+    <tr><td colspan="2"><button type="submit" class="btn btn-secondary right" name="volunteering_button" value="volunteering"> Speichern </button></td></tr>
     {% endif %}
     {% if request.user != volunteering_instance.user %}
     <h3 style="text-align:center;"> – Bereits übernommen – </h3>

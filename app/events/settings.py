@@ -35,7 +35,6 @@ if ALLOWED_HOSTS_ENV:
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -49,7 +48,7 @@ INSTALLED_APPS = [
     'backend',
     'events_calendar',
     'profile_page',
-    #'django_extensions'
+    'django.contrib.admin',
 ]
 
 MIDDLEWARE = [

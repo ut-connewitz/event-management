@@ -6,7 +6,7 @@ Adresse
 
 {% block content %}
 <div class="clearfix">
-  <a class="btn btn-success left" href="{% url 'profile:hub' %}"> Zurück </a>
+  <a class="btn btn-secondary left" href="{% url 'profile:hub' %}"> Zurück </a>
 </div>
 
 {% if form.errors %}
@@ -28,7 +28,7 @@ Adresse
   {% csrf_token %}
   <table class="form form-table">
     {{ form }}
-    <tr><td colspan="2"><button type="submit" class="btn btn-success right"> Speichern </button></td></tr>
+    <tr><td colspan="2"><button type="submit" class="btn btn-secondary right"> Speichern </button></td></tr>
   </table>
 </form>
 

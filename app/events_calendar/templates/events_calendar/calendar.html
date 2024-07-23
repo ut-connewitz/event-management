@@ -9,12 +9,12 @@ Kalender
 {% block content %}
 
 <div class="clearfix">
-	<a class="btn btn-success left" href="{% url 'ecal:calendar' %}?{{ prev_month }}"> Vorheriger Monat </a>
-	<a class="btn btn-success right" href="{% url 'ecal:calendar' %}?{{ next_month }}"> Nächster Monat </a>
+	<a class="btn btn-secondary left" href="{% url 'ecal:calendar' %}?{{ prev_month }}"> Vorheriger Monat </a>
+	<a class="btn btn-secondary right" href="{% url 'ecal:calendar' %}?{{ next_month }}"> Nächster Monat </a>
   {% if request.user.is_staff %}
   <div class="d-grip gap-2 col-6 mx-auto">
-    <a class="btn btn-success" href="{% url 'ecal:event_new' %}"> Veranstaltung hinzufügen </a>
-    <a class="btn btn-success" href="{% url 'ecal:task_new' %}"> Aufgabe hinzufügen </a>
+    <a class="btn btn-secondary" href="{% url 'ecal:event_new' %}"> Veranstaltung hinzufügen </a>
+    <a class="btn btn-secondary" href="{% url 'ecal:task_new' %}"> Aufgabe hinzufügen </a>
   </div>
   {% endif %}
 </div>

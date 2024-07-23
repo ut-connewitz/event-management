@@ -26,16 +26,16 @@ Dienste und Einstellungen
 
     <div class="col-sm-3">
       <div class="clearfix">
-        <a class="btn btn-success left" href="{% url 'profile:account' pk=user_pk %}"> Account </a>
+        <a class="btn btn-secondary left" href="{% url 'profile:account' pk=user_pk %}"> Account </a>
       </div>
       {% if adress is not None %}
       <div class="clearfix">
-        <a class="btn btn-success left" href="{% url 'profile:adress_edit' pk=user_pk %}"> Adresse </a>
+        <a class="btn btn-secondary" href="{% url 'profile:adress_edit' pk=user_pk %}"> Adresse </a>
       </div>
       {% endif %}
       {% if adress is None %}
       <div class="clearfix">
-        <a class="btn btn-success left" href="{% url 'profile:adress_create' %}"> Adresse </a>
+        <a class="btn btn-secondary left" href="{% url 'profile:adress_create' %}"> Adresse </a>
       </div>
       {% endif %}
     </div>
