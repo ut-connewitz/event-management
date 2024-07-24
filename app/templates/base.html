@@ -46,7 +46,7 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link" href="{% url 'ecal:calendar' %}"> &#128197; Kalender </a>
           </li>
@@ -59,7 +59,7 @@
           </li>
           {% endif %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}"> &#8618; Ausloggen </a>
+            <a class="nav-link" href="{% url 'logout' %}"> &#8618; Abmelden </a>
           </li>
           {% include 'dark_mode_switch/dark_mode_switch.html' %}
         </ul>

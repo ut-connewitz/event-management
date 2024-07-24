@@ -3,25 +3,15 @@ Documentation of the current frontend appearance.
 
 ## Screenshots
 
-### misc
-![login](frontend-screenshots/login.png)
+### Admin Panel
 
-### Admin
+![admin panel](frontend-screenshots/admin_panel_dark.png)
 
-#### Admin Calender
-![admin calendar](frontend-screenshots/calendar_admin.png)
+### Calendar App
 
-#### Admin Task
-![admin task](frontend-screenshots/task_admin.png)
-
-### User
-
-#### User Calendar
-![user calendar](frontend-screenshots/calendar_user.png)
-
-### User Task
-![user task](frontend-screenshots/task_user.png)
+#### Calendar
+![calendar](frontend-screenshots/calendar_dark.png)
 
 
-### Profile Page
-![profile page](frontend-screenshots/profile_page.png)
+#### Task
+![task](frontend-screenshots/task_dark.png)
