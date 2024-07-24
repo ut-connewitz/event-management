@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 
 from backend.forms import CustomUserCreationForm, CustomUserChangeForm, CustomAdminPasswordChangeForm
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
-from backend.models.user import (User, UTMember, Adress, Team, TeamMember)
+from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, Adress, Team, TeamMember)
 from backend.models.event import(Event, EventSeries, Act, EventAct)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering, DeletedVolunteering)
@@ -32,6 +32,9 @@ class UserAdressInLine(admin.TabularInline):
 class TeamMemberInLine(admin.TabularInline):
     model = TeamMember
 
+class AdminGroupMemberInLine(admin.TabularInline):
+    model = AdminGroupMember
+
 class UserGroupInLine(admin.TabularInline):
     model = User.groups.through
     raw_id_fields=("user",)
@@ -39,10 +42,19 @@ class UserGroupInLine(admin.TabularInline):
 class EventActInLine(admin.TabularInline):
     model = EventAct
 
-class TeamAdmin(GroupAdmin):
+class AdminGroupAdmin(GroupAdmin):
     inlines = [
         UserGroupInLine,
     ]
+
+class AdminGroupMemberAdmin(admin.ModelAdmin):
+    model = AdminGroupMember
+    ordering = ["user"]
+    list_display = ["user", "admin_group"]
+    list_filter = ["user", "admin_group"]
+
+class TeamAdmin(admin.ModelAdmin):
+    model = Team
 
 class TeamMemberAdmin(admin.ModelAdmin):
     model = TeamMember
@@ -60,7 +72,6 @@ class EventSeriesAdmin(admin.ModelAdmin):
     ordering = ["event_name"]
     list_display = ["event_name", "event_type"]
     list_filter = ["event_name", "event_type"]
-
 
 class TaskInline(admin.TabularInline):
     model = Task
@@ -169,6 +180,7 @@ class CustomUserAdmin(UserAdmin):
     ]
 
     inlines = [
+        AdminGroupMemberInLine,
         TeamMemberInLine,
         UTMemberInLine,
         UserAdressInLine,
@@ -270,6 +282,8 @@ admin.site.register(UTMember)
 admin.site.register(Adress)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(TeamMember, TeamMemberAdmin)
+admin.site.register(AdminGroup, AdminGroupAdmin)
+admin.site.register(AdminGroupMember, AdminGroupMemberAdmin)
 #admin.site.register(EventType)
 admin.site.register(EventSeries, EventSeriesAdmin)
 admin.site.register(Event, EventAdmin)
