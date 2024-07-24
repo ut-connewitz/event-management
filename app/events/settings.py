@@ -35,7 +35,6 @@ if ALLOWED_HOSTS_ENV:
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -43,12 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_celery_results',
     'django_celery_beat',
-    'bootstrap5',
+    'django_bootstrap5',
+    'dark_mode_switch',
     'testbootstrap',
-    'backend',
+    'backend', # this has to be above 'django.contrib.admin' to ovewrite default admin panel styling
     'events_calendar',
     'profile_page',
-    #'django_extensions'
+    'django.contrib.admin', # this has to be below 'backend' otherwise default admin panel styles will be used
 ]
 
 MIDDLEWARE = [

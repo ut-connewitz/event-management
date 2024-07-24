@@ -1,6 +1,63 @@
 /* app/static/css/styles.css */
 
+body {
+  min-height: 100rem;
+  padding-top: 7rem;
+  padding-right: 2.7rem;
+  padding-bottom: 2.7rem;
+  padding-left: 2.7rem;
+}
 
 .navbar{
   padding: 2%;
+  background-color: rgba(177, 153, 118, 0.95);
+}
+
+ul {
+  height: 100%;
+  padding: 0px 5px 0px 20px;
+}
+
+a {
+  color: rgb(108, 138, 151);
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.btn-secondary {
+  outline: none;
+  color: black;
+  background-color: rgba(177, 153, 118, 0.95);
+  border-color: rgba(177, 153, 118, 0.95);
+  --bs-btn-hover-bg: rgba(177, 153, 118, 0.6);
+  --bs-btn-hover-border: rgba(177, 153, 118, 1);
+  --bs-btn-active-border-color: rgba(177, 153, 118, 1);
+  box-shadow: 0 0 0 0;
+}
+
+.clearfix {
+  margin: 15px;
+}
+
+.form {
+  margin: auto;
+}
+
+.form input, .form select, .form textarea {
+  border-radius: 5px;
+  border: 1px solid rgba(177, 153, 118, 0.95);
+  outline: none;
+  background: none;
+  padding: 5px;
+  width: 100%;
+}
+
+h2 {
+  text-align: center;
 }

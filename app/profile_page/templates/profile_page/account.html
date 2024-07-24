@@ -9,12 +9,12 @@ Account
   <div class="row">
     <div class="col">
       <div class="clearfix">
-        <a class="btn btn-info left" href="{% url 'profile:hub' %}"> Zurück </a>
+        <a class="btn btn-secondary left" href="{% url 'profile:hub' %}"> Zurück </a>
       </div>
     </div>
     <div class="col">
       <div class="clearfix">
-        <a class="btn btn-info left" href="{% url 'password_change' %}"> Passwort ändern </a>
+        <a class="btn btn-secondary left" href="{% url 'password_change' %}"> Passwort ändern </a>
       </div>
     </div>
   </div>
@@ -45,7 +45,7 @@ Account
   {% csrf_token %}
   <table class="form form-table">
     {{ form }}
-    <tr><td colspan="2"><button type="submit" class="btn btn-info right"> Speichern </button></td></tr>
+    <tr><td colspan="2"><button type="submit" class="btn btn-secondary right"> Speichern </button></td></tr>
   </table>
 </form>
 

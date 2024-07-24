@@ -9,7 +9,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap -->
-  {% load bootstrap5 %}
+  {% load django_bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
 
@@ -17,40 +17,54 @@
   {% block stylesheet %}
   {% endblock %}
 
+  {% block bootstrap5_extra_head %}
+  {{ block.super }}
+  <link href="{% static 'dark_mode_switch/dark-mode-switch.css' %}" rel="stylesheet" type="text/css">
+  {% endblock %}
+
+  {% block bootstrap5_extra_script %}
+  {{ block.super }}
+  <script src="{% static 'dark_mode_switch/dark-mode-switch.js' %}"></script>
+  {% endblock %}
+
   <title>{% block title %} Veranstaltungen {% endblock %}</title>
-
-
-
 </head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#"> UT-Connewitz Veranstaltungen </a>
-    <button class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr auto">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'ecal:calendar' %}"> &#128197; Kalender </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'profile:hub' %}"> &#10003; Dienste und Einstellungen </a>
-        </li>
-        {% if request.user.is_staff %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'admin:index' %}"> &#9096; Administration </a>
-        {% endif %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}"> &#8618; Ausloggen </a>
-        </li>
-      </ul>
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"> UT-Connewitz Veranstaltungen </a>
+
+      <button class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'ecal:calendar' %}"> &#128197; Kalender </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'profile:hub' %}"> &#10003; Dienste und Einstellungen </a>
+          </li>
+          {% if request.user.is_staff %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin:index' %}"> &#9096; Administration </a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}"> &#8618; Abmelden </a>
+          </li>
+          {% include 'dark_mode_switch/dark_mode_switch.html' %}
+        </ul>
+      </div>
+
     </div>
   </nav>
 

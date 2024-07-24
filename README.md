@@ -89,6 +89,8 @@ event-management/
 │   │   │   ├── task
 │   │   │   └── user
 │   │   ├── templates
+│   │   │   ├── admin
+│   │   │   │   └── base.html
 │   │   │   ├── admin_change_pw.html
 │   │   │   └── master.html
 │   │   ├── tests
