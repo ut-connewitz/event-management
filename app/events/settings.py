@@ -45,10 +45,10 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'dark_mode_switch',
     'testbootstrap',
-    'backend',
+    'backend', # this has to be above 'django.contrib.admin' to ovewrite default admin panel styling
     'events_calendar',
     'profile_page',
-    'django.contrib.admin',
+    'django.contrib.admin', # this has to be below 'backend' otherwise default admin panel styles will be used
 ]
 
 MIDDLEWARE = [
