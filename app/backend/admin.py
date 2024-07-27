@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from backend.forms import CustomUserCreationForm, CustomUserChangeForm, CustomAdminPasswordChangeForm
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
 from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, Adress, Team, TeamMember)
-from backend.models.event import(Event, EventSeries, Act, EventAct)
+from backend.models.event import(Event, EventSeries, Act, EventAct, PastEvent)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering, DeletedVolunteering)
 
@@ -82,6 +82,12 @@ class EventAdmin(admin.ModelAdmin):
         TaskInline,
         EventActInLine,
     ]
+    ordering = ["date"]
+    list_display = ["series", "date", "start_time"]
+    list_filter = ["series", "date"]
+
+class PastEventAdmin(admin.ModelAdmin):
+    model = PastEvent
     ordering = ["date"]
     list_display = ["series", "date", "start_time"]
     list_filter = ["series", "date"]
@@ -306,6 +312,7 @@ admin.site.register(EventSeries, EventSeriesAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Act)
 admin.site.register(EventAct)
+admin.site.register(PastEvent, PastEventAdmin)
 #admin.site.register(TaskType)
 #admin.site.register(TeamRestriction)
 #admin.site.register(Urgency)

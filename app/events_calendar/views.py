@@ -13,10 +13,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import HiddenInput
 
 
-from backend.models.event import Event
+from backend.models.event import Event, PastEvent
 from backend.models.task import Task, Volunteering, ConfirmationType, State
 from .utils import Calendar
-from .forms import EventForm, TaskForm, VolunteeringForm
+from .forms import EventForm, PastEventForm, TaskForm, VolunteeringForm
 
 
 class CalendarView(LoginRequiredMixin, generic.ListView):
@@ -72,7 +72,7 @@ def event(request, event_id=None):
 
     form = EventForm(request.POST or None, instance=instance)
     if not request.user.is_staff:
-        form.fields['event_series'].disabled = True
+        form.fields['series'].disabled = True
         form.fields['date'].disabled = True
         form.fields['start_time'].disabled = True
         form.fields['duration'].disabled = True
@@ -87,6 +87,30 @@ def event(request, event_id=None):
         'form': form,
     }
     return render(request, 'events_calendar/event.html', context=context)
+
+@login_required
+def past_event(request, past_event_id=None):
+
+    instance = get_object_or_404(PastEvent, pk=past_event_id)
+
+    form = PastEventForm(
+        request.POST or None,
+        instance=instance,
+    )
+
+    form.fields['series'].disabled = True
+    form.fields['date'].disabled = True
+    form.fields['start_time'].disabled = True
+
+    if request.POST and form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('ecal:calendar'))
+
+    context = {
+        'past_event_id' : past_event_id,
+        'form': form,
+    }
+    return render(request, 'events_calendar/past_event.html', context=context)
 
 @login_required
 def task(request, task_id=None, volunteering_id=None, event_id=None):

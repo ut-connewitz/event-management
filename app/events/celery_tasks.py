@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from django.utils.timezone import get_current_timezone
-from backend.models.event import Event
+from backend.models.event import Event, PastEvent
 from celery.utils.log import get_task_logger
 from .celery import app
 from celery import shared_task
@@ -17,6 +17,15 @@ def delete_past_events():
     yesterday = today - timedelta(hours=24)
     # saving the queryset containing the event names and dates to return als result
     past_events=list(Event.objects.filter(date__lte=yesterday))
+
+    for event in past_events:
+        past_event = PastEvent.objects.create(
+            past_event_id = event.event_id,
+            series = event.series,
+            date = event.date,
+            start_time = event.start_time
+        )
+        past_event.save()
 
     #trying to get any logger to work as expected :(
     #logger.info('info celery task deleting: \n'+ str(past_events)) #debug
