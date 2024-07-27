@@ -23,24 +23,38 @@ admin.site.index_title = "Administration"
 
 
 
+# inlines
+
+class AdminGroupMemberInLine(admin.TabularInline):
+    model = AdminGroupMember
+
+class EventInLine(admin.TabularInline):
+    model = Event
+
+class EventActInLine(admin.TabularInline):
+    model = EventAct
+
+class TaskInline(admin.TabularInline):
+    model = Task
+
+class TeamMemberInLine(admin.TabularInline):
+    model = TeamMember
+
 class UTMemberInLine(admin.TabularInline):
     model = UTMember
 
 class UserAdressInLine(admin.TabularInline):
     model = Adress
 
-class TeamMemberInLine(admin.TabularInline):
-    model = TeamMember
-
-class AdminGroupMemberInLine(admin.TabularInline):
-    model = AdminGroupMember
-
 class UserGroupInLine(admin.TabularInline):
     model = User.groups.through
     raw_id_fields=("user",)
 
-class EventActInLine(admin.TabularInline):
-    model = EventAct
+class VolunteeringInLine(admin.TabularInline):
+    model = Volunteering
+
+
+# admins
 
 class AdminGroupAdmin(GroupAdmin):
     inlines = [
@@ -62,20 +76,6 @@ class TeamMemberAdmin(admin.ModelAdmin):
     list_display = ["user", "team"]
     list_filter = ["user", "team"]
 
-class EventInLine(admin.TabularInline):
-    model = Event
-
-class EventSeriesAdmin(admin.ModelAdmin):
-    inlines = [
-        EventInLine,
-    ]
-    ordering = ["event_name"]
-    list_display = ["event_name", "event_type"]
-    list_filter = ["event_name", "event_type"]
-
-class TaskInline(admin.TabularInline):
-    model = Task
-
 class EventAdmin(admin.ModelAdmin):
     model = Event
     inlines = [
@@ -85,6 +85,23 @@ class EventAdmin(admin.ModelAdmin):
     ordering = ["date"]
     list_display = ["series", "date", "start_time"]
     list_filter = ["series", "date"]
+
+class EventSeriesAdmin(admin.ModelAdmin):
+    inlines = [
+        EventInLine,
+    ]
+    ordering = ["event_name"]
+    list_display = ["event_name", "event_type"]
+    list_filter = ["event_name", "event_type"]
+
+class TaskAdmin(admin.ModelAdmin):
+    model = Task
+    inlines = [
+        VolunteeringInLine,
+    ]
+    ordering = ["event"]
+    list_display = ["event", "task_type", "team_restriction", "urgency", "state"]
+    list_filter = ["event", "task_type", "team_restriction", "urgency", "state"]
 
 # unregister the provided admin
 #admin.site.unregister(User)
@@ -294,7 +311,7 @@ admin.site.register(EventAct)
 #admin.site.register(Urgency)
 #admin.site.register(State)
 #admin.site.register(ConfirmationType)
-admin.site.register(Task)
+admin.site.register(Task, TaskAdmin)
 admin.site.register(Volunteering)
 admin.site.register(DeletedVolunteering) #debug, unregister later
 #admin.site.register(NotificationType)

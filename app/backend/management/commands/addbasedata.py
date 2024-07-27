@@ -17,7 +17,6 @@ ADMIN_GROUP_PERMISSIONS = {
         models.user.Adress: ['add', 'change', 'delete', 'view'],
         models.user.TeamMember: ['add', 'change', 'delete', 'view'],
         models.user.Team: ['view'],
-        models.user.AdminGroup: ['view'],
         models.user.AdminGroupMember: ['view'],
         models.user.User: ['add', 'change', 'view'],
         models.user.UTMember: ['add', 'change', 'delete', 'view'],
@@ -41,18 +40,9 @@ class Command(BaseCommand):
         team4 = Team.objects.create(name="Verwaltung")
         team4.save()
 
-        #ct = ContentType.objects.get_for_model(EventSeries)
+        self.assign_admin_group_permissions()
 
-        #permission_add_eventseries = Permission.objects.create(
-        #    codename='can_add_eventseries',
-        #    name='Can add eventseries',
-        #    content_type=ct
-        #)
-
-        #utadmin_team=Team.objects.get(name="utadmin")
-        #utadmin_team.permissions.add(permission_add_eventseries)
-
-        #
+    def assign_admin_group_permissions(self):
         for admin_group_name in ADMIN_GROUP_PERMISSIONS:
             admin_group, created = AdminGroup.objects.get_or_create(name=admin_group_name)
             for model_cls in ADMIN_GROUP_PERMISSIONS[admin_group_name]:

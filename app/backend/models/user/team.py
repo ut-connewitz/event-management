@@ -7,6 +7,9 @@ class Team(models.Model):
     class Meta:
         verbose_name = "Team"
         verbose_name_plural = "Teams"
+        constraints = [
+            models.UniqueConstraint(fields=["name"], name="prevent teamname duplicates constraint")
+        ]
 
     def __str__(self):
         return str(self.name)

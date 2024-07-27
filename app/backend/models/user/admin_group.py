@@ -3,7 +3,6 @@ from django.db.utils import IntegrityError
 from django.contrib.auth.models import Group
 
 class AdminGroup(Group):
-    #group = models.OneToOneField(Group, on_delete=models.CASCADE, primary_key=True)
 
     class Meta:
         verbose_name = "Admin Gruppe"
