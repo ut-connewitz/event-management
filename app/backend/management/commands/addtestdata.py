@@ -6,7 +6,7 @@ from django.utils.timezone import get_current_timezone
 from django.contrib.auth.models import Group, Permission
 
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
-from backend.models.user import (User, UTMember, Adress, Team, TeamMember)
+from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, Adress, Team, TeamMember)
 from backend.models.event import(EventType, EventSeries, Event, Act, EventAct)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering)

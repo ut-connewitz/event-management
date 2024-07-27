@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sleep 15s
+sleep 20s
 
 # python3 manage.py collectstatic &
 

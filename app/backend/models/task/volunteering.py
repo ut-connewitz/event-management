@@ -55,6 +55,7 @@ class Volunteering(models.Model):
         ]
         verbose_name = "Dienst"
         verbose_name_plural = "Dienste"
+        order_with_respect_to = "task"
 
     def __str__(self):
         return str(self.user) + " " + str(self.task)

@@ -59,6 +59,7 @@ class Task(models.Model):
     class Meta:
         verbose_name = "Aufgabe"
         verbose_name_plural = "Aufgaben"
+        order_with_respect_to = "event"
 
     def __str__(self):
         return str(self.event)+" "+self.get_task_type_display()

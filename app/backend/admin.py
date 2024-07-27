@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 
 from backend.forms import CustomUserCreationForm, CustomUserChangeForm, CustomAdminPasswordChangeForm
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
-from backend.models.user import (User, UTMember, Adress, Team, TeamMember)
+from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, Adress, Team, TeamMember)
 from backend.models.event import(Event, EventSeries, Act, EventAct)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering, DeletedVolunteering)
@@ -23,47 +23,58 @@ admin.site.index_title = "Administration"
 
 
 
+# inlines
+
+class AdminGroupMemberInLine(admin.TabularInline):
+    model = AdminGroupMember
+
+class EventInLine(admin.TabularInline):
+    model = Event
+
+class EventActInLine(admin.TabularInline):
+    model = EventAct
+
+class TaskInline(admin.TabularInline):
+    model = Task
+
+class TeamMemberInLine(admin.TabularInline):
+    model = TeamMember
+
 class UTMemberInLine(admin.TabularInline):
     model = UTMember
 
 class UserAdressInLine(admin.TabularInline):
     model = Adress
 
-class TeamMemberInLine(admin.TabularInline):
-    model = TeamMember
-
 class UserGroupInLine(admin.TabularInline):
     model = User.groups.through
     raw_id_fields=("user",)
 
-class EventActInLine(admin.TabularInline):
-    model = EventAct
+class VolunteeringInLine(admin.TabularInline):
+    model = Volunteering
 
-class TeamAdmin(GroupAdmin):
+
+# admins
+
+class AdminGroupAdmin(GroupAdmin):
     inlines = [
         UserGroupInLine,
     ]
+
+class AdminGroupMemberAdmin(admin.ModelAdmin):
+    model = AdminGroupMember
+    ordering = ["user"]
+    list_display = ["user", "admin_group"]
+    list_filter = ["user", "admin_group"]
+
+class TeamAdmin(admin.ModelAdmin):
+    model = Team
 
 class TeamMemberAdmin(admin.ModelAdmin):
     model = TeamMember
     ordering = ["user"]
     list_display = ["user", "team"]
     list_filter = ["user", "team"]
-
-class EventInLine(admin.TabularInline):
-    model = Event
-
-class EventSeriesAdmin(admin.ModelAdmin):
-    inlines = [
-        EventInLine,
-    ]
-    ordering = ["event_name"]
-    list_display = ["event_name", "event_type"]
-    list_filter = ["event_name", "event_type"]
-
-
-class TaskInline(admin.TabularInline):
-    model = Task
 
 class EventAdmin(admin.ModelAdmin):
     model = Event
@@ -74,6 +85,23 @@ class EventAdmin(admin.ModelAdmin):
     ordering = ["date"]
     list_display = ["series", "date", "start_time"]
     list_filter = ["series", "date"]
+
+class EventSeriesAdmin(admin.ModelAdmin):
+    inlines = [
+        EventInLine,
+    ]
+    ordering = ["event_name"]
+    list_display = ["event_name", "event_type"]
+    list_filter = ["event_name", "event_type"]
+
+class TaskAdmin(admin.ModelAdmin):
+    model = Task
+    inlines = [
+        VolunteeringInLine,
+    ]
+    ordering = ["event"]
+    list_display = ["event", "task_type", "team_restriction", "urgency", "state"]
+    list_filter = ["event", "task_type", "team_restriction", "urgency", "state"]
 
 # unregister the provided admin
 #admin.site.unregister(User)
@@ -169,6 +197,7 @@ class CustomUserAdmin(UserAdmin):
     ]
 
     inlines = [
+        AdminGroupMemberInLine,
         TeamMemberInLine,
         UTMemberInLine,
         UserAdressInLine,
@@ -270,6 +299,8 @@ admin.site.register(UTMember)
 admin.site.register(Adress)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(TeamMember, TeamMemberAdmin)
+admin.site.register(AdminGroup, AdminGroupAdmin)
+admin.site.register(AdminGroupMember, AdminGroupMemberAdmin)
 #admin.site.register(EventType)
 admin.site.register(EventSeries, EventSeriesAdmin)
 admin.site.register(Event, EventAdmin)
@@ -280,7 +311,7 @@ admin.site.register(EventAct)
 #admin.site.register(Urgency)
 #admin.site.register(State)
 #admin.site.register(ConfirmationType)
-admin.site.register(Task)
+admin.site.register(Task, TaskAdmin)
 admin.site.register(Volunteering)
 admin.site.register(DeletedVolunteering) #debug, unregister later
 #admin.site.register(NotificationType)

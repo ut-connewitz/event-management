@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 
-from backend.models.user import Team, TeamMember
+from backend.models.user import AdminGroup, AdminGroupMember
 
 class UsersManagersTests(TestCase):
 
@@ -132,13 +132,13 @@ class UsersManagersTests(TestCase):
             pass
 
 
-        admin_group, created = Team.objects.get_or_create(name="UT-Admin")
+        admin_group, created = AdminGroup.objects.get_or_create(name="Veranstaltungsorganisation")
         #admin_group.user_set.add(admin) #does not call save() of TeamMember
         #admin.groups.add(admin_group) #does not call save() on TeamMember
         #admin.save()
         # use this for assigning users to admin group via code for automatically setting user.is_staff = True
-        membership, created = TeamMember.objects.get_or_create(user=admin, team=admin_group)
-        print("1"+ str(list(TeamMember.objects.filter(user=admin))))
+        membership, created = AdminGroupMember.objects.get_or_create(user=admin, admin_group=admin_group)
+        print("1"+ str(list(AdminGroupMember.objects.filter(user=admin))))
         admin.refresh_from_db()
         try:
             self.assertTrue(admin.is_staff)
@@ -151,15 +151,15 @@ class UsersManagersTests(TestCase):
         admin.groups.remove(admin_group)
         #admin.save()
         print("post bulk delete " +str(admin.is_staff))
-        # bulk deletion of teammembership needs db refresh for the user object
+        # bulk deletion of admin group membership needs db refresh for the user object
         self.assertTrue(admin.is_staff)
         admin.refresh_from_db()
         self.assertFalse(admin.is_staff)
         print("post bulk delete refresh " +str(admin.is_staff))
-        print("2"+ str(list(TeamMember.objects.filter(user=admin))))
+        print("2"+ str(list(AdminGroupMember.objects.filter(user=admin))))
 
-        membership, created = TeamMember.objects.get_or_create(user=admin, team=admin_group)
-        print("3"+ str(list(TeamMember.objects.filter(user=admin))))
+        membership, created = AdminGroupMember.objects.get_or_create(user=admin, admin_group=admin_group)
+        print("3"+ str(list(AdminGroupMember.objects.filter(user=admin))))
         admin.refresh_from_db()
         try:
             self.assertTrue(admin.is_staff)
@@ -170,7 +170,7 @@ class UsersManagersTests(TestCase):
         # testing the model instance delete() method
         # model instance deletion of teammembership does not need db refresh for the user object
         membership.delete()
-        print("4"+ str(list(TeamMember.objects.filter(user=admin))))
+        print("4"+ str(list(AdminGroupMember.objects.filter(user=admin))))
         print("post instance delete" +str(admin.is_staff))
         try:
             self.assertTrue(admin.is_staff)

@@ -4,6 +4,8 @@ from django.urls import reverse
 from django.db.utils import IntegrityError
 from .event_series import EventSeries
 
+from datetime import datetime
+
 
 class Event(models.Model):
     event_id = models.BigAutoField(primary_key=True)
@@ -38,11 +40,13 @@ class Event(models.Model):
         verbose_name_plural = "Veranstaltungen"
 
         constraints = [
-        models.UniqueConstraint(fields=["date", "start_time"], name="prevent event duplicates constraint")
+            models.UniqueConstraint(fields=["date", "start_time"], name="prevent event duplicates constraint")
         ]
 
+        ordering = ["date"]
+
     def __str__(self):
-        return str(self.series) + " " + str(self.date)
+        return str(self.series) + " " + str(self.date.strftime('%d.%m.%Y'))
 
     # overwrite save methods with caution!
     # this is meant to prevent db crash wenn multiple event days with equal starting times are entered from addtestdata.py
