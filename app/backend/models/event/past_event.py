@@ -22,6 +22,12 @@ class PastEvent(models.Model):
     start_time = models.TimeField(
         "Veranstaltungsbeginn",
     )
+    duration = models.PositiveIntegerField(
+        "Veranstaltungsdauer",
+        null=True,
+        blank=True,
+        help_text="Dauer in Minuten"
+    )    
     comment = models.TextField(
         "Kommentar",
         max_length=800,

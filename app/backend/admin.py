@@ -95,6 +95,7 @@ class PastEventAdmin(admin.ModelAdmin):
         'series',
         'date',
         'start_time',
+        'duration',
     ]
 
 class EventSeriesAdmin(admin.ModelAdmin):
