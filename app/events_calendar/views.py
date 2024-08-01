@@ -117,6 +117,7 @@ def past_event(request, past_event_id=None):
     form.fields['series'].disabled = True
     form.fields['date'].disabled = True
     form.fields['start_time'].disabled = True
+    form.fields['duration'].disabled = True
 
     if request.POST and form.is_valid():
         form.save()

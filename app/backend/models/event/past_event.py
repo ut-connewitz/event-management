@@ -26,8 +26,8 @@ class PastEvent(models.Model):
         "Veranstaltungsdauer",
         null=True,
         blank=True,
-        help_text="Dauer in Minuten"
-    )    
+        help_text="(Dauer in Minuten)"
+    )
     comment = models.TextField(
         "Kommentar",
         max_length=800,
