@@ -23,7 +23,8 @@ def delete_past_events():
             past_event_id = event.event_id,
             series = event.series,
             date = event.date,
-            start_time = event.start_time
+            start_time = event.start_time,
+            comment = event.comment,
         )
         past_event.save()
 

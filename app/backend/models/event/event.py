@@ -1,10 +1,13 @@
+from datetime import datetime
+
 from django.db import models
-from django.utils.timezone import now
-from django.urls import reverse
 from django.db.utils import IntegrityError
+from django.urls import reverse
+from django.utils.timezone import now
+
 from .event_series import EventSeries
 
-from datetime import datetime
+
 
 
 class Event(models.Model):
@@ -18,20 +21,25 @@ class Event(models.Model):
         "Datum",
         null=False,
         blank=False,
-        default=now,
     )
     start_time = models.TimeField(
         "Veranstaltungsbeginn",
         default=now,
     )
-    duration = models.DurationField(
-        "Veranstaltungsdauer",
-        null=True,
-        blank=True,
-    ) #TODO: test how this works
     admission_time = models.TimeField(
         "Einlassbeginn",
         null=True,
+        blank=True,
+    )
+    duration = models.PositiveIntegerField(
+        "Veranstaltungsdauer",
+        null=True,
+        blank=True,
+        help_text="Dauer in Minuten"
+    ) #TODO: test how this works
+    comment = models.TextField(
+        "Kommentar",
+        max_length=800,
         blank=True,
     )
 

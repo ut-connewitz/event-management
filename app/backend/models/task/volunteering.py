@@ -44,7 +44,7 @@ class Volunteering(models.Model):
     comment = models.TextField(
         "Kommentar",
         blank=True,
-        max_length=300,
+        max_length=800,
     )
 
     objects = VolunteeringManager()

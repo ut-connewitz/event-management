@@ -53,6 +53,7 @@ class Task(models.Model):
     )
     comment = models.TextField(
         "Kommentar",
+        max_length=800,
         blank=True,
     )
 

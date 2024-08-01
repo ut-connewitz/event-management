@@ -22,6 +22,11 @@ class PastEvent(models.Model):
     start_time = models.TimeField(
         "Veranstaltungsbeginn",
     )
+    comment = models.TextField(
+        "Kommentar",
+        max_length=800,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = "Vergangene Veranstaltung"

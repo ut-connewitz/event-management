@@ -91,6 +91,11 @@ class PastEventAdmin(admin.ModelAdmin):
     ordering = ["date"]
     list_display = ["series", "date", "start_time"]
     list_filter = ["series", "date"]
+    readonly_fields = [
+        'series',
+        'date',
+        'start_time',
+    ]
 
 class EventSeriesAdmin(admin.ModelAdmin):
     inlines = [

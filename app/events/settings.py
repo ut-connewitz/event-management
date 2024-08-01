@@ -145,7 +145,6 @@ TIME_FORMAT = 'H:i'
 
 TIME_INPUT_FORMATS = [
     '%H:%M',
-    '%H:%M:%S',
 ]
 
 DATE_FORMAT = 'd.m.Y'

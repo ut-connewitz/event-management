@@ -28,6 +28,9 @@ Vergangene Veranstaltung
   {% csrf_token %}
   <table class="form form-table">
     {{ form }}
+    {% if request.user.is_staff %}
+    <tr><td colspan="2"><button type="submit" class="btn btn-secondary right"> Speichern </button></td></tr>
+    {% endif %}
   </table>
 </form>
 {% endblock %}

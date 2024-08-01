@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from django.core.management.base import BaseCommand, CommandError
-from django.utils.dateparse import parse_datetime, parse_duration, parse_time
+from django.utils.dateparse import parse_datetime, parse_time
 from django.utils.timezone import get_current_timezone
 from django.contrib.auth.models import Group, Permission
 
@@ -79,7 +79,7 @@ class Command(BaseCommand):
             series=EventSeries.objects.get(event_name="BAIKALTRAIN DISCO"),
             date=parse_datetime("2024-02-24"),
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
-            duration=parse_duration("0 5:00:00"),
+            duration=300,
             admission_time=parse_time("19:30:00").replace(tzinfo=get_current_timezone()),
         )
         event1.save()
@@ -88,7 +88,7 @@ class Command(BaseCommand):
             series=EventSeries.objects.get(event_name="BAIKALTRAIN DISCO"),
             date=parse_datetime("2024-03-08"),
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
-            duration=parse_duration("0 5:00:00"),
+            duration=300,
             admission_time=parse_time("19:30:00").replace(tzinfo=get_current_timezone()),
         )
         event2.save()
@@ -97,7 +97,7 @@ class Command(BaseCommand):
             series=EventSeries.objects.get(event_name="BAIKALTRAIN DISCO"),
             date=date_within_the_week_after,
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
-            duration=parse_duration("0 5:00:00"),
+            duration=300,
             admission_time=parse_time("19:30:00").replace(tzinfo=get_current_timezone()),
         )
         event3.save()
@@ -106,7 +106,7 @@ class Command(BaseCommand):
             series=EventSeries.objects.get(event_name="JOHNNY & ME"),
             date=parse_datetime("2024-02-12"),
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
-            duration=parse_duration("0 2:17:00"),
+            duration=137,
             admission_time=parse_time("19:50:00").replace(tzinfo=get_current_timezone()),
         )
         event4.save()
@@ -115,7 +115,7 @@ class Command(BaseCommand):
             series=EventSeries.objects.get(event_name="JOHNNY & ME"),
             date=date_within_next_week,
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
-            duration=parse_duration("0 2:17:00"),
+            duration=137,
             admission_time=parse_time("19:50:00").replace(tzinfo=get_current_timezone()),
         )
         event5.save()
@@ -124,7 +124,7 @@ class Command(BaseCommand):
             series=EventSeries.objects.get(event_name="JOHNNY & ME"),
             date=date_in_the_past,
             start_time=parse_time("20:00:00").replace(tzinfo=get_current_timezone()),
-            duration=parse_duration("0 2:17:00"),
+            duration=137,
             admission_time=parse_time("19:50:00").replace(tzinfo=get_current_timezone()),
         )
         event6.save()
