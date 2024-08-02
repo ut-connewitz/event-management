@@ -1,17 +1,23 @@
-from django.forms import ModelForm, DateInput, TimeInput, BooleanField, HiddenInput
-from backend.models.event import Event
+from django.forms import ModelForm, DateInput, TimeInput, BooleanField, HiddenInput, DateField
+from backend.models.event import Event, PastEvent
 from backend.models.task import Task, Volunteering
+from datetime import datetime
+
+import logging
 
 class EventForm(ModelForm):
     class Meta:
         model = Event
         widgets = {
             'date': DateInput(
-                format=('%Y-%m-%d'),
+                format=('%d.%m.%Y'),
                 attrs={
                     'class': 'form-control',
                     'placeholder': 'Datum wählen',
-                    'type': 'date',
+                    #'type': 'date',
+                    # chosing the 'type': 'date' option enables the actual date-picking widget
+                    # but defaults the input value to the current date and makes saving dates impossible
+                    # due to a format error
                     }),
             'start_time': TimeInput(
                 format=('%H:%M'),
@@ -23,6 +29,10 @@ class EventForm(ModelForm):
                 attrs={
                 'type': 'time-local',
                 'class': 'form-control'}),
+            'duration': TimeInput(
+                format=('%H:%M'),
+                attrs={
+                    'class': 'form-control'}),
         }
         fields = '__all__'
 
@@ -30,6 +40,28 @@ class EventForm(ModelForm):
         super(EventForm, self).__init__(*args, **kwargs)
         self.fields['start_time'].input_formats = ('%H:%M',)
         self.fields['admission_time'].input_formats = ('%H:%M',)
+        self.fields['duration'].input_formats = ('%H:%M',)
+        #self.fields['duration'].help_text = 'Eingabeformat der Veranstaltungsdauer: HH:MM'
+        self.fields['date'].input_formats = ('%d.%m.%Y',)
+        #logger = logging.getLogger(__name__) #debug
+        #logger.error(str(self.instance.date)) #debug
+        #logger.error(str(self.instance.date.strftime('%d.%m.%Y')))
+        #self.fields['date'].initial = self.instance.date.strftime('%d.%m.%Y')
+        #self.fields['date'].initial = self.instance.date
+
+class PastEventForm(ModelForm):
+    class Meta:
+        model = PastEvent
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(PastEventForm, self).__init__(*args, **kwargs)
+        self.fields['start_time'].input_formats = ('%H:%M',)
+        self.fields['date'].input_formats = ('%d.%m.%Y',)
+        #logger = logging.getLogger(__name__) #debug
+        #logger.error(str(self.instance.date)) #debug
+        #logger.error(str(self.instance.date.strftime('%d.%m.%Y')))
+        #self.fields['date'].initial = self.instance.date.strftime('%d.%m.%Y')
 
 class TaskForm(ModelForm):
     # this hidden fields purpose is determine which form is submitted in the post request

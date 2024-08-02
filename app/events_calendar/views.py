@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, date
 import calendar
-#import logging
+import logging
 
 from django.conf import settings
 from django.shortcuts import redirect, render, get_object_or_404
@@ -8,15 +8,16 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.utils.timezone import now
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import HiddenInput
 
 
-from backend.models.event import Event
+from backend.models.event import Event, PastEvent
 from backend.models.task import Task, Volunteering, ConfirmationType, State
 from .utils import Calendar
-from .forms import EventForm, TaskForm, VolunteeringForm
+from .forms import EventForm, PastEventForm, TaskForm, VolunteeringForm
 
 
 class CalendarView(LoginRequiredMixin, generic.ListView):
@@ -64,15 +65,27 @@ def event(request, event_id=None):
     instance = Event()
     if event_id:
         instance = get_object_or_404(Event, pk=event_id)
+        initial_date = instance.date.strftime('%d.%m.%Y')
     else:
         instance = Event()
         event_id = instance.event_id
+        initial_date = now().date().strftime('%d.%m.%Y')
         #logger = logging.getLogger(__name__) #debug
         #logger.error('new instance id: '+str(event_day_id)) #debug
 
-    form = EventForm(request.POST or None, instance=instance)
+    #logger = logging.getLogger(__name__) #debug
+    #logger.error(str(instance.date)) #debug
+    #logger.error(str(instance.date.strftime('%d.%m.%Y')))
+
+    form = EventForm(
+        request.POST or None,
+        instance=instance,
+        initial={
+            'date': initial_date
+        }
+    )
     if not request.user.is_staff:
-        form.fields['event_series'].disabled = True
+        form.fields['series'].disabled = True
         form.fields['date'].disabled = True
         form.fields['start_time'].disabled = True
         form.fields['duration'].disabled = True
@@ -87,6 +100,34 @@ def event(request, event_id=None):
         'form': form,
     }
     return render(request, 'events_calendar/event.html', context=context)
+
+@login_required
+def past_event(request, past_event_id=None):
+
+    instance = get_object_or_404(PastEvent, pk=past_event_id)
+
+    form = PastEventForm(
+        request.POST or None,
+        instance=instance,
+        initial={
+            'date': instance.date.strftime('%d.%m.%Y')
+        }
+    )
+
+    form.fields['series'].disabled = True
+    form.fields['date'].disabled = True
+    form.fields['start_time'].disabled = True
+    form.fields['duration'].disabled = True
+
+    if request.POST and form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('ecal:calendar'))
+
+    context = {
+        'past_event_id' : past_event_id,
+        'form': form,
+    }
+    return render(request, 'events_calendar/past_event.html', context=context)
 
 @login_required
 def task(request, task_id=None, volunteering_id=None, event_id=None):

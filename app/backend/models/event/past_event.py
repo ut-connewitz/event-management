@@ -1,17 +1,14 @@
-from datetime import datetime
-
 from django.db import models
-from django.db.utils import IntegrityError
-from django.urls import reverse
 from django.utils.timezone import now
-
+from django.urls import reverse
+from django.db.utils import IntegrityError
 from .event_series import EventSeries
 
+from datetime import datetime
 
 
-
-class Event(models.Model):
-    event_id = models.BigAutoField(primary_key=True)
+class PastEvent(models.Model):
+    past_event_id = models.BigAutoField(primary_key=True)
     series = models.ForeignKey(
         EventSeries,
         on_delete=models.CASCADE,
@@ -24,19 +21,13 @@ class Event(models.Model):
     )
     start_time = models.TimeField(
         "Veranstaltungsbeginn",
-        default=now,
-    )
-    admission_time = models.TimeField(
-        "Einlassbeginn",
-        null=True,
-        blank=True,
     )
     duration = models.PositiveIntegerField(
         "Veranstaltungsdauer",
         null=True,
         blank=True,
-        help_text="(in Minuten: '127' für 2 h 7 min)"
-    ) #TODO: test how this works
+        help_text="(Dauer in Minuten)"
+    )
     comment = models.TextField(
         "Kommentar",
         max_length=800,
@@ -44,12 +35,8 @@ class Event(models.Model):
     )
 
     class Meta:
-        verbose_name = "Veranstaltung"
-        verbose_name_plural = "Veranstaltungen"
-
-        constraints = [
-            models.UniqueConstraint(fields=["date", "start_time"], name="prevent event duplicates constraint")
-        ]
+        verbose_name = "Vergangene Veranstaltung"
+        verbose_name_plural = "Vergangene Veranstaltungen"
 
         ordering = ["date"]
 
@@ -63,7 +50,7 @@ class Event(models.Model):
     # exception handling in the admin panel is not affected
     def save(self, *args, **kwargs):
         try:
-            super(Event, self).save(*args, **kwargs)
+            super(PastEvent, self).save(*args, **kwargs)
         except IntegrityError as e:
             error_message = e.__cause__
             print(error_message)
@@ -71,5 +58,5 @@ class Event(models.Model):
 
     @property
     def get_html_url(self):
-        url = reverse('events_calendar:event_edit', args=(self.event_id,))
+        url = reverse('events_calendar:past_event_edit', args=(self.past_event_id,))
         return f'<a href="{url}"> {self.series.event_name} </a>'

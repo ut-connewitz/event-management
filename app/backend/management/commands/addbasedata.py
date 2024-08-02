@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from backend.models.event import (EventSeries, Act, Event, EventType)
+from backend.models.event import (EventSeries, Act, Event, EventType, PastEvent)
 from backend.models.task import (Task, ConfirmationType, State, TaskType, TeamRestriction, Urgency, Volunteering)
 from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, Adress, Team, TeamMember)
 from backend import models
@@ -12,6 +12,7 @@ ADMIN_GROUP_PERMISSIONS = {
         models.event.EventSeries: ['add', 'change', 'view'],
         models.event.Act: ['add', 'change', 'delete', 'view'],
         models.event.Event: ['add', 'change', 'delete', 'view'],
+        models.event.PastEvent: ['change', 'view'],
         models.task.Task: ['add', 'change', 'delete', 'view'],
         models.task.Volunteering: ['add', 'change', 'delete', 'view'],
         models.user.Adress: ['add', 'change', 'delete', 'view'],

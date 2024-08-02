@@ -2,7 +2,7 @@ from django.db import models
 
 class Act(models.Model):
     act_name = models.CharField(
-        "Aktname",
+        "Name",
         max_length=40,
         primary_key=True
     )

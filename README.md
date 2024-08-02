@@ -117,7 +117,8 @@ event-management/
 │   │   │   ├── events_calendar
 │   │   │   │   ├── base.html
 │   │   │   │   ├── calendar.html
-│   │   │   │   ├── event_day.html
+│   │   │   │   ├── event.html
+│   │   │   │   ├── past_event.html
 │   │   │   │   └── task.html
 │   │   │   └── registration
 │   │   │       └── login.html
