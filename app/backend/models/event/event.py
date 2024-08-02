@@ -35,7 +35,7 @@ class Event(models.Model):
         "Veranstaltungsdauer",
         null=True,
         blank=True,
-        help_text="(Dauer in Minuten)"
+        help_text="(in Minuten: '127' für 2 h 7 min)"
     ) #TODO: test how this works
     comment = models.TextField(
         "Kommentar",
