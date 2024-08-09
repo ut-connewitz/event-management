@@ -2,8 +2,18 @@
 
 .membership {
   margin: auto;
-  width: 50%;
-  border: 3px solid #73AD21;
+  padding: 10%
+  width: 90%;
+  border: 3px solid rgba(177, 153, 118, 0.95);
+  border-radius: 15px;
+  text-align: center;
+}
+
+.mail_reminder {
+  margin: auto;
+  padding: 10%
+  width: 90%;
+  border: 3px solid rgb(151, 117, 113);
   border-radius: 15px;
   text-align: center;
 }

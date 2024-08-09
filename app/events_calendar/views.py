@@ -140,6 +140,7 @@ def task(request, task_id=None, volunteering_id=None, event_id=None):
     task_id = task_instance.task_id
 
     volunteering_instance = Volunteering()
+    is_new_volunteering = False
     try:
         volunteering_instance = Volunteering.objects.get(
             task = task_instance,
@@ -149,14 +150,24 @@ def task(request, task_id=None, volunteering_id=None, event_id=None):
             task = task_instance,
             user = request.user,
         )
+        is_new_volunteering = True
+
 
     if event_id:
         event = Event.objects.get(event_id=event_id)
-        task_form = TaskForm(instance=task_instance, initial={'event': event})
+        task_form = TaskForm(request.POST or None, instance=task_instance, initial={'event': event})
     else:
-        task_form = TaskForm(instance=task_instance)
+        task_form = TaskForm(request.POST or None, instance=task_instance)
 
-    volunteering_form = VolunteeringForm(instance=volunteering_instance)
+    volunteering_form = VolunteeringForm(
+        request.POST or None,
+        instance=volunteering_instance,
+        initial={
+            'confirmation_type': ConfirmationType.YES,
+            'user': request.user,
+        })
+    if is_new_volunteering:
+        volunteering_form.fields['confirmation_type'].disabled = True
 
     if not request.user.is_staff:
         task_form.fields['event'].disabled = True
@@ -194,13 +205,11 @@ def task(request, task_id=None, volunteering_id=None, event_id=None):
 
     if request.method == 'POST':
         if 'edit_task' in request.POST:
-            task_form = TaskForm(request.POST or None, instance=task_instance)
             if task_form.is_valid():
                 task_form.save()
                 return HttpResponseRedirect(reverse('ecal:calendar'))
 
         if 'edit_volunteering' in request.POST and (request.user == volunteering_instance.user or request.user.is_staff):
-            volunteering_form = VolunteeringForm(request.POST or None, instance=volunteering_instance)
             if volunteering_form.is_valid() and request.POST.get('volunteering_button')=="volunteering":
                 confirmation_type = volunteering_form.cleaned_data["confirmation_type"]
                 volunteering_form.save()
