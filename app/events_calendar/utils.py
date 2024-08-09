@@ -28,8 +28,8 @@ class Calendar(HTMLCalendar):
                     if user_team.team.name == "Verwaltung":
                         return True
 
-    #formats a days as td
-    #filters event_days by day
+    #formats a days as table cell
+    #filters events by day
     def formatday(self, day, events, past_events):
         events_per_day = events.filter(date__day=day)
         past_events_per_day = past_events.filter(date__day=day)
@@ -50,9 +50,9 @@ class Calendar(HTMLCalendar):
                 pass_team_restriction = self.check_team_restriction(team_restriction, user_teams)
                 if self.user.is_staff or pass_team_restriction:
                     if task.urgency == Urgency.URGENT:
-                        task_html += f'<li class ="urgency_urgent">{task.get_html_url} (dringend!)</li>'
+                        task_html += f'<li class ="urgency_urgent">{task.get_html_url} &#9200;</li>'
                     elif task.urgency == Urgency.IMPORTANT:
-                        task_html += f'<li class ="urgency_important">{task.get_html_url} (!)</li>'
+                        task_html += f'<li class ="urgency_important">{task.get_html_url} &#8252;</li>'
                     elif task.urgency == Urgency.MEDIUM:
                         task_html += f'<li class ="urgency_medium">{task.get_html_url}</li>'
                     else:
@@ -76,25 +76,27 @@ class Calendar(HTMLCalendar):
             day_content += f'<li class="past_event">{past_event.get_html_url} </li>'
 
         if day!= 0:
-            return f"<td><span class='date'>{day}</span><ul> {day_content} </ul></td>"
-        return '<td></td>'
+            if day_content!='':
+                return f"<td><div class='event_day'><span class='date'>{day}</span><ul> {day_content} </ul></div></td>"
+            return f"<td><div class='empty_day'><span class='date'>{day}</span></div></td>"
+        return "<td><div class='other_month'></div></td>"
 
     #formats a week as tr
     def formatweek(self, theweek, events, past_events):
-        week = ''
-        for d, weekday in theweek:
-            week += self.formatday(d, events, past_events)
-        return f'<tr> {week} </tr>'
+        week_html = ''
+        for day, weekday in theweek:
+            week_html += self.formatday(day, events, past_events)
+        return f'<tr> {week_html} </tr>'
 
     #formats a month as a table
-    #filters event_days by year and month
+    #filters events by year and month
     def formatmonth(self, withyear=True):
         events = Event.objects.filter(date__year=self.year, date__month=self.month)
         past_events = PastEvent.objects.filter(date__year=self.year, date__month=self.month)
-        #cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
-        cal = f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
-        cal += f'{self.formatweekheader()}\n'
+        #calendar_html = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
+        calendar_html = f'{self.formatmonthname(self.year, self.month, withyear=withyear)}\n'
+        calendar_html += f'{self.formatweekheader()}\n'
         for week in self.monthdays2calendar(self.year, self.month):
-		          cal += f'{self.formatweek(week, events, past_events)}\n'
-        cal += f'</table>'
-        return cal
+		          calendar_html += f'{self.formatweek(week, events, past_events)}\n'
+        #calendar_html += f'</table>'
+        return calendar_html
