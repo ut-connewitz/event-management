@@ -4,6 +4,7 @@
   width: 98%;
   margin: auto;
   font-size: 13px;
+  font-size: 0.8rem;
 }
 
 .calendar tr, .calendar td {
@@ -14,20 +15,47 @@
   padding: 10px;
   text-align: center;
   font-size: 18px;
+  font-size: 1.125rem;
 }
 
 .calendar td {
-  width: 200px;
-  height: 150px;
-  padding: 20px 0px 0px 5px;
+  width: 1%;
+  height: 1%;
+  padding: 1% 1% 1% 1%;
+  vertical-align: top;
 }
 
 .month {
   font-size: 25px;
+  font-size: 1.8rem;
 }
 
 .date {
   font-size: 16px;
+  font-size: 1rem;
+  padding: 0% 1% 1% 0%;
+  /*vertical-align: top;*/
+}
+
+.event_day {
+  font-size: 16px;
+  font-size: 1rem;
+  min-height: 100px;
+  min-width: 50px;
+}
+
+.empty_day {
+  font-size: 16px;
+  font-size: 1rem;
+  min-height: 100px;
+  min-width: 10px;
+}
+
+.other_month {
+  font-size: 16px;
+  font-size: 1rem;
+  min-height: 5px;
+  min-width: 5px;
 }
 
 .taken_task{
