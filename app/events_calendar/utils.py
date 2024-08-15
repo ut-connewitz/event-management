@@ -36,50 +36,93 @@ class Calendar(HTMLCalendar):
         day_content = ''
 
         for event in events_per_day:
-            day_content += f'<li>{event.get_html_url} </li>'
-            free_tasks = Task.objects.filter(event=event, state=State.FREE)
-            #logger = logging.getLogger(__name__) #debug
-            #logger.error(str(free_tasks)) #debug
-            taken_tasks = Task.objects.filter(event=event, state=State.TAKEN)
-            task_html = ''
-            user_teams = TeamMember.objects.filter(user=self.user)
+            empty_task_html = f'''<div class="collapse"
+                            id="{event.event_id}_tasks"
+                            aria-labelledby="#{event.event_id}_tasks_header"
+                            data-parent=#{event.event_id}_tasks_header>
+                                <ul>
+                                '''
+            empty_task_html_closure = '</ul></div>'
+            task_html = self.get_event_task_html(event, empty_task_html, empty_task_html_closure)
 
 
-            for task in free_tasks:
-                team_restriction = task.team_restriction
-                pass_team_restriction = self.check_team_restriction(team_restriction, user_teams)
-                if self.user.is_staff or pass_team_restriction:
-                    if task.urgency == Urgency.URGENT:
-                        task_html += f'<li class ="urgency_urgent">{task.get_html_url} &#9200;</li>'
-                    elif task.urgency == Urgency.IMPORTANT:
-                        task_html += f'<li class ="urgency_important">{task.get_html_url} &#8252;</li>'
-                    elif task.urgency == Urgency.MEDIUM:
-                        task_html += f'<li class ="urgency_medium">{task.get_html_url}</li>'
-                    else:
-                        task_html += f'<li>{task.get_html_url}</li>'
+            if task_html != empty_task_html + empty_task_html_closure:
+                #day_content += f'<ul>' + task_html +f'</ul>'
+                day_content += f'''<li>{event.get_html_url}
+                                    <br>
+                                        <div id="{event.event_id}_tasks_header"
+                                                <button class="btn btn-secondary btn-sm"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#{event.event_id}_tasks"
+                                                    aria-expanded="false"
+                                                    aria-controls="{event.event_id}_tasks">
+                                                        Aufgaben
+                                                </button>
+                                        </div>
+                                            {task_html}
+                                    </li>'''
+            else:
+                day_content += f'<li>{event.get_html_url}</li>'
 
-
-            for task in taken_tasks:
-                try:
-                    task_volunteering = Volunteering.objects.get(task=task)
-                    volunteering_user = task_volunteering.user
-                except Volunteering.DoesNotExist:
-                    volunteering_user = None
-
-                if self.user.is_staff or self.user == task_volunteering.user:
-                    task_html += f'<li class ="taken_task">{task.get_html_url} &#10003;</li>'
-
-            if task_html != '':
-                day_content += f'<ul>' + task_html +f'</ul>'
 
         for past_event in past_events_per_day:
             day_content += f'<li class="past_event">{past_event.get_html_url} </li>'
 
         if day!= 0:
             if day_content!='':
-                return f"<td><div class='event_day'><span class='date'>{day}</span><ul> {day_content} </ul></div></td>"
-            return f"<td><div class='empty_day'><span class='date'>{day}</span></div></td>"
+                return f"""<td>
+                                <div class='event_day'>
+                                    <span class='date'>
+                                        {day}
+                                    </span>
+                                    <ul>
+                                        {day_content}
+                                    </ul>
+                                </div>
+                            </td>"""
+            return f"""<td>
+                            <div class='empty_day'>
+                                <span class='date'>
+                                    {day}
+                                </span>
+                            </div>
+                        </td>"""
         return "<td><div class='other_month'></div></td>"
+
+    def get_event_task_html(self, event, empty_task_html, empty_task_html_closure):
+        free_tasks = Task.objects.filter(event=event, state=State.FREE)
+        #logger = logging.getLogger(__name__) #debug
+        #logger.error(str(free_tasks)) #debug
+        taken_tasks = Task.objects.filter(event=event, state=State.TAKEN)
+        task_html = empty_task_html
+        user_teams = TeamMember.objects.filter(user=self.user)
+
+        for task in free_tasks:
+            team_restriction = task.team_restriction
+            pass_team_restriction = self.check_team_restriction(team_restriction, user_teams)
+            if self.user.is_staff or pass_team_restriction:
+                if task.urgency == Urgency.URGENT:
+                    task_html += f'<li class ="urgency_urgent">{task.get_html_url} &#9200;</li>'
+                elif task.urgency == Urgency.IMPORTANT:
+                    task_html += f'<li class ="urgency_important">{task.get_html_url} &#8252;</li>'
+                elif task.urgency == Urgency.MEDIUM:
+                    task_html += f'<li class ="urgency_medium">{task.get_html_url}</li>'
+                else:
+                    task_html += f'<li>{task.get_html_url}</li>'
+
+        for task in taken_tasks:
+            try:
+                task_volunteering = Volunteering.objects.get(task=task)
+                volunteering_user = task_volunteering.user
+            except Volunteering.DoesNotExist:
+                volunteering_user = None
+
+            if self.user.is_staff or self.user == task_volunteering.user:
+                task_html += f'<li class ="taken_task">{task.get_html_url} &#10003;</li>'
+
+        task_html += empty_task_html_closure
+        return task_html
 
     #formats a week as tr
     def formatweek(self, theweek, events, past_events):
