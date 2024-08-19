@@ -4,7 +4,11 @@ from .value_type import ValueType
 
 
 class Setting(models.Model):
-    setting_name = models.CharField("Einstellungsname", primary_key=True)
+    setting_id = models.BigAutoField(primary_key=True)
+    setting_name = models.CharField(
+        "Einstellungsname",
+        max_length=50,
+    )
     setting_type = models.CharField(
         "Einstellungsart",
         max_length=2,

@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from backend.forms import CustomUserCreationForm, CustomUserChangeForm, CustomAdminPasswordChangeForm
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
 from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, Adress, Team, TeamMember)
-from backend.models.event import(Event, EventSeries, Act, EventAct, PastEvent)
+from backend.models.event import(Event, EventSeries, Act, EventAct, PastEvent, Location)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering, DeletedVolunteering)
 
@@ -27,31 +27,49 @@ admin.site.index_title = "Administration"
 
 class AdminGroupMemberInLine(admin.TabularInline):
     model = AdminGroupMember
+    extra = 1
+    classes = ('collapse')
 
-class EventInLine(admin.TabularInline):
+class EventInLine(admin.StackedInline):
     model = Event
+    extra = 0
+    classes = ('collapse')
 
 class EventActInLine(admin.TabularInline):
     model = EventAct
+    extra = 1
+    classes = ('collapse')
 
 class TaskInline(admin.TabularInline):
     model = Task
+    extra = 3
+    classes = ('collapse')
 
 class TeamMemberInLine(admin.TabularInline):
     model = TeamMember
+    extra = 1
+    classes = ('collapse')
 
 class UTMemberInLine(admin.TabularInline):
     model = UTMember
+    extra = 0
+    classes = ('collapse')
 
 class UserAdressInLine(admin.TabularInline):
     model = Adress
+    extra = 0
+    classes = ('collapse')
 
 class UserGroupInLine(admin.TabularInline):
     model = User.groups.through
     raw_id_fields=("user",)
+    extra = 1
+    classes = ('collapse')
 
 class VolunteeringInLine(admin.TabularInline):
     model = Volunteering
+    extra = 0
+    classes = ('collapse')
 
 
 # admins
@@ -83,19 +101,21 @@ class EventAdmin(admin.ModelAdmin):
         EventActInLine,
     ]
     ordering = ["date"]
-    list_display = ["series", "date", "start_time"]
-    list_filter = ["series", "date"]
+    list_display = ["series", "subtitle", "date", "start_time", "location"]
+    list_filter = ["series", "subtitle", "date", "location"]
 
 class PastEventAdmin(admin.ModelAdmin):
     model = PastEvent
     ordering = ["date"]
-    list_display = ["series", "date", "start_time"]
-    list_filter = ["series", "date"]
+    list_display = ["series", "subtitle", "date", "start_time", "location"]
+    list_filter = ["series", "subtitle", "date", "location"]
     readonly_fields = [
         'series',
+        'subtitle',
         'date',
         'start_time',
         'duration',
+        'location',
     ]
 
 class EventSeriesAdmin(admin.ModelAdmin):
@@ -319,6 +339,7 @@ admin.site.register(Event, EventAdmin)
 admin.site.register(Act)
 admin.site.register(EventAct)
 admin.site.register(PastEvent, PastEventAdmin)
+admin.site.register(Location)
 #admin.site.register(TaskType)
 #admin.site.register(TeamRestriction)
 #admin.site.register(Urgency)

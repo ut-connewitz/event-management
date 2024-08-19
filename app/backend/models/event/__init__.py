@@ -6,3 +6,4 @@ from .event_series import EventSeries
 from .act import Act
 from .event_act import EventAct
 from .past_event import PastEvent
+from .location import Location

@@ -19,6 +19,7 @@ from backend.models.user import User
 #        return DeletedVolunteeringQuerySet(model=self.model, using=self._db, hints=self._hints)
 
 class DeletedVolunteering(models.Model):
+    deleted_volunteering_id = models.BigAutoField(primary_key=True)
     task = models.ForeignKey(
         Task,
         null=True,
