@@ -1,11 +1,12 @@
 from django.db import models
+from django.db.utils import IntegrityError
 from .event_type import EventType
 
 class EventSeries(models.Model):
     series_id = models.BigAutoField(primary_key=True)
     event_name = models.CharField(
-        "Name der Vorlage",
-        help_text="Der Name der Vorlage erscheint als Name der daraus erstellten Veranstaltungen und kann dabei optional um einen Veranstaltungstitel erweitert werden.",
+        "Name der Reihe",
+        help_text="Der Name der Reihe bildet den ersten Teil des Namens der daraus erstellten Veranstaltungen und kann dabei optional um einen Veranstaltungstitel erweitert werden.",
         max_length=50,
     )
     event_type = models.CharField(
@@ -38,8 +39,20 @@ class EventSeries(models.Model):
     )
 
     class Meta:
-        verbose_name = "Veranstaltungsvorlage"
-        verbose_name_plural = "Veranstaltungsvorlagen"
+        ordering = ["event_name"]
+        verbose_name = "Veranstaltungsreihe"
+        verbose_name_plural = "Veranstaltungsreihen"
+        constraints = [
+            models.UniqueConstraint(fields=["event_name"], name="prevent EventSeries name duplicates constraint")
+        ]
 
     def __str__(self):
         return str(self.event_name)
+
+    def save(self, *args, **kwargs):
+        try:
+            super(EventSeries, self).save(*args, **kwargs)
+        except IntegrityError as e:
+            error_message = e.__cause__
+            print(error_message)
+            pass

@@ -3,7 +3,8 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from backend.models.event import (EventSeries, Act, Event, EventType, PastEvent, Location)
 from backend.models.task import (Task, ConfirmationType, State, TaskType, TeamRestriction, Urgency, Volunteering)
-from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, Adress, Team, TeamMember)
+from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, UserAdress, Team, TeamMember)
+from backend.models.misc import Adress
 from backend import models
 from django.db.utils import IntegrityError
 
@@ -12,15 +13,16 @@ ADMIN_GROUP_PERMISSIONS = {
         models.event.EventSeries: ['add', 'change', 'view'],
         models.event.Act: ['add', 'change', 'delete', 'view'],
         models.event.Event: ['add', 'change', 'delete', 'view'],
-        models.event.Location: ['add', 'change', 'view'],
+        models.event.Location: ['add', 'change', 'delete', 'view'],
         models.event.PastEvent: ['change', 'view'],
+        models.misc.Adress: ['add', 'change', 'delete', 'view'],
         models.task.Task: ['add', 'change', 'delete', 'view'],
         models.task.Volunteering: ['add', 'change', 'delete', 'view'],
-        models.user.Adress: ['add', 'change', 'delete', 'view'],
         models.user.TeamMember: ['add', 'change', 'delete', 'view'],
         models.user.Team: ['view'],
         models.user.AdminGroupMember: ['view'],
         models.user.User: ['add', 'change', 'view'],
+        models.user.UserAdress: ['add', 'change', 'delete', 'view'],
         models.user.UTMember: ['add', 'change', 'delete', 'view'],
     }
 }
