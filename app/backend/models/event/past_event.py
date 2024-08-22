@@ -3,6 +3,7 @@ from django.utils.timezone import now
 from django.urls import reverse
 from django.db.utils import IntegrityError
 from .event_series import EventSeries
+from .location import Location
 
 from datetime import datetime
 
@@ -13,6 +14,11 @@ class PastEvent(models.Model):
         EventSeries,
         on_delete=models.CASCADE,
         verbose_name = "Veranstaltungsreihe",
+    )
+    subtitle = models.TextField(
+        "Veranstaltungsname",
+        max_length=100,
+        blank=True,
     )
     date = models.DateField(
         "Datum",
@@ -27,6 +33,13 @@ class PastEvent(models.Model):
         null=True,
         blank=True,
         help_text="(Dauer in Minuten)"
+    )
+    location = models.ForeignKey(
+        Location,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name="Ort",
     )
     comment = models.TextField(
         "Kommentar",

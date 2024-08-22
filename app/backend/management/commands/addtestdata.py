@@ -6,10 +6,11 @@ from django.utils.timezone import get_current_timezone
 from django.contrib.auth.models import Group, Permission
 
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
-from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, Adress, Team, TeamMember)
+from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, UserAdress, Team, TeamMember)
 from backend.models.event import(EventType, EventSeries, Event, Act, EventAct)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering)
+from backend.models.misc import Adress
 
 class Command(BaseCommand):
     help = "Fügt der Datenbank Testdaten hinzu"
@@ -48,12 +49,17 @@ class Command(BaseCommand):
         user2.save()
 
         adress_jd = Adress(
-            user=User.objects.get(username="jd"),
             street="Forstweg",
             house_number="13a",
             postal_code="43221",
         )
         adress_jd.save()
+
+        user_adress_jd = UserAdress(
+            user=User.objects.get(username="jd"),
+            adress=Adress.objects.get(street="Forstweg"),
+        )
+        user_adress_jd.save()
 
 
 

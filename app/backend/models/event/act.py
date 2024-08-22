@@ -1,18 +1,42 @@
 from django.db import models
 
 class Act(models.Model):
+    act_id = models.BigAutoField(primary_key=True)
     act_name = models.CharField(
         "Name",
         max_length=40,
-        primary_key=True
     )
-    person_count = models.PositiveIntegerField("Personenzahl", null=True, blank=True)
-    act_image = models.ImageField("Bild", null=True, blank=True)
+    person_count = models.PositiveIntegerField(
+        "Personenzahl",
+        null=True,
+        blank=True,
+    )
+    act_image = models.ImageField(
+        "Bild",
+        null=True,
+        blank=True,
+    )
     #TODO: test options for music files
-    music_sample = models.FileField("Musikbeispiel", null=True, blank=True)
-    diet = models.CharField("Ernährung", blank=True, max_length=100)
-    act_email = models.EmailField("Email", null=True, blank=True, max_length=100)
-    act_phone = models.CharField("Telefon", blank=True, max_length=15)
+    music_sample = models.FileField(
+        "Musikbeispiel",
+        null=True,
+        blank=True,
+    )
+    diet = models.CharField(
+        "Ernährung",
+        blank=True,
+        max_length=400,
+    )
+    act_email = models.EmailField(
+        "Email",
+        null=True,
+        blank=True,
+        max_length=100)
+    act_phone = models.CharField(
+        "Telefon",
+        blank=True,
+        max_length=15,
+    )
 
     class Meta:
         verbose_name = "Ensemble"

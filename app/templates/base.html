@@ -33,7 +33,7 @@
 <body>
   <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"> UT-Connewitz Veranstaltungen </a>
+      <a class="navbar-brand" href="{% url 'ecal:calendar' %}"> UT Connewitz Veranstaltungen </a>
 
       <button class="navbar-toggler"
               type="button"
@@ -75,11 +75,10 @@
   {% block script %}
   {% endblock %}
 
-<footer class="bg-black text-white text-center fixed-bottom">
-  <div class="container p-2">
-    <span class="text-white">
-      Dies ist ein open-source Software Projekt:
-      <a href="https://github.com/ut-connewitz/event-management" class="text-white"> Link zum Quelltext auf github.com </a>
+<footer class="text-center fixed-bottom">
+  <div class="container p-1">
+    <span>
+      <a href="https://github.com/ut-connewitz/event-management"> public source code repository </a>
     </span>
   </div>
 </footer>

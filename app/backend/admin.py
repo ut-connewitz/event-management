@@ -9,10 +9,11 @@ from django.core.exceptions import ValidationError
 
 from backend.forms import CustomUserCreationForm, CustomUserChangeForm, CustomAdminPasswordChangeForm
 from backend.models.setting import (Setting, UserSettingValue, BoolValue, IntValue, EnumValue)
-from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, Adress, Team, TeamMember)
-from backend.models.event import(Event, EventSeries, Act, EventAct, PastEvent)
+from backend.models.user import (AdminGroup, AdminGroupMember, User, UTMember, UserAdress, Team, TeamMember)
+from backend.models.event import(Event, EventSeries, Act, EventAct, PastEvent, Location)
 from backend.models.notification import (NotificationType, Notification, TaskNotification, VolunteeringNotification)
 from backend.models.task import (TaskType, TeamRestriction, Urgency, State, Task, ConfirmationType, Volunteering, DeletedVolunteering)
+from backend.models.misc import Adress
 
 # some admin site customisation
 # link to website
@@ -24,41 +25,66 @@ admin.site.index_title = "Administration"
 
 
 # inlines
-
-class AdminGroupMemberInLine(admin.TabularInline):
+class AdminGroupMemberInline(admin.TabularInline):
     model = AdminGroupMember
+    extra = 1
+    classes = ('collapse')
 
-class EventInLine(admin.TabularInline):
+class EventInline(admin.StackedInline):
     model = Event
+    extra = 0
 
-class EventActInLine(admin.TabularInline):
+class EventActInline(admin.TabularInline):
     model = EventAct
+    extra = 1
+    classes = ('collapse')
+
+class LocationInline(admin.StackedInline):
+    model = Location
+    extra = 0
+    classes = ('collapse')
 
 class TaskInline(admin.TabularInline):
     model = Task
+    extra = 1
 
-class TeamMemberInLine(admin.TabularInline):
+class TeamMemberInline(admin.TabularInline):
     model = TeamMember
+    extra = 1
 
-class UTMemberInLine(admin.TabularInline):
+class UTMemberInline(admin.TabularInline):
     model = UTMember
+    extra = 0
+    classes = ('collapse')
 
-class UserAdressInLine(admin.TabularInline):
-    model = Adress
+class UserAdressInline(admin.StackedInline):
+    model = UserAdress
+    extra = 0
+    classes = ('collapse')
 
-class UserGroupInLine(admin.TabularInline):
+class UserGroupInline(admin.TabularInline):
     model = User.groups.through
     raw_id_fields=("user",)
+    extra = 1
+    classes = ('collapse')
 
-class VolunteeringInLine(admin.TabularInline):
+class VolunteeringInline(admin.TabularInline):
     model = Volunteering
+    extra = 0
+    classes = ('collapse')
 
 
 # admins
+class AdressAdmin(admin.ModelAdmin):
+    model = Adress
+    inlines = [
+        UserAdressInline,
+        LocationInline,
+    ]
 
 class AdminGroupAdmin(GroupAdmin):
     inlines = [
-        UserGroupInLine,
+        UserGroupInline,
     ]
 
 class AdminGroupMemberAdmin(admin.ModelAdmin):
@@ -80,27 +106,29 @@ class EventAdmin(admin.ModelAdmin):
     model = Event
     inlines = [
         TaskInline,
-        EventActInLine,
+        EventActInline,
     ]
     ordering = ["date"]
-    list_display = ["series", "date", "start_time"]
-    list_filter = ["series", "date"]
+    list_display = ["series", "subtitle", "date", "start_time", "location"]
+    list_filter = ["series", "subtitle", "date", "location"]
 
 class PastEventAdmin(admin.ModelAdmin):
     model = PastEvent
     ordering = ["date"]
-    list_display = ["series", "date", "start_time"]
-    list_filter = ["series", "date"]
+    list_display = ["series", "subtitle", "date", "start_time", "location"]
+    list_filter = ["series", "subtitle", "date", "location"]
     readonly_fields = [
         'series',
+        'subtitle',
         'date',
         'start_time',
         'duration',
+        'location',
     ]
 
 class EventSeriesAdmin(admin.ModelAdmin):
     inlines = [
-        EventInLine,
+        EventInline,
     ]
     ordering = ["event_name"]
     list_display = ["event_name", "event_type"]
@@ -109,7 +137,7 @@ class EventSeriesAdmin(admin.ModelAdmin):
 class TaskAdmin(admin.ModelAdmin):
     model = Task
     inlines = [
-        VolunteeringInLine,
+        VolunteeringInline,
     ]
     ordering = ["event"]
     list_display = ["event", "task_type", "team_restriction", "urgency", "state"]
@@ -209,10 +237,10 @@ class CustomUserAdmin(UserAdmin):
     ]
 
     inlines = [
-        AdminGroupMemberInLine,
-        TeamMemberInLine,
-        UTMemberInLine,
-        UserAdressInLine,
+        AdminGroupMemberInline,
+        TeamMemberInline,
+        UTMemberInline,
+        UserAdressInline,
     ]
 
     # this modifies the form for creating/editing users depending on the
@@ -307,8 +335,9 @@ class CustomUserAdmin(UserAdmin):
 # Register your models here.
 admin.site.unregister(Group)
 #admin.site.register(User, CustomUserAdmin)
+admin.site.register(UserAdress)
 admin.site.register(UTMember)
-admin.site.register(Adress)
+admin.site.register(Adress, AdressAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(AdminGroup, AdminGroupAdmin)
@@ -319,6 +348,7 @@ admin.site.register(Event, EventAdmin)
 admin.site.register(Act)
 admin.site.register(EventAct)
 admin.site.register(PastEvent, PastEventAdmin)
+admin.site.register(Location)
 #admin.site.register(TaskType)
 #admin.site.register(TeamRestriction)
 #admin.site.register(Urgency)

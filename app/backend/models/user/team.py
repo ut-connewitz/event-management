@@ -2,7 +2,12 @@ from django.db import models
 from django.db.utils import IntegrityError
 
 class Team(models.Model):
-    name = models.CharField("Teamname", blank=False, max_length=40)
+    team_id = models.BigAutoField(primary_key=True)
+    name = models.CharField(
+        "Teamname",
+        blank=False,
+        max_length=40,
+    )
 
     class Meta:
         verbose_name = "Team"

@@ -8,9 +8,9 @@ from django.utils.timezone import get_current_timezone
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import UpdateView, CreateView
 
-from backend.models.user import User, TeamMember, UTMember, Adress
+from backend.models.user import User, TeamMember, UTMember, UserAdress
 from backend.models.task import Task, Urgency, State, Volunteering, DeletedVolunteering
-#from .forms import AccountForm
+from backend.models.misc import Adress
 
 class ProfileHub(LoginRequiredMixin, TemplateView):
     template_name = 'profile_page/profile_hub.html'
@@ -86,11 +86,15 @@ class ProfileHub(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         user_pk = user.pk
+        user_adress = None
         adress = None
+        adress_pk = None
 
         try:
-            adress = Adress.objects.get(pk=user_pk)
-        except Adress.DoesNotExist:
+            user_adress = UserAdress.objects.get(pk=user_pk)
+            adress = user_adress.adress
+            adress_pk = adress.adress_id
+        except UserAdress.DoesNotExist:
             pass
 
         user_volunteerings = self.get_user_volunteering(user)
@@ -108,7 +112,8 @@ class ProfileHub(LoginRequiredMixin, TemplateView):
         context['user_teams_html'] = mark_safe(user_teams_html)
 
         context['user_pk'] = user_pk
-        context['adress'] = adress
+        context['user_adress'] = user_adress
+        context['adress_pk'] = adress_pk
 
         return context
 
@@ -157,6 +162,12 @@ class CreateAdress(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        self.object = form.save()
+        user_adress = UserAdress.objects.create(
+            user = form.instance.user,
+            adress = self.object,
+        )
+        user_adress.save()
         return super().form_valid(form)
 
 
@@ -169,6 +180,16 @@ class UpdateAdress(LoginRequiredMixin, UpdateView):
     # first built in method that is called when the view is used
     # used here to check if the user instance given by the url belongs to the logged in user
     def dispatch(self, request, *args, **kwargs):
-        if self.get_object().pk != request.user.id:
+        req_user_adress = None
+        req_adress_pk = None
+
+        try:
+            req_user_adress = UserAdress.objects.get(pk=request.user.id)
+            req_adress = req_user_adress.adress
+            req_adress_pk = req_adress.adress_id
+        except UserAdress.DoesNotExist:
+            pass
+
+        if self.get_object().pk != req_adress_pk:
             raise Http404('Falscher Account.')
         return super(UpdateAdress, self).dispatch(request, *args, **kwargs)
