@@ -13,7 +13,7 @@ class Event(models.Model):
     series = models.ForeignKey(
         EventSeries,
         on_delete=models.CASCADE,
-        verbose_name = "Veranstaltungsvorlage",
+        verbose_name = "Veranstaltungsreihe",
     )
     subtitle = models.TextField(
         "Veranstaltungstitel",
