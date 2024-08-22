@@ -188,6 +188,7 @@ general dependencies within docker (nginx only for deploy)
 ### Framework
 
 - [Django](https://docs.djangoproject.com): [4.2 LTS](https://www.djangoproject.com/download/)
+- Very useful: [Django class based views descriptions](https://ccbv.co.uk)
 - [Python: 3.11](https://docs.djangoproject.com/en/4.2/faq/install/#faq-python-version-support)
 - [Bootstrap](https://pypi.org/project/django-bootstrap-v5/)
 - [Postgres 16.3](https://hub.docker.com/_/postgres/)
