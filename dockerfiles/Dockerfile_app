@@ -10,4 +10,4 @@ RUN mkdir -p /scripts
 COPY ./scripts/ /scripts
 RUN chmod +x /scripts/django.sh
 
-CMD ["/scripts/django.sh"]
+CMD ["sh", "/scripts/django.sh"]

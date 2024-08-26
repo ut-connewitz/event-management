@@ -10,4 +10,4 @@ RUN mkdir -p /scripts
 COPY ./scripts/ /scripts
 RUN chmod +x /scripts/celery_beat.sh
 
-CMD ["/scripts/celery_beat.sh"]
+CMD ["sh", "/scripts/celery_beat.sh"]
