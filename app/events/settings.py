@@ -206,7 +206,7 @@ LOGGING = {
             'celery': {
                 'level': 'INFO',
                 'class': 'logging.handlers.RotatingFileHandler',
-                'filename': 'celery.log',
+                'filename': '/var/log/celery/events.log',
                 'formatter': 'default',
                 'maxBytes': 1024 * 1024 * 5,
                 'backupCount': 3,

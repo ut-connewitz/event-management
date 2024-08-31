@@ -10,6 +10,8 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - TZ=GMT+2
+      - PGTZ=GMT+2
 
   events:
     container_name: events
@@ -39,12 +41,13 @@ services:
     #    - ./etc/rabbitmq/logs/:/var/log/rabbitmq/
     #    - ./rabbit_enabled_plugins:/etc/rabbitmq/rabbit_enabled_plugins
     environment:
-            - RABBITMQ_ERLANG_COOKIE=test
+        - RABBITMQ_ERLANG_COOKIE=test
+        - TZ=GMT+2
 
     ports:
-            - 5672:5672    #amqp
-            - 15672:15672  #http
-            - 15692:15692  #prometheus
+        - 5672:5672    #amqp
+        - 15672:15672  #http
+        - 15692:15692  #prometheus
 
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "5672"]
