@@ -17,9 +17,9 @@ ENV RABBITMQ_WORKER worker
 ENV RABBITMQ_WORKER_PASS worker
 ENV RABBITMQ_PID_FILE /var/lib/rabbitmq/mnesia/rabbitmq
 
-ADD init.sh /init.sh
+COPY ./init.sh /init.sh
 RUN chmod +x /init.sh
 EXPOSE 4369 5671 5672 15671 15672 25672 35672-35682
 
 # Define default command
-CMD ["/init.sh"]
+CMD ["sh", "./init.sh"]
