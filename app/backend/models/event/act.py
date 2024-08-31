@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.utils import IntegrityError
 
 class Act(models.Model):
     act_id = models.BigAutoField(primary_key=True)
@@ -41,6 +42,17 @@ class Act(models.Model):
     class Meta:
         verbose_name = "Ensemble"
         verbose_name_plural = "Ensembles"
+        constraints = [
+            models.UniqueConstraint(fields=["act_name"], name="prevent Act name duplicates constraint")
+        ]
+
+    def save(self, *args, **kwargs):
+        try:
+            super(Act, self).save(*args, **kwargs)
+        except IntegrityError as e:
+            error_message = e.__cause__
+            print(error_message)
+            pass
 
     def __str__(self):
         return str(self.act_name)
