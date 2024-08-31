@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'justForDevelopmentSecretKey')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
 ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS')
 if ALLOWED_HOSTS_ENV:
     ALLOWED_HOSTS.extend(ALLOWED_HOSTS_ENV.split(','))
@@ -206,7 +206,7 @@ LOGGING = {
             'celery': {
                 'level': 'INFO',
                 'class': 'logging.handlers.RotatingFileHandler',
-                'filename': 'celery.log',
+                'filename': '/var/log/celery/events.log',
                 'formatter': 'default',
                 'maxBytes': 1024 * 1024 * 5,
                 'backupCount': 3,
