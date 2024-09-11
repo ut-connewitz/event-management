@@ -10,5 +10,5 @@ chown -R nobody:nogroup /var/run/celery /var/log/celery
 
 exec celery --app=events beat \
             -l debug \
-             --loglevel=DEBUG --logfile=/var/log/celery/events.log \
+            --loglevel=DEBUG --logfile=/var/log/celery/events.log \
             --uid=nobody --gid=nogroup

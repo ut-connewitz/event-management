@@ -7,3 +7,4 @@ Pillow==10.2
 celery==5.4
 django_celery_results==2.4.0
 django_celery_beat==2.5.0
+python-dotenv==1.0.1
