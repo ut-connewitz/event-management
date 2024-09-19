@@ -34,9 +34,8 @@ services:
       # TBD Be careful with path here. Context is /rabbitmq so the paths of the Dockerfile
       # are within /rabbitmq (different to the other Dockerfiles)
       dockerfile: Dockerfile
-# TBD .env may contains env-vars
-#    env_file:
-#      - ./app/.env
+    env_file:
+      - ./app/.env
     # TBD Was machen wir damit??
     ports:
       - 5672:5672    #amqp
