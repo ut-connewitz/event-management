@@ -4,7 +4,6 @@ RUN mkdir -p /etc/rabbitmq/conf.d
 RUN chown -R rabbitmq:rabbitmq /etc/rabbitmq/conf.d
 COPY 20-logging.conf /etc/rabbitmq/conf.d
 
-ENV RABBITMQ_PID_FILE /var/lib/rabbitmq/mnesia/rabbitmq
 ENV TZ GMT+2
 
 ADD init-deploy.sh /init-deploy.sh

@@ -33,7 +33,7 @@ services:
       context: ./rabbitmq
       # TBD Be careful with path here. Context is /rabbitmq so the paths of the Dockerfile
       # are within /rabbitmq (different to the other Dockerfiles)
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_deploy
     env_file:
       - ./app/.env
     # TBD Was machen wir damit??
