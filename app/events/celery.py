@@ -10,8 +10,8 @@ load_dotenv()
 #setting up environment variable for using django settings file
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'events.settings')
 
-rabbit_worker = os.environ.get('RABBITMQ_WORKER')
-rabbit_worker_pass = os.environ.get('RABBITMQ_WORKER_PASS')
+rabbit_worker = os.getenv('RABBITMQ_WORKER')
+rabbit_worker_pass = os.getenv('RABBITMQ_WORKER_PASS')
 
 #celery app as entry point for using the tasks
 app = Celery('events',

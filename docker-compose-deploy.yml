@@ -11,6 +11,11 @@ services:
     environment:
       - TZ=GMT+2
       - PGTZ=GMT+2
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
     networks:
       - events_network
 
@@ -22,7 +27,8 @@ services:
     volumes:
       - static_data:/vol/web
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - events_network
 
@@ -33,9 +39,11 @@ services:
       context: ./rabbitmq
       # TBD Be careful with path here. Context is /rabbitmq so the paths of the Dockerfile
       # are within /rabbitmq (different to the other Dockerfiles)
-      dockerfile: Dockerfile_deploy
+      dockerfile: Dockerfile
     env_file:
       - ./app/.env
+    environment:
+      - TZ=GMT+2
     # TBD Was machen wir damit??
     ports:
       - 5672:5672    #amqp
