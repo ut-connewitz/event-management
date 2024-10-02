@@ -13,7 +13,7 @@ Development repository for event management services.
 - run `docker exec events python3 manage.py makemigrations` & `docker exec events python3 manage.py migrate` to initialize local test db
 - optionally run `docker exec events python3 manage.py addbasedata` & `docker exec events python3 manage.py addtestdata` to insert base and test data
 - run `docker exec events python3 manage.py createsuperuser` to create admin user **fails due to: ``Superuser creation skipped due to not running in a TTY. You can run `manage.py createsuperuser` in your project to create one manually.``**
-- run `docker compose exec events /bin/bash` to open the events container with CLI
+- run `docker exec -ti events /bin/bash` to open the events container with CLI (`/bin/sh` im deploy container)
 - within the container: `python3 manage.py createsuperuser`
 - open `http://0.0.0.0:8000/`
 
@@ -39,35 +39,15 @@ Within the file `tests_user.py` in `/app/backend/tests` there are a few tests fo
 ## Docker Deployment
 
 1. Clone
-2. create .env
-3. Put the following
-4. Change
-```dotenv
-DEBUG=False
+2. Add nginx-config to host (`event-management/nginx_deploy_server.conf`) and change domain
+3. Adjust `event-management/app/.env`
 
-POSTGRES_DB=postgres
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-
-RABBITMQ_ERLANG_COOKIE=?
-RABBITMQ_ADMIN=?
-RABBITMQ_ADMIN_PASS=?
-RABBITMQ_WORKER=?
-RABBITMQ_WORKER_PASS=?
-
-ALLOWED_HOSTS=???????? #tbd
-SECRET_KEY=samplesecret123
-
-EMAIL_HOST = 'smtp.gmail.com' #tbd
-EMAIL_PORT = 587 #tbd
-EMAIL_HOST_USER = ? #tbd
-EMAIL_HOST_PASSWORD = ? #tbd
-
-```
 ## Project Structure
 ### Directory
 
 tree view of relevant files and directories
+
+***TBD UPDATE***
 ```
 event-management/
 ├── OTHER
@@ -183,6 +163,8 @@ event-management/
 
 ### Docker Setup 
 general dependencies within docker (nginx only for deploy)
+
+***TBD UPDATE***
 ![Docker Setup](OTHER/docker-setup.png)
 
 ### Framework
@@ -207,4 +189,3 @@ general dependencies within docker (nginx only for deploy)
 - [ ] Central database for all event related data.
 - [ ] Web service for database administration.
 - [ ] Web service for letting members of the UT-Connewitz select events where they want to participate.
-- [ ] Server deploy.

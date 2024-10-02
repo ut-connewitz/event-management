@@ -6,67 +6,65 @@ services:
     image: postgres:16.3
     volumes:
       - ./data/db:/var/lib/postgresql/data
+    env_file:
+      - ./app/.env
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - TZ=GMT+2
-      - PGTZ=GMT+2      
+      - PGTZ=GMT+2
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - events_network
 
-  app:
+  events:
     container_name: events
     build:
       context: .
-      dockerfile: Dockerfile_app_deploy
+      dockerfile: ./dockerfiles/Dockerfile_app_deploy
     volumes:
       - static_data:/vol/web
-    environment:
-      - DEBUG=${DEBUG}
-      - SECRET_KEY=${SECRET_KEY}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-      - POSTGRES_NAME=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
-      - db
-
-  nginx:
-    container_name: events_nginx
-    build:
-      context: ./nginx
-    volumes:
-      - static_data:/vol/static
-    ports:
-      - "8080:8080"
-    depends_on:
-      - app
+      db:
+        condition: service_healthy
+    networks:
+      - events_network
 
   rabbitmq:
     container_name: events_rabbit
     hostname: rabbit_host
     build:
       context: ./rabbitmq
-      dockerfile: ./rabbitmq/Dockerfile_deploy
+      # TBD Be careful with path here. Context is /rabbitmq so the paths of the Dockerfile
+      # are within /rabbitmq (different to the other Dockerfiles)
+      dockerfile: Dockerfile
+    env_file:
+      - ./app/.env
+    environment:
+      - TZ=GMT+2
+    # TBD Was machen wir damit??
     ports:
-            - 5672:5672    #amqp
-            - 15672:15672  #http
-            - 15692:15692  #prometheus
+      - 5672:5672    #amqp
+      - 15672:15672  #http
+      - 15692:15692  #prometheus
+    networks:
+      - events_network
 
   celery_worker:
     container_name: events_celery_worker
     build:
       context: .
-      dockerfile: ./dockerfiles/Dockerfile_celery
+      dockerfile: ./dockerfiles/Dockerfile_celery_worker
     volumes:
       - ./app:/app
-    environment:
-      - POSTGRES_NAME=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       - events
       - rabbitmq
       - db
+    networks:
+      - events_network
 
   celery_beat:
     container_name: events_celery_beat
@@ -75,14 +73,30 @@ services:
       dockerfile: ./dockerfiles/Dockerfile_celery_beat
     volumes:
       - ./app:/app
-    environment:
-      - POSTGRES_NAME=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       - events
       - rabbitmq
       - db
+    networks:
+      - events_network
+
+  nginx:
+    container_name: events_nginx
+    build:
+      context: ./nginx
+    volumes:
+      - static_data:/vol/static
+    ports:
+      - "44445:8080"
+    depends_on:
+      - events
+    networks:
+      - events_network
 
 volumes:
   static_data:
+
+networks:
+  events_network:
+    name: events_network
+    driver: bridge

@@ -2,13 +2,20 @@ import os
 import celery
 import logging
 from celery import Celery
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 #setting up environment variable for using django settings file
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'events.settings')
 
+rabbit_worker = os.getenv('RABBITMQ_WORKER')
+rabbit_worker_pass = os.getenv('RABBITMQ_WORKER_PASS')
+
 #celery app as entry point for using the tasks
 app = Celery('events',
-            broker = 'amqp://worker:worker@events_rabbit:5676//',
+            broker = f'amqp://{rabbit_worker}:{rabbit_worker_pass}@events_rabbit:5672//',
             #backend = 'amqp://worker:worker@events_rabbit:5676//',
             include = ['events.celery_tasks', ]
             )
