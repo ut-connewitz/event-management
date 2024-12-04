@@ -2,6 +2,16 @@
 
 Development repository for event management services.
 
+## Live Demo
+
+A live demo of the project can be found via following links:
+- [admin panel](https://ut.johannesgge.de/admin/)
+- [calendar view](https://ut.johannesgge.de/ecal/calendar/)
+
+Login with: 
+- `ut-admin/ut-admin` as non-superuser admin.
+- `ut-user/ut-user` as non-admin user.
+
 
 ## Local-Docker-Dev-Setup
 (*) *only needed for local IDE*
@@ -50,6 +60,7 @@ tree view of relevant files and directories
 ***TBD UPDATE***
 ```
 event-management/
+├── LICENSE
 ├── OTHER
 ├── README.md
 ├── app
@@ -64,13 +75,14 @@ event-management/
 │   │   ├── migrations
 │   │   ├── models
 │   │   │   ├── event
+│   │   │   ├── misc
 │   │   │   ├── notification
 │   │   │   ├── setting
 │   │   │   ├── task
 │   │   │   └── user
 │   │   ├── templates
 │   │   │   ├── admin
-│   │   │   │   └── base.html
+│   │   │   │   └── base.html
 │   │   │   ├── admin_change_pw.html
 │   │   │   └── master.html
 │   │   ├── tests
@@ -130,9 +142,8 @@ event-management/
 │   ├── static
 │   │   └── css
 │   │       └── base.css
-│   ├── templates
-│   │   └── base.html
-│   └── testbootstrap
+│   └── templates
+│       └── base.html
 ├── data
 ├── docker-compose-deploy.yml
 ├── docker-compose.yml
@@ -140,18 +151,15 @@ event-management/
 │   ├── Dockerfile_app
 │   ├── Dockerfile_app_deploy
 │   ├── Dockerfile_celery_beat
-│   ├── Dockerfile_celery_beat_deploy
-│   ├── Dockerfile_celery_worker
-│   └── Dockerfile_celery_worker_deploy
+│   └── Dockerfile_celery_worker
 ├── nginx
 │   ├── Dockerfile
 │   ├── default.conf
 │   └── uwsgi_params
+├── nginx_deploy_server.conf
 ├── rabbitmq
 │   ├── 20-logging.conf
 │   ├── Dockerfile
-│   ├── Dockerfile_deploy
-│   ├── init-deploy.sh
 │   └── init.sh
 ├── requirements.txt
 └── scripts
@@ -184,8 +192,8 @@ general dependencies within docker (nginx only for deploy)
 
 [Collection of current frontend screenshots](OTHER/frontend.md)
 
-## TODO
+## MVP checklist
 
-- [ ] Central database for all event related data.
-- [ ] Web service for database administration.
-- [ ] Web service for letting members of the UT-Connewitz select events where they want to participate.
+- [x] Central database for all event related data.
+- [x] Web service for database administration.
+- [x] Web service for letting members of the UT-Connewitz select events where they want to participate.
