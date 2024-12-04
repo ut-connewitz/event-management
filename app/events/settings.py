@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_bootstrap5',
     'dark_mode_switch',
-    'testbootstrap',
     'backend', # this has to be above 'django.contrib.admin' to ovewrite default admin panel styling
     'events_calendar',
     'profile_page',
